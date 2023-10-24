@@ -4,6 +4,11 @@
 - [2. Installation ](#2-installation)
 - [3. Running the Application](#3-running-the-application)
 - [4. Environment Configuration](#4-environment-configuration)
+- [4. Prerequisites to run the Application in Docker](#4-prerequisites-to-run-the-application-in-docker)
+- [5. Build the Docker image using the provided Dockerfile](#5-build-the-docker-image-using-the-provided-dockerfile)
+- [6. Run the Application](#6-run-the-application)
+- [7. Accessing the Application](#7-accessing-the-application)
+- [8. Stopping and Cleaning Up](#8-stopping-and-cleaning-up)
 
 ## 1. Prerequisites:
 
@@ -41,3 +46,46 @@ To configure your Next.js application, you will need an environment (`.env`) fil
    ```env
    PORT=3000
    ```
+
+## 4.Prerequisites to run the Application in Docker
+
+Before you can run the application in Docker, make sure you have the following dependencies installed on your machine:
+
+- Docker: Download and install Docker from [https://www.docker.com/get-started](https://www.docker.com/get-started).
+
+## 5. Build the Docker image using the provided Dockerfile:
+
+```
+docker build -t frontend-image .
+```
+
+## 6. Run the Application
+
+Now that you have built the Docker image, you can run the application within a Docker container. Use the following command:
+
+```
+docker run -d -p 3000:3000 --name frontend-container frontend-image
+```
+
+## 7. Accessing the Application
+
+Once the container is up and running, you can access the application in your web browser by navigating to:
+
+```
+http://localhost:3000
+```
+
+## 8. Stopping and Cleaning Up
+
+To stop the Docker container, use the following command:
+
+```
+docker stop frontend-container
+```
+
+To remove the Docker container and image when you're done, run:
+
+```
+docker rm frontend-container
+docker rmi frontend-container
+```
