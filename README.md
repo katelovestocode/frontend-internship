@@ -3,6 +3,7 @@
 - [1. Prerequisites](#1-prerequisites)
 - [2. Installation ](#2-installation)
 - [3. Running the Application](#3-running-the-application)
+- [4. Environment Configuration](#4-environment-configuration)
 
 ## 1. Prerequisites:
 
@@ -28,3 +29,15 @@ Start your Next.js application on port **3000** using the following command:
 ```
 npm run dev
 ```
+
+## 4. Environment Configuration:
+
+To configure your Next.js application, you will need an environment (`.env`) file. This file is used to store sensitive data and configuration settings. Here's how you can set up your `.env` file:
+
+1. Create an `.env` file in the root of your project directory.
+
+2. Define your environment variables in the `.env` file. You need to specify values for variables like PORT, Database connection URLs, API keys, and other configuration settings. For example:
+
+   ```env
+   PORT=3000
+   ```
