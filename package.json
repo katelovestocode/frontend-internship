@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "docker-build:prod": "docker build -t docker-image-prod --progress=plain --no-cache --target prod .",
-    "docker-run:prod": "docker run -d -p 3001:3001 --name docker-image-prod docker-image-prod"
+    "docker-build:prod": "docker build -t docker-frontend --progress=plain --no-cache --target prod .",
+    "docker-run:prod": "docker run -d -p 3000:3000 --name docker-frontend docker-frontend"
   },
   "dependencies": {
     "react": "^18",

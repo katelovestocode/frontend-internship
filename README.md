@@ -56,7 +56,7 @@ Before you can run the application in Docker, make sure you have the following d
 ## 6. Build the Docker image using the provided Dockerfile:
 
 ```
-docker build -t frontend-image .
+docker build -t docker-frontend --progress=plain --no-cache --target prod .
 ```
 
 ## 7. Run the Application
@@ -64,7 +64,7 @@ docker build -t frontend-image .
 Now that you have built the Docker image, you can run the application within a Docker container. Use the following command:
 
 ```
-docker run -d -p 3000:3000 --name frontend-container frontend-image
+docker run -d -p 3000:3000 --name docker-frontend docker-frontend
 ```
 
 ## 8. Accessing the Application
@@ -80,12 +80,12 @@ http://localhost:3000
 To stop the Docker container, use the following command:
 
 ```
-docker stop frontend-container
+docker stop docker-frontend
 ```
 
 To remove the Docker container and image when you're done, run:
 
 ```
-docker rm frontend-container
-docker rmi frontend-container
+docker rm docker-frontend
+docker rmi docker-frontend
 ```
