@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Adamina, Inter } from "next/font/google";
+import { Adamina } from "next/font/google";
 import "./globals.css";
 import { TheHeader } from "@/components/TheHeader";
 

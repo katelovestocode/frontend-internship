@@ -1,27 +1,28 @@
-"use client";
 import Link from "next/link";
 
-type NavLink = {
-  label: string;
-  href: string;
-};
-type Props = {
-  navLinks: NavLink[];
-};
-
-const Navigation = ({ navLinks }: Props) => {
+const Navigation = () => {
   return (
     <>
-      {navLinks.map((link) => {
-        return (
-          <Link key={link.label} href={link.href} className={"text-xl"}>
-            {link.label}
-          </Link>
-        );
-      })}
+      <Link href="/" className={"text-xl"}>
+        Home
+      </Link>
+      <Link href="/about" className={"text-xl"}>
+        About
+      </Link>
+
       <Link href="/profile" className={"text-xl"}>
         Profile
       </Link>
+      <Link href="/users" className={"text-xl"}>
+        Users
+      </Link>
+      <Link href="/companies" className={"text-xl"}>
+        Companies
+      </Link>
+      <Link href="/company-profile" className={"text-xl"}>
+        Company Profile
+      </Link>
+
       <Link href="/register" className={"text-xl"}>
         Register
       </Link>
