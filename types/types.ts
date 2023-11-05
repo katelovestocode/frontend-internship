@@ -23,3 +23,11 @@ export type WrapperProps = {
   title: string;
   children: React.ReactNode;
 }
+
+export type IntitalState = {
+    value: Counter
+}
+
+export type Counter = {
+    counter: number
+}

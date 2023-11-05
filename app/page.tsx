@@ -1,4 +1,5 @@
 import Image from "next/image";
+import React from "react";
 
 export default function Home() {
   return (
@@ -13,11 +14,11 @@ export default function Home() {
         </p>
       </div>
       <div>
-        <div className={"w-600"}>
+        <div className="w-600">
           <Image
             width={635}
             height={675}
-            src={"/images/hero-min.png"}
+            src="/images/hero-min.png"
             alt="hero-image"
           />
         </div>

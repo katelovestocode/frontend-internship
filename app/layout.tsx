@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Adamina } from "next/font/google";
 import "./globals.css";
 import TheHeader from "@/components/common/TheHeader";
+import React from "react";
+import { ReduxProvider } from "@/redux/provider";
 
 const adamina = Adamina({
   subsets: ["latin"],
@@ -22,7 +24,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <TheHeader />
-        <main className={adamina.className}>{children}</main>
+        <main className={adamina.className}>
+          <ReduxProvider> {children}</ReduxProvider>
+        </main>
       </body>
     </html>
   );

@@ -1,6 +1,8 @@
 import Container from "@/components/common/Container";
 import Modal from "@/components/common/Modal";
 import { Metadata } from "next";
+import React from "react";
+import Counter from "@/components/common/Counter";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -14,7 +16,7 @@ export default function About() {
         aspernatur dolores provident commodi ratione explicabo ipsam nesciunt
         optio eaque unde qui sit tempora sunt dolor neque, illo, aliquid et ad.
       </p>
-
+      <Counter />
       <Modal
         modal_id="about"
         title="About Us Page"

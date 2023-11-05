@@ -1,5 +1,6 @@
 import Container from "@/components/common/Container";
 import { Metadata } from "next";
+import React from "react";
 
 export const metadata: Metadata = {
   title: "List of Companies",
