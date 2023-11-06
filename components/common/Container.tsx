@@ -1,3 +1,4 @@
+import React from "react";
 import { ContainerProps } from "../../types/types";
 
 export default function Container({ title, children }: ContainerProps) {

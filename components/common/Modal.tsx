@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import Button from "./Button";
 import { ModalType } from "@/types/types";
 
@@ -30,8 +31,8 @@ export default function Modal({
 
   return (
     <>
-      <div className={"w-40"}>
-        <Button onClick={openModal} title={"open modal"} />
+      <div className="w-40">
+        <Button onClick={openModal} title="open modal" />
       </div>
 
       <dialog id={modal_id} className="modal modal-bottom sm:modal-middle">
@@ -41,7 +42,7 @@ export default function Modal({
           <div className="modal-action">
             <form method="dialog" onSubmit={handleSubmit}>
               {children}
-              <Button title={"Submit"} onClick={closeDialog} />
+              <Button title="Submit" onClick={closeDialog} />
             </form>
           </div>
         </div>

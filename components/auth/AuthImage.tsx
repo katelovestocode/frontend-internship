@@ -1,6 +1,7 @@
 import Image from "next/image";
+import React from "react";
 
-export default function AuthImage () {
+export default function AuthImage() {
   return (
     <div className="flex items-center w-600">
       <Image
@@ -12,5 +13,4 @@ export default function AuthImage () {
       />
     </div>
   );
-};
-
+}

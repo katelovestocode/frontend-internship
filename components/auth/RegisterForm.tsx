@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import Button from "../common/Button";
 import Input  from "../common/Input";
 
@@ -52,7 +53,7 @@ export default function RegisterForm() {
           className=""
         />
       </div>
-      <Button title={"Register"} />
+      <Button title="Register" />
     </form>
   );
 }
