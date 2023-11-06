@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Adamina } from "next/font/google";
 import "./globals.css";
-import TheHeader from "@/components/common/TheHeader";
+import TheHeader from "@/components/layout/TheHeader";
 import React from "react";
 import { ReduxProvider } from "@/redux/provider";
 
