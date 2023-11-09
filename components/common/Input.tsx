@@ -21,7 +21,7 @@ export default function Input({
       name={name}
       placeholder={placeholder}
       pattern={pattern}
-      className={`w-full h-68 px-4 py-2 border-solid border-gray-200 border-2 rounded-xl`}
+      className="w-full h-68 px-4 py-2 border-solid border-gray-200 border-2 rounded-xl"
       {...rest}
     />
   );

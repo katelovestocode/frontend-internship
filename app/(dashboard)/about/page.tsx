@@ -3,6 +3,7 @@ import Modal from "@/components/common/Modal";
 import { Metadata } from "next";
 import React from "react";
 import Counter from "@/components/common/Counter";
+import HealthCheck from "@/components/common/HelathCheck";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -16,6 +17,7 @@ export default function About() {
         aspernatur dolores provident commodi ratione explicabo ipsam nesciunt
         optio eaque unde qui sit tempora sunt dolor neque, illo, aliquid et ad.
       </p>
+      <HealthCheck />
       <Counter />
       <Modal
         modal_id="about"
