@@ -1,10 +1,22 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useGetHealthCheckQuery } from "../../redux/api/healthApiSlice";
 import Loader from "./Loader";
+import { useDispatch } from "react-redux";
+import { AppDispatch, useAppSelector } from "../../redux/store";
+import { updateHealthCheck } from "@/redux/slices/healthCheck-slice";
 
 export default function HealthCheck() {
-  const { data, isLoading, error } = useGetHealthCheckQuery("");
+  const dispatch: AppDispatch = useDispatch();
+  const healthCheckData = useAppSelector((state) => state.healthCheck);
+
+  const { data, isLoading, error } = useGetHealthCheckQuery();
+
+  useEffect(() => {
+    if (data) {
+      dispatch(updateHealthCheck(data));
+    }
+  }, [data, dispatch]);
 
   return (
     <>
@@ -13,9 +25,9 @@ export default function HealthCheck() {
         <Loader />
       ) : (
         <div>
-          <p>status сode: {data?.status_code}</p>
-          <p>details: {data?.detail}</p>
-          <p>result: {data?.result}</p>
+          <p>status сode: {healthCheckData.status_code}</p>
+          <p>details: {healthCheckData.detail}</p>
+          <p>result: {healthCheckData.result}</p>
         </div>
       )}
     </>

@@ -31,3 +31,9 @@ export type IntitalState = {
 export type Counter = {
     counter: number
 }
+
+export type HealthCheckState = {
+  status_code: number;
+  detail: string;
+  result: string;
+};
