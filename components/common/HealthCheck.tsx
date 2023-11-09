@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useGetHealthCheckQuery } from "../../redux/api/healthApiSlice";
-import Loader from "../common/Loader";
+import Loader from "./Loader";
 
 export default function HealthCheck() {
   const { data, isLoading, error } = useGetHealthCheckQuery("");

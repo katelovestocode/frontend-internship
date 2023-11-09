@@ -3,7 +3,7 @@ import Modal from "@/components/common/Modal";
 import { Metadata } from "next";
 import React from "react";
 import Counter from "@/components/common/Counter";
-import HealthCheck from "@/components/common/HelathCheck";
+import HealthCheck from "@/components/common/HealthCheck";
 
 export const metadata: Metadata = {
   title: "About Us",
