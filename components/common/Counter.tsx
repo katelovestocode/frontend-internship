@@ -7,7 +7,7 @@ import Button from "./Button";
 
 export default function Counter() {
   const dispatch = useDispatch<AppDispatch>();
-  const counter = useAppSelector((state) => state.counterReducer.value.counter);
+  const counter = useAppSelector((state) => state.counter.value.counter);
 
   return (
     <>
