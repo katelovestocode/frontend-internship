@@ -1,3 +1,4 @@
+import { Auth0Login } from "@/auth0/Auth0Login";
 import Image from "next/image";
 import React from "react";
 
@@ -23,6 +24,7 @@ export default function Home() {
           />
         </div>
       </div>
+      <Auth0Login />
     </main>
   );
 }

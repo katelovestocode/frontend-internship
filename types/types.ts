@@ -18,7 +18,6 @@ export type ModalType = {
   handleSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
 };
 
-
 export type WrapperProps = {
   title: string;
   children: React.ReactNode;
@@ -37,3 +36,37 @@ export type HealthCheckState = {
   detail: string;
   result: string;
 };
+
+export type Children = {
+  children: React.ReactNode;
+};
+
+export type LoginState = {
+   email: string; password: string 
+}
+export type RegisterState = {
+  name: string; email: string; password: string 
+}
+
+export type InitialState = {
+  user: UserType;
+  isLoading: boolean;
+  isLoggedIn: boolean;
+  isRefreshing: boolean;
+}
+
+export type UserType = {
+  id?: number;
+  name: string;
+  email: string;
+  password?: string;
+  accessToken?: string,
+  refreshToken?: string,
+ 
+}
+
+export type NavLinkType = {
+  hrefLink: string,
+  label: string
+  setIsSideBarOpen: (status: boolean) => void 
+}

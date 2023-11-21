@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { increment, decrement, reset } from "../../redux/slices/counter-slice";
+import { increment, decrement, reset } from "../../redux/slices/counterSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch, useAppSelector } from "@/redux/store";
 import Button from "./Button";

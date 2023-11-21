@@ -14,9 +14,6 @@ export default function Register() {
     <Wrapper title="Sign Up to be a part of our gang">
       <RegisterForm />
 
-      <p className="font-bold text-xl"> OR </p>
-      <Button title="Auth0" />
-
       <p>
         Already have an account?
         <Link href="/login">

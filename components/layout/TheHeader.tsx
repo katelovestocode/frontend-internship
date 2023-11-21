@@ -3,11 +3,11 @@ import Navigation from "./Navigation";
 
 export default function TheHeader() {
   return (
-    <header className="flex flex-row p-10">
+    <header className="flex flex-row items-center p-10">
       <p className="text-4xl"> LOGO </p>
-      <nav className="flex flex-row place-content-right items-center ml-auto gap-8">
+      <div className="flex flex-row place-content-right items-center ml-auto gap-8">
         <Navigation />
-      </nav>
+      </div>
     </header>
   );
 }
