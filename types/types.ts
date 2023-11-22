@@ -65,8 +65,15 @@ export type UserType = {
  
 }
 
+export type LoginUserType = {
+    user: any;
+    data: InitialState
+}
+
 export type NavLinkType = {
   hrefLink: string,
   label: string
   setIsSideBarOpen: (status: boolean) => void 
 }
+
+

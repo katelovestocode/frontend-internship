@@ -1,20 +1,15 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { InitialState, LoginState, RegisterState } from "@/types/types";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import {
+  InitialState,
+  LoginState,
+  LoginUserType,
+  RegisterState,
+} from "@/types/types";
+import { commonApi } from "./commonApi";
 
 export type AuthApi = ReturnType<typeof createApi>;
 
-export const authApi = createApi({
-  reducerPath: "authApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
-    responseHandler: async (response) => {
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.details || "An error occurred");
-      }
-      return data.details;
-    },
-  }),
+export const authApi = commonApi.injectEndpoints({
   endpoints: (build) => ({
     registerUser: build.mutation<InitialState, RegisterState>({
       query: (body: { name: string; email: string; password: string }) => ({
@@ -23,7 +18,7 @@ export const authApi = createApi({
         body,
       }),
     }),
-    loginUser: build.mutation<InitialState, LoginState>({
+    loginUser: build.mutation<LoginUserType, LoginState>({
       query: (body: { email: string; password: string }) => ({
         url: "/auth/login",
         method: "POST",
@@ -33,7 +28,7 @@ export const authApi = createApi({
         body,
       }),
     }),
-    currentUser: build.query<InitialState, any>({
+    currentUser: build.query<InitialState, string>({
       query: (token) => ({
         url: "/auth/me",
         method: "GET",
@@ -42,7 +37,7 @@ export const authApi = createApi({
         },
       }),
     }),
-    refreshUser: build.query<InitialState, any>({
+    refreshUser: build.query<InitialState, string>({
       query: (token) => ({
         url: "/auth/refresh",
         method: "GET",
@@ -60,4 +55,5 @@ export const {
   useLoginUserMutation,
   useCurrentUserQuery,
   useRefreshUserQuery,
+  useLazyRefreshUserQuery,
 } = authApi;

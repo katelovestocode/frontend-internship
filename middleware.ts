@@ -7,11 +7,6 @@ const isAuthPages = (url: string) => AUTH_PAGES.some((page) => page.startsWith(u
 const auth0JWKSUrl = process.env.NEXT_PUBLIC_AUTH0_JWKS_URL as string
 const secret = process.env.NEXT_PUBLIC_ACCESS_SECRET_KEY as string
 
-export async function verifyJWT(token: string, secret: string): Promise<jose.JWTPayload> {
-const {payload} = await jwtVerify(token, new TextEncoder().encode(secret));
-return payload
-}
-
 
 async function verifyAuth0(token: string) {
     const jwks = jose.createRemoteJWKSet(new URL(auth0JWKSUrl!));
@@ -19,28 +14,42 @@ async function verifyAuth0(token: string) {
         await jose.jwtVerify(token.replace('Bearer ', ''), jwks);
         return NextResponse.next();
     } catch (e) {
-        console.error('Authentication failed: Token could not be verified')
-        return new NextResponse(
-            JSON.stringify({success: false, message: 'Authentication failed: Token could not be verified'}),
-            {status: 401, headers: {'content-type': 'application/json'}}
-        );
+      console.error('Authentication failed: Token could not be verified')
+      const response = NextResponse.next();
+      response.cookies.delete("token");
+      response.cookies.delete("provider");
+      NextResponse.redirect(new URL(`/`));
+      return response;
     }
 }
 
 export async function middleware(request: any) {
-    
+
   const { url, nextUrl, cookies } = request;
     const { value: token } = cookies.get("accessToken") ?? { value: null };
     const { value: provider }  = cookies.get("provider") ?? { value: null };
 
     let hasVerifiedToken;
 
-    if (provider === 'auth0') {
-        hasVerifiedToken = token && (await verifyAuth0(token));
-    } else if (provider === 'jwt') {
-        hasVerifiedToken = token && (await verifyJWT(token, secret));
+  // parse Auth0 token
+   if (provider === 'auth0') {
+     hasVerifiedToken = token && (await verifyAuth0(token));
+     
+  // parse JWT token
+   } else if (provider === 'jwt') {
+     
+    try {
+      const decodedToken = await jwtVerify(token, new TextEncoder().encode(secret));
+      hasVerifiedToken = !!decodedToken;
+    } catch (error) {
+      const response = NextResponse.next();
+      response.cookies.delete("token");
+      response.cookies.delete("provider");
+      NextResponse.redirect(new URL(`/`, url));
+      return response;
+    }
   }
-   
+
   const isAuthPageRequested = isAuthPages(nextUrl.pathname);
 
   if (isAuthPageRequested) {

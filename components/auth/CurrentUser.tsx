@@ -7,7 +7,7 @@ import React from "react";
 
 export default function CurrentUser({ children }: Children) {
   const accessToken = Cookies.get("accessToken") as string;
-  const [getCurrentUser, results] = useLazyCurrentUserQuery();
+  const [getCurrentUser] = useLazyCurrentUserQuery();
 
   useEffect(() => {
     if (accessToken) getCurrentUser(accessToken);

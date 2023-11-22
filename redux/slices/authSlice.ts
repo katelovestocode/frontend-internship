@@ -56,11 +56,7 @@ export const authSlice = createSlice({
          .addMatcher(
         authApi.endpoints.loginUser.matchFulfilled,
            (state, action) => {
-        state.user.accessToken = action.payload.user.accessToken;
-        state.user.refreshToken = action.payload.user.refreshToken;
-        state.user.name = action.payload.user.name
-        state.user.id = action.payload.user.id
-        state.user.email = action.payload.user.email
+        state.user = action.payload.user
         state.isLoading = false;
         state.isLoggedIn = true;
       })
@@ -79,15 +75,34 @@ export const authSlice = createSlice({
          .addMatcher(
         authApi.endpoints.currentUser.matchFulfilled,
            (state, action) => {
-        state.user.name = action.payload.user.name
-        state.user.id = action.payload.user.id
-        state.user.email = action.payload.user.email
+        state.user = action.payload.user
         state.isLoading = false;
         state.isLoggedIn = true;
         state.isRefreshing = false
       })
       .addMatcher(
         authApi.endpoints.currentUser.matchRejected,
+        (state, action) => {
+          state.isLoading = false;
+          state.isLoggedIn = false;
+          state.isRefreshing = false
+        })
+     // refresh user
+        .addMatcher(
+        authApi.endpoints.refreshUser.matchPending,
+        (state) => {
+          state.isLoading = true;
+          state.isRefreshing = true})
+         .addMatcher(
+        authApi.endpoints.refreshUser.matchFulfilled,
+           (state, action) => {
+        state.user = action.payload.user
+        state.isLoading = false;
+        state.isLoggedIn = true;
+        state.isRefreshing = false
+      })
+      .addMatcher(
+        authApi.endpoints.refreshUser.matchRejected,
         (state, action) => {
           state.isLoading = false;
           state.isLoggedIn = false;

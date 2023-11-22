@@ -13,6 +13,7 @@ import Cookies from "js-cookie";
 
 export default function LoginForm() {
   const router = useRouter();
+
   const [
     loginUser,
     {
@@ -24,30 +25,31 @@ export default function LoginForm() {
     },
   ] = useLoginUserMutation();
 
+
   useEffect(() => {
     if (isLoginError) {
-      toast.error((loginError as any)?.data?.message, {
+      toast.error((loginError as any)?.error, {
         position: toast.POSITION.TOP_CENTER,
       });
     }
 
     if (isLoginSuccess) {
-      toast.success("You have been successfully logged-in", {
-        position: toast.POSITION.TOP_CENTER,
-      });
-      setTimeout(() => {
-        router.push("/profile");
-      }, 2000);
+      router.push("/profile");
     }
-  }, [isLoginSuccess, loginData, loginError, router]);
+  }, [isLoginError, isLoginSuccess, loginData, loginError, router]);
 
   const handleLogin = async (user: LoginState) => {
     try {
       const response = await loginUser(user);
 
-      Cookies.set("accessToken", response.data?.user?.accessToken as string);
-      Cookies.set("refreshToken", response.data?.user?.refreshToken as string);
-      Cookies.set("provider", "jwt");
+      if (!isLoginError && "data" in response) {
+        Cookies.set("accessToken", response.data?.user?.accessToken as string);
+        Cookies.set(
+          "refreshToken",
+          response.data?.user?.refreshToken as string
+        );
+        Cookies.set("provider", "jwt");
+      }
     } catch (error: any) {
       toast.error(error.message, {
         position: toast.POSITION.TOP_CENTER,

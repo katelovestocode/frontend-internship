@@ -30,15 +30,9 @@ export default function RegisterForm() {
       });
     }
     if (isRegisterSuccess) {
-      toast.success("You have successfully registered! Please login!", {
-        position: toast.POSITION.TOP_CENTER,
-      });
-
-      setTimeout(() => {
-        router.push("/login");
-      }, 2000);
+      router.push("/login");
     }
-  }, [isRegisterSuccess, registerData, registerError, router]);
+  }, [isRegisterError, isRegisterSuccess, registerData, registerError, router]);
 
   const handleRegister = async (user: RegisterState) => {
     try {
