@@ -6,15 +6,6 @@ import "react-toastify/dist/ReactToastify.css";
 export const commonApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
-    prepareHeaders: (headers, { getState }) => {
-      const state = getState() as RootState;
-      const accessToken = state.authReducer.user.accessToken as string;
-
-      if (accessToken) {
-        headers.set("authorization", `Bearer ${accessToken}`);
-      }
-      return headers;
-    },
     responseHandler: async (response) => {
       const data = await response.json();
       if (!response.ok) {

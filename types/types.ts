@@ -76,4 +76,6 @@ export type NavLinkType = {
   setIsSideBarOpen: (status: boolean) => void 
 }
 
-
+export interface CustomError extends Error {
+  status?: number;
+}
