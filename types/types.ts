@@ -79,3 +79,7 @@ export type NavLinkType = {
 export interface CustomError extends Error {
   status?: number;
 }
+
+export type RefreshTokenType = {
+refreshToken: string 
+}

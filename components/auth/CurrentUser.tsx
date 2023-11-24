@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import Cookies from "js-cookie";
 import {
   useLazyCurrentUserQuery,
-  useLazyRefreshUserQuery,
+  useRefreshUserMutation,
 } from "@/redux/api/authApiSlice";
 import { CustomError } from "@/types/types";
 import React from "react";
@@ -19,7 +19,7 @@ interface Children {
 export default function CurrentUser({ children }: Children) {
   const [getCurrentUser, { error: getUserError }] = useLazyCurrentUserQuery();
   const [getRefreshToken, { data: result, isSuccess, error: refreshError }] =
-    useLazyRefreshUserQuery();
+    useRefreshUserMutation();
 
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -30,21 +30,21 @@ export default function CurrentUser({ children }: Children) {
 
   useEffect(() => {
     if (accessToken) {
-      getCurrentUser(accessToken);
+      getCurrentUser();
     }
   }, [accessToken, getCurrentUser]);
 
-  const handleRefresh = async () => {
-    if (refreshToken) {
-      await getRefreshToken(refreshToken);
+  useEffect(() => {
+    if ((getUserError as CustomError)?.status === 401 && refreshToken) {
+      handleRefresh();
     }
+  }, [getUserError, refreshToken]);
+
+  const handleRefresh = async () => {
+    await getRefreshToken({ refreshToken: refreshToken });
   };
 
   useEffect(() => {
-    if ((getUserError as CustomError)?.status && refreshToken) {
-      handleRefresh();
-    }
-
     if (isSuccess) {
       Cookies.set("accessToken", result?.user?.accessToken as string);
       Cookies.set("refreshToken", result?.user?.refreshToken as string);
@@ -59,7 +59,7 @@ export default function CurrentUser({ children }: Children) {
       logout({ logoutParams: { returnTo: window.location.origin } });
       router.push("/login");
     }
-  }, [(getUserError as CustomError)?.status, isSuccess, refreshError]);
+  }, [isSuccess, refreshError]);
 
   return <>{children}</>;
 }

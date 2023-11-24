@@ -22,12 +22,16 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     logOut: (state) => {
-      state.user.accessToken = '';
-      state.user.refreshToken = '';
-      state.user.name = '';
-      state.user.id = 0;
-      state.user.email = '';
+      state.user = {
+        accessToken: '',
+        refreshToken: '',
+        name: '',
+        id: 0,
+        email: '',
+      };
       state.isLoggedIn = false;
+      state.isLoading = false;
+      state.isRefreshing = false;
     },
   },
   extraReducers: (builder) => {
@@ -75,10 +79,13 @@ export const authSlice = createSlice({
          .addMatcher(
         authApi.endpoints.currentUser.matchFulfilled,
            (state, action) => {
-        state.user = action.payload.user
-        state.isLoading = false;
-        state.isLoggedIn = true;
-        state.isRefreshing = false
+        return {
+        ...state,
+        user: action.payload.user,
+        isLoading: false,
+        isLoggedIn: true,
+        isRefreshing: false,
+      };
       })
       .addMatcher(
         authApi.endpoints.currentUser.matchRejected,
@@ -96,10 +103,13 @@ export const authSlice = createSlice({
          .addMatcher(
         authApi.endpoints.refreshUser.matchFulfilled,
            (state, action) => {
-        state.user = action.payload.user
-        state.isLoading = false;
-        state.isLoggedIn = true;
-        state.isRefreshing = false
+        return {
+        ...state,
+        user: action.payload.user,
+        isLoading: false,
+        isLoggedIn: true,
+        isRefreshing: false,
+      };
       })
       .addMatcher(
         authApi.endpoints.refreshUser.matchRejected,

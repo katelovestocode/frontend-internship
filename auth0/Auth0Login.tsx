@@ -22,17 +22,22 @@ export const Auth0Login = () => {
       const token = await getAccessTokenSilently()
         .then(loginUserAuth)
         .then((result) => result)
-        .catch((error) => console.log(error));
+        .catch((error) =>
+          toast.error(error.message, {
+            position: toast.POSITION.TOP_CENTER,
+          })
+        );
       return token;
     }
   }
 
   async function loginUserAuth(token: string) {
     try {
-      getCurrentUser(token);
       if (results) {
         Cookies.set("accessToken", token);
         Cookies.set("provider", "auth0");
+
+        getCurrentUser();
 
         toast.success("You have been successfully logged-in", {
           position: toast.POSITION.TOP_CENTER,
@@ -41,7 +46,9 @@ export const Auth0Login = () => {
         router.push("/profile");
       }
     } catch (error) {
-      throw Error;
+      toast.error(error.message, {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
   }
 

@@ -3,6 +3,7 @@ import {
   InitialState,
   LoginState,
   LoginUserType,
+  RefreshTokenType,
   RegisterState,
 } from "@/types/types";
 import { commonApi } from "./commonApi";
@@ -28,22 +29,17 @@ export const authApi = commonApi.injectEndpoints({
         body,
       }),
     }),
-    currentUser: build.query<InitialState, string>({
-      query: (token) => ({
+    currentUser: build.query<InitialState, void>({
+      query: () => ({
         url: "/auth/me",
         method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       }),
     }),
-    refreshUser: build.query<InitialState, string>({
-      query: (token) => ({
+    refreshUser: build.mutation<InitialState, RefreshTokenType>({
+      query: (body) => ({
         url: "/auth/refresh",
-        method: "GET",
-        headers: {
-          Authorization: `Refresh ${token}`,
-        },
+        method: "POST",
+        body: { refreshToken: body },
       }),
     }),
   }),
@@ -54,6 +50,5 @@ export const {
   useRegisterUserMutation,
   useLoginUserMutation,
   useCurrentUserQuery,
-  useRefreshUserQuery,
-  useLazyRefreshUserQuery,
+  useRefreshUserMutation,
 } = authApi;
