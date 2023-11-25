@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 
 export const commonApi = createApi({
   reducerPath: "commonApi",
+  tagTypes: ["User", "Company"],
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
     prepareHeaders: (headers) => {
@@ -19,10 +20,11 @@ export const commonApi = createApi({
     responseHandler: async (response) => {
       const data = await response.json();
       if (!response.ok) {
-        toast.error(response.statusText, {
+        toast.error(data?.message, {
           position: toast.POSITION.TOP_CENTER,
         });
       }
+
       if (response.ok) {
         toast.success(data?.result, {
           position: toast.POSITION.TOP_CENTER,

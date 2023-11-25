@@ -1,6 +1,11 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { commonApi } from "./commonApi";
-import { GetAllUsersType, GetOneUserType, InitialState } from "@/types/types";
+import {
+  GetAllUsersType,
+  GetOneUserType,
+  InitialState,
+  UpdateUserType,
+} from "@/types/types";
 
 export type UserApi = ReturnType<typeof createApi>;
 
@@ -16,6 +21,19 @@ export const userApi = commonApi.injectEndpoints({
       query: (id) => ({
         url: `/users/${id}`,
         method: "GET",
+      }),
+    }),
+    updateUser: build.mutation<GetOneUserType, UpdateUserType>({
+      query: ({ id, ...body }) => ({
+        url: `/users/${id}`,
+        method: "PUT",
+        body: body,
+      }),
+    }),
+    deleteUser: build.mutation<GetOneUserType, number>({
+      query: (id) => ({
+        url: `/users/${id}`,
+        method: "DELETE",
       }),
     }),
     //   registerUser: build.mutation<InitialState, RegisterState>({
@@ -47,4 +65,6 @@ export const {
   useGetOneUserQuery,
   useLazyGetAllUsersQuery,
   useGetAllUsersQuery,
+  useUpdateUserMutation,
+  useDeleteUserMutation,
 } = userApi;

@@ -98,3 +98,16 @@ export type GetOneUserType = {
   refreshToken?: string,
   }
 }
+
+export type UpdateUserType = {
+  id: number,
+  body: {
+    name?: string,
+    password?: string
+  }
+}
+
+export type OneUserType = {
+    id: number,
+    data: GetOneUserType
+}
