@@ -1,27 +1,21 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-// import {} from "@/types/types";
 import { commonApi } from "./commonApi";
+import { GetAllUsersType, GetOneUserType, InitialState } from "@/types/types";
 
 export type UserApi = ReturnType<typeof createApi>;
 
 export const userApi = commonApi.injectEndpoints({
   endpoints: (build) => ({
-    getAllUsers: build.query({
-      query: (token) => ({
+    getAllUsers: build.query<GetAllUsersType, void>({
+      query: () => ({
         url: "/users",
         method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       }),
     }),
-    getOneUser: build.query({
-      query: (options: { token: string; id: number }) => ({
-        url: `/users/${options.id}`,
+    getOneUser: build.query<GetOneUserType, number>({
+      query: (id) => ({
+        url: `/users/${id}`,
         method: "GET",
-        headers: {
-          Authorization: `Bearer ${options.token}`,
-        },
       }),
     }),
     //   registerUser: build.mutation<InitialState, RegisterState>({

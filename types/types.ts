@@ -83,3 +83,18 @@ export interface CustomError extends Error {
 export type RefreshTokenType = {
 refreshToken: string 
 }
+
+export type GetAllUsersType = {
+  users: []
+}
+
+export type GetOneUserType = {
+  user: {
+  id?: number;
+  name: string;
+  email: string;
+  password?: string;
+  accessToken?: string,
+  refreshToken?: string,
+  }
+}
