@@ -42,8 +42,6 @@ export async function middleware(request: any) {
         hasVerifiedToken = !!decodedToken;
       } catch (error) {
         const response = NextResponse.next();
-        response.cookies.delete("token");
-        response.cookies.delete("provider");
         NextResponse.redirect(new URL(`/`, url));
         return response;
       }
@@ -54,8 +52,6 @@ export async function middleware(request: any) {
     if (isAuthPageRequested) {
       if (!hasVerifiedToken) {
         const response = NextResponse.next();
-        response.cookies.delete("token");
-        response.cookies.delete("provider");
         return response;
       }
       const response = NextResponse.redirect(new URL(`/`, url));
@@ -69,8 +65,6 @@ export async function middleware(request: any) {
       const response = NextResponse.redirect(
         new URL(`/login?${searchParams}`, url)
       );
-      response.cookies.delete("token");
-      response.cookies.delete("provider");
       return response;
     }
 
