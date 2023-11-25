@@ -22,7 +22,7 @@ export const Auth0Login = () => {
       const token = await getAccessTokenSilently()
         .then(loginUserAuth)
         .then((result) => result)
-        .catch((error) =>
+        .catch((error: any) =>
           toast.error(error.message, {
             position: toast.POSITION.TOP_CENTER,
           })
