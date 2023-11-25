@@ -45,7 +45,7 @@ export const Auth0Login = () => {
 
         router.push("/profile");
       }
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error.message, {
         position: toast.POSITION.TOP_CENTER,
       });
