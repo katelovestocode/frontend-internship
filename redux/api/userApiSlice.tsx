@@ -1,11 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { commonApi } from "./commonApi";
-import {
-  GetAllUsersType,
-  GetOneUserType,
-  InitialState,
-  UpdateUserType,
-} from "@/types/types";
+import { GetAllUsersType, GetOneUserType, UpdateUserType } from "@/types/types";
 
 export type UserApi = ReturnType<typeof createApi>;
 
@@ -30,38 +25,16 @@ export const userApi = commonApi.injectEndpoints({
         body: body,
       }),
     }),
-    deleteUser: build.mutation<GetOneUserType, number>({
+    deleteUser: build.mutation<GetOneUserType, number | undefined>({
       query: (id) => ({
         url: `/users/${id}`,
         method: "DELETE",
       }),
     }),
-    //   registerUser: build.mutation<InitialState, RegisterState>({
-    //     query: (body: { name: string; email: string; password: string }) => ({
-    //       url: "/auth/register",
-    //       method: "POST",
-    //       body,
-    //     }),
-    //   }),
-    //   loginUser: build.mutation<LoginUserType, LoginState>({
-    //     query: (body: { email: string; password: string }) => ({
-    //       url: "/auth/login",
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       body,
-    //     }),
-    //   }),
   }),
 });
 
 export const {
-  // useLazyCurrentUserQuery,
-  // useRegisterUserMutation,
-  // useLoginUserMutation,
-  // useCurrentUserQuery,
-  // useLazyRefreshUserQuery,
   useGetOneUserQuery,
   useLazyGetAllUsersQuery,
   useGetAllUsersQuery,

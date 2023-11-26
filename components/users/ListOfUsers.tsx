@@ -5,7 +5,7 @@ import Link from "next/link";
 import RefreshToken from "../auth/RefreshToken";
 
 export default function ListOfUsers() {
-  const { data, isLoading, isError, error } = useGetAllUsersQuery();
+  const { data, error } = useGetAllUsersQuery();
 
   return (
     <>
@@ -17,18 +17,14 @@ export default function ListOfUsers() {
               className="border-solid border-gray-700 border-1 rounded-xl p-4 flex gap-2 bg-white xl:gap-3 flex-col xl:flex-row shadow-lg"
             >
               <Link href={`/users/${user?.id}`} className="flex gap-4 flex-col">
-                <p className="font-bold">
+                <p className="font-bold text-amber-800">
                   Name:{" "}
-                  <span className="text-amber-800 font-normal">
-                    {user?.name}
-                  </span>
+                  <span className="font-bold text-gray-950">{user?.name}</span>
                 </p>
 
-                <p className="font-bold">
+                <p className="font-bold text-amber-800">
                   Email:{" "}
-                  <span className="text-amber-800 font-normal">
-                    {user?.email}
-                  </span>
+                  <span className="font-bold text-gray-950">{user?.email}</span>
                 </p>
               </Link>
             </li>

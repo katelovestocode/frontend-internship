@@ -34,7 +34,7 @@ export async function middleware(request: any) {
     if (provider === 'auth0') {
       hasVerifiedToken = token && (await verifyAuth0(token));
      
-      // parse JWT token
+    // parse JWT token
     } else if (provider === 'jwt') {
      
       try {

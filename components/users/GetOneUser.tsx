@@ -3,17 +3,16 @@ import React from "react";
 import { useGetOneUserQuery } from "../../redux/api/userApiSlice";
 import RefreshToken from "../auth/RefreshToken";
 import OneUserTemplate from "./OneUserTemplate";
+import { IdProps } from "@/types/types";
 
-type Props = {
-  id: number;
-};
-
-export default function GetOneUser({ id }: Props) {
+export default function GetOneUser({ id }: IdProps) {
   const { data, error: getOneUserError } = useGetOneUserQuery(id);
+
+  const { user } = data || {};
 
   return (
     <>
-      <OneUserTemplate id={id} data={data} />
+      {user && <OneUserTemplate id={id} user={user} />}
       <RefreshToken error={getOneUserError} />
     </>
   );

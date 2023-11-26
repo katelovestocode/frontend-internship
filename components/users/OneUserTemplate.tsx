@@ -16,9 +16,10 @@ import { useAppDispatch, useAppSelector } from "@/redux/store";
 import Cookies from "js-cookie";
 import { useAuth0 } from "@auth0/auth0-react";
 import { logOut } from "@/redux/slices/authSlice";
-import { OneUserType } from "@/types/types";
+import { ActiveFieldsType, OneUserType } from "@/types/types";
+import { useLazyCurrentUserQuery } from "@/redux/api/authApiSlice";
 
-export default function OneUserTemplate({ id, data }: OneUserType) {
+export default function OneUserTemplate({ id, user }: OneUserType) {
   const [disabledFields, setDisabledFields] = useState(true);
   const userId = useAppSelector((state) => state.authReducer.user?.id);
   const [isActive, setIsActive] = useState({
@@ -30,6 +31,7 @@ export default function OneUserTemplate({ id, data }: OneUserType) {
   const dispatch = useAppDispatch();
   const { logout } = useAuth0();
 
+  const [getCurrentUser, { error: getUserError }] = useLazyCurrentUserQuery();
   const [
     updateCurrentUser,
     {
@@ -50,7 +52,7 @@ export default function OneUserTemplate({ id, data }: OneUserType) {
     },
   ] = useDeleteUserMutation();
 
-  const toggleActiveState = (field: any) => {
+  const toggleActiveState = (field: keyof ActiveFieldsType) => {
     setIsActive((prev) => ({ ...prev, [field]: !prev[field] }));
   };
 
@@ -73,6 +75,9 @@ export default function OneUserTemplate({ id, data }: OneUserType) {
         password: false,
         confirmPassword: false,
       });
+    }
+    if (isUpdateSuccess) {
+      getCurrentUser();
     }
   }, [isUpdateError, isUpdateSuccess]);
 
@@ -101,7 +106,7 @@ export default function OneUserTemplate({ id, data }: OneUserType) {
     }
   };
 
-  const handleDeleteUser = async (id: number) => {
+  const handleDeleteUser = async (id: number | undefined) => {
     try {
       if (id === userId) {
         await deleteCurrentUser(id);
@@ -118,17 +123,17 @@ export default function OneUserTemplate({ id, data }: OneUserType) {
 
   const formik = useFormik({
     initialValues: {
-      email: data?.user.email,
-      name: data?.user.name,
-      password: data?.user.password,
-      confirmPassword: data?.user.password,
+      email: "",
+      name: "",
+      password: "",
+      confirmPassword: "",
     },
     validationSchema: updateUserSchema,
     onSubmit: (values: any) => {
       if (values.password === values.confirmPassword) {
         const updatedFields: Partial<typeof formik.values> = Object.keys(
           values
-        ).reduce((acc, key) => {
+        ).reduce((acc: Record<string, any>, key) => {
           if (
             key !== "confirmPassword" &&
             values[key] !== formik.initialValues[key]
@@ -138,7 +143,13 @@ export default function OneUserTemplate({ id, data }: OneUserType) {
           return acc;
         }, {});
 
-        handleUpdateUser({ id, ...updatedFields });
+        if (Object.keys(updatedFields).length > 0) {
+          handleUpdateUser({ id, ...updatedFields });
+        } else {
+          toast.error("No changes were made!", {
+            position: toast.POSITION.TOP_CENTER,
+          });
+        }
       }
     },
   });
@@ -158,7 +169,7 @@ export default function OneUserTemplate({ id, data }: OneUserType) {
             <UpdateFormInput
               type="email"
               name="email"
-              placeholder={`${data?.user?.email}`}
+              placeholder={`${user?.email}`}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.email}
@@ -167,7 +178,9 @@ export default function OneUserTemplate({ id, data }: OneUserType) {
             />
           </div>
           {formik.touched.email && formik.errors.email && (
-            <p className="text-xs text-red-600 pt-1">{formik.errors.email}</p>
+            <p className="text-xs text-red-600 pt-1">
+              {formik.errors.email as string}
+            </p>
           )}
         </div>
 
@@ -179,7 +192,7 @@ export default function OneUserTemplate({ id, data }: OneUserType) {
             <UpdateFormInput
               type="text"
               name="name"
-              placeholder={`${data?.user?.name}`}
+              placeholder={`${user?.name}`}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.name}
@@ -193,7 +206,9 @@ export default function OneUserTemplate({ id, data }: OneUserType) {
             )}
           </div>
           {formik.touched.name && formik.errors.name && (
-            <p className="text-xs text-red-600 pt-1">{formik.errors.name}</p>
+            <p className="text-xs text-red-600 pt-1">
+              {formik.errors.name as string}
+            </p>
           )}
         </div>
 
@@ -223,7 +238,7 @@ export default function OneUserTemplate({ id, data }: OneUserType) {
           </div>
           {formik.touched.password && formik.errors.password && (
             <p className="text-xs text-red-600 pt-1">
-              {formik.errors.password}
+              {formik.errors.password as string}
             </p>
           )}
         </div>
@@ -254,7 +269,7 @@ export default function OneUserTemplate({ id, data }: OneUserType) {
           </div>
           {formik.touched.confirmPassword && formik.errors.confirmPassword && (
             <p className="text-xs text-red-600 pt-1">
-              {formik.errors.confirmPassword}
+              {formik.errors.confirmPassword as string}
             </p>
           )}
         </div>
@@ -281,7 +296,7 @@ export default function OneUserTemplate({ id, data }: OneUserType) {
           </>
         )}
       </div>
-      <RefreshToken error={updateError || deleteError} />
+      <RefreshToken error={updateError || deleteError || getUserError} />
     </div>
   );
 }

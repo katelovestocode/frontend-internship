@@ -107,7 +107,17 @@ export type UpdateUserType = {
   }
 }
 
-export type OneUserType = {
-    id: number,
-    data: GetOneUserType
+export type OneUserType = GetOneUserType & {
+    id?: number,
 }
+
+export type ActiveFieldsType = {
+    email: boolean,
+    name: boolean,
+    password: boolean,
+    confirmPassword: boolean,
+}
+
+export type IdProps = {
+  id: number;
+};

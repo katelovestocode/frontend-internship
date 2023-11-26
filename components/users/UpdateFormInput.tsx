@@ -11,7 +11,6 @@ export default function UpdateFormInput({
   name,
   type,
   placeholder,
-  pattern,
   isActive,
   ...rest
 }: InputProps) {
@@ -20,7 +19,6 @@ export default function UpdateFormInput({
       type={type}
       name={name}
       placeholder={placeholder}
-      pattern={pattern}
       className={`${
         isActive
           ? "w-full p-2 border-solid border-gray-400 border-2 rounded-md text-gray"

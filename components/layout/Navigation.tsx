@@ -5,7 +5,8 @@ import Cookies from "js-cookie";
 import { logOut } from "@/redux/slices/authSlice";
 import { useAuth0 } from "@auth0/auth0-react";
 import NavLink from "../common/NavLink";
-import { MdMenu, MdClose } from "react-icons/md";
+import { MdMenu, MdClose, MdOutlineEmail } from "react-icons/md";
+import { FaUserAlt } from "react-icons/fa";
 
 export default function Navigation() {
   const name = useAppSelector((state) => state.authReducer.user?.name);
@@ -69,15 +70,20 @@ export default function Navigation() {
                 setIsSideBarOpen={setIsSideBarOpen}
               />
 
-              <div className="border-solid border-gray-700 border-1 rounded-xl p-4 flex gap-2  xl:gap-3 flex-col xl:flex-row shadow-md">
-                <p className="text-xl text-amber-700"> {name} </p>
-                <p className="text-xl text-amber-700"> {email} </p>
+              <div className="py-4 flex gap-2  xl:gap-4 flex-col xl:flex-row">
+                <p className="flex gap-2 items-center text-xl ">
+                  <FaUserAlt className="text-amber-700" /> {name}{" "}
+                </p>
+                <p className="flex gap-2 items-center text-xl ">
+                  <MdOutlineEmail className="text-amber-700" />
+                  {email}
+                </p>
               </div>
               <button
-                className="px-4 py-3 text-xl border-solid border-gray-200 border-2 rounded-xl bg-gray-700 hover:bg-gray-600 shadow-md text-white "
+                className="px-3 py-3 text-xl rounded-xl bg-gray-700 hover:bg-gray-600 shadow-md text-white"
                 onClick={() => handleLogOut()}
               >
-                Sign Out
+                LogOut
               </button>
             </>
           ) : (
