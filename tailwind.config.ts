@@ -20,7 +20,7 @@ const config: Config = {
         '275': '17rem'
       },
        height: {
-        '68': '4rem',
+        '68': '3.5rem',
       }
     },
   },
