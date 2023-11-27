@@ -70,7 +70,7 @@ export default function Navigation() {
                 setIsSideBarOpen={setIsSideBarOpen}
               />
 
-              <div className="py-4 flex gap-2  xl:gap-4 flex-col xl:flex-row">
+              <div className="py-4 flex gap-2 items-center xl:gap-4 flex-col xl:flex-row">
                 <p className="flex gap-2 items-center text-xl ">
                   <FaUserAlt className="text-amber-700" /> {name}{" "}
                 </p>
