@@ -1,19 +1,16 @@
 "use client";
 import React, { useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/redux/store";
-import Cookies from "js-cookie";
-import { logOut } from "@/redux/slices/authSlice";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useAppSelector } from "@/redux/store";
 import NavLink from "../common/NavLink";
 import { MdMenu, MdClose, MdOutlineEmail } from "react-icons/md";
 import { FaUserAlt } from "react-icons/fa";
+import useLogout from "@/hooks/useLogout";
 
 export default function Navigation() {
   const name = useAppSelector((state) => state.authReducer.user?.name);
   const email = useAppSelector((state) => state.authReducer.user?.email);
   const isLoggedIn = useAppSelector((state) => state.authReducer.isLoggedIn);
-  const dispatch = useAppDispatch();
-  const { logout } = useAuth0();
+  const logOutUser = useLogout();
 
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
 
@@ -21,14 +18,6 @@ export default function Navigation() {
     setIsSideBarOpen((prevState) => !prevState);
   };
 
-  const handleLogOut = () => {
-    dispatch(logOut());
-    Cookies.remove("accessToken");
-    Cookies.remove("refreshToken");
-    Cookies.remove("provider");
-    //Auth0 logout
-    logout({ logoutParams: { returnTo: window.location.origin } });
-  };
   return (
     <>
       <div className="relative items-center">
@@ -81,7 +70,7 @@ export default function Navigation() {
               </div>
               <button
                 className="px-3 py-3 text-xl rounded-xl bg-gray-700 hover:bg-gray-600 shadow-md text-white"
-                onClick={() => handleLogOut()}
+                onClick={() => logOutUser()}
               >
                 LogOut
               </button>

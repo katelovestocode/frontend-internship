@@ -1,8 +1,9 @@
 "use client";
 import React from "react";
 import { useGetAllUsersQuery } from "../../redux/api/userApiSlice";
-import Link from "next/link";
 import RefreshToken from "../auth/RefreshToken";
+import ListOfUsersItem from "./ListOfUsersItem";
+import { UserType } from "@/types/types";
 
 export default function ListOfUsers() {
   const { data, error } = useGetAllUsersQuery();
@@ -11,23 +12,8 @@ export default function ListOfUsers() {
     <>
       <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {data?.users &&
-          data?.users.map((user: any) => (
-            <li
-              key={user?.id}
-              className="border-solid border-gray-700 border-1 rounded-xl p-4 flex gap-2 bg-white xl:gap-3 flex-col xl:flex-row shadow-lg"
-            >
-              <Link href={`/users/${user?.id}`} className="flex gap-4 flex-col">
-                <p className="font-bold text-amber-800">
-                  Name:{" "}
-                  <span className="font-bold text-gray-950">{user?.name}</span>
-                </p>
-
-                <p className="font-bold text-amber-800">
-                  Email:{" "}
-                  <span className="font-bold text-gray-950">{user?.email}</span>
-                </p>
-              </Link>
-            </li>
+          data?.users.map((user: UserType) => (
+            <ListOfUsersItem user={user} key={user?.id} />
           ))}
       </ul>
       <RefreshToken error={error} />

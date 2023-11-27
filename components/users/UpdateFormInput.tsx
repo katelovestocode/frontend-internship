@@ -21,8 +21,8 @@ export default function UpdateFormInput({
       placeholder={placeholder}
       className={`${
         isActive
-          ? "w-full p-2 border-solid border-gray-400 border-2 rounded-md text-gray"
-          : "w-full bg-white text-gray"
+          ? "w-full p-2 border-solid border-gray-400 border-2 rounded-md text-zinc-800"
+          : "w-full bg-white text-zinc-400"
       }`}
       {...rest}
     />

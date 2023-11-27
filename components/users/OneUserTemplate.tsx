@@ -12,12 +12,11 @@ import { MdEdit } from "react-icons/md";
 import { FaCheck } from "react-icons/fa";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useAppDispatch, useAppSelector } from "@/redux/store";
-import Cookies from "js-cookie";
-import { useAuth0 } from "@auth0/auth0-react";
-import { logOut } from "@/redux/slices/authSlice";
+import { useAppSelector } from "@/redux/store";
 import { ActiveFieldsType, OneUserType } from "@/types/types";
 import { useLazyCurrentUserQuery } from "@/redux/api/authApiSlice";
+import useLogout from "../../hooks/useLogout";
+import { omit } from "lodash";
 
 export default function OneUserTemplate({ id, user }: OneUserType) {
   const [disabledFields, setDisabledFields] = useState(true);
@@ -28,10 +27,11 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
     password: false,
     confirmPassword: false,
   });
-  const dispatch = useAppDispatch();
-  const { logout } = useAuth0();
+  const logOutUser = useLogout();
 
-  const [getCurrentUser, { error: getUserError }] = useLazyCurrentUserQuery();
+  const [getCurrentUser, { error: getUserError, data: userData }] =
+    useLazyCurrentUserQuery();
+
   const [
     updateCurrentUser,
     {
@@ -66,18 +66,18 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
   };
 
   useEffect(() => {
+    if (isUpdateSuccess) {
+      getCurrentUser();
+    }
     if (isUpdateSuccess || isUpdateError) {
       setDisabledFields(true);
-      formik.resetForm();
       setIsActive({
         email: false,
         name: false,
         password: false,
         confirmPassword: false,
       });
-    }
-    if (isUpdateSuccess) {
-      getCurrentUser();
+      formik.resetForm();
     }
   }, [isUpdateError, isUpdateSuccess]);
 
@@ -87,14 +87,9 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
       formik.resetForm();
     }
     if (isDeleteSuccess) {
-      dispatch(logOut());
-      Cookies.remove("accessToken");
-      Cookies.remove("refreshToken");
-      Cookies.remove("provider");
-      //Auth0 logout
-      logout({ logoutParams: { returnTo: window.location.origin } });
+      logOutUser();
     }
-  }, [isDeleteSuccess, isDeleteError, logout]);
+  }, [isDeleteSuccess, isDeleteError]);
 
   const handleUpdateUser = async (data: any) => {
     try {
@@ -131,20 +126,17 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
     validationSchema: updateUserSchema,
     onSubmit: (values: any) => {
       if (values.password === values.confirmPassword) {
-        const updatedFields: Partial<typeof formik.values> = Object.keys(
-          values
-        ).reduce((acc: Record<string, any>, key) => {
-          if (
-            key !== "confirmPassword" &&
-            values[key] !== formik.initialValues[key]
-          ) {
-            acc[key] = values[key];
-          }
-          return acc;
-        }, {});
+        const updatedFields: Partial<typeof formik.values> = {};
 
-        if (Object.keys(updatedFields).length > 0) {
-          handleUpdateUser({ id, ...updatedFields });
+        for (const key in values) {
+          if (values[key] !== formik.initialValues[key]) {
+            updatedFields[key] = values[key];
+          }
+        }
+        const fieldsToSend = omit(updatedFields, ["email", "confirmPassword"]);
+
+        if (formik.dirty) {
+          handleUpdateUser({ id, ...fieldsToSend });
         } else {
           toast.error("No changes were made!", {
             position: toast.POSITION.TOP_CENTER,

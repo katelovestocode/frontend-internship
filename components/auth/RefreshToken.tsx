@@ -3,19 +3,16 @@ import { useEffect } from "react";
 import Cookies from "js-cookie";
 import { useRefreshUserMutation } from "@/redux/api/authApiSlice";
 import React from "react";
-import { useAppDispatch } from "@/redux/store";
-import { logOut } from "@/redux/slices/authSlice";
 import { useRouter } from "next/navigation";
-import { useAuth0 } from "@auth0/auth0-react";
+import useLogout from "@/hooks/useLogout";
 
 export default function RefreshToken({ error }: any) {
   const [getRefreshToken, { data: result, isSuccess, error: refreshError }] =
     useRefreshUserMutation();
   const refreshToken = Cookies.get("refreshToken") as string;
 
-  const dispatch = useAppDispatch();
   const router = useRouter();
-  const { logout } = useAuth0();
+  const logOutUser = useLogout();
 
   useEffect(() => {
     if (error?.status === 401 && refreshToken) {
@@ -35,11 +32,7 @@ export default function RefreshToken({ error }: any) {
     }
 
     if (refreshError) {
-      dispatch(logOut());
-      Cookies.remove("accessToken");
-      Cookies.remove("refreshToken");
-      Cookies.remove("provider");
-      logout({ logoutParams: { returnTo: window.location.origin } });
+      logOutUser();
       router.push("/");
     }
   }, [isSuccess, refreshError]);

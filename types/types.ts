@@ -121,3 +121,9 @@ export type ActiveFieldsType = {
 export type IdProps = {
   id: number;
 };
+
+
+export type ListOfUsersItemType =  {
+  key?: number,
+  user: UserType
+}
