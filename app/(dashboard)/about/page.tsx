@@ -12,11 +12,23 @@ export const metadata: Metadata = {
 export default function About() {
   return (
     <Container title="About Us">
-      <p className="text-xl">
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quidem
-        aspernatur dolores provident commodi ratione explicabo ipsam nesciunt
-        optio eaque unde qui sit tempora sunt dolor neque, illo, aliquid et ad.
+      <p className="text-2xl">
+        Why Choose <span className="font-semibold"> QuizQuest </span>Quizzes?
       </p>
+      <ul className="flex flex-col gap-4 text-xl">
+        <li>
+          1. Diverse Topics: Explore quizzes on a wide range of subjects, from
+          science and technology to pop culture and history.
+        </li>
+        <li>
+          2. Interactive Experience: Engage in a dynamic learning experience
+          with our interactive quizzes that cater to all learning styles.
+        </li>
+        <li>
+          3. Track Your Progress: Monitor your achievements, review completed
+          quizzes, and challenge yourself to continuously improve.
+        </li>
+      </ul>
       <HealthCheck />
       <Counter />
       <Modal

@@ -83,3 +83,47 @@ export interface CustomError extends Error {
 export type RefreshTokenType = {
 refreshToken: string 
 }
+
+export type GetAllUsersType = {
+  users: []
+}
+
+export type GetOneUserType = {
+  user: {
+  id?: number;
+  name: string;
+  email: string;
+  password?: string;
+  accessToken?: string,
+  refreshToken?: string,
+  }
+}
+
+export type UpdateUserType = {
+  id: number,
+  body: {
+    name?: string,
+    password?: string
+  }
+}
+
+export type OneUserType = GetOneUserType & {
+    id?: number,
+}
+
+export type ActiveFieldsType = {
+    email: boolean,
+    name: boolean,
+    password: boolean,
+    confirmPassword: boolean,
+}
+
+export type IdProps = {
+  id: number;
+};
+
+
+export type ListOfUsersItemType =  {
+  key?: number,
+  user: UserType
+}
