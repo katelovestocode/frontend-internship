@@ -34,9 +34,13 @@ export default function ModalWindow({
   };
 
   useEffect(() => {
-    document.body.style.overflow = showModal ? "hidden" : "auto";
+    if (typeof window !== "undefined") {
+      document.body.style.overflow = showModal ? "hidden" : "auto";
+    }
     return () => {
-      document.body.style.overflow = "auto";
+      if (typeof window !== "undefined") {
+        document.body.style.overflow = "auto";
+      }
     };
   }, [showModal]);
 
