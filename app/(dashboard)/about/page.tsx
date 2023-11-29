@@ -1,5 +1,4 @@
 import Container from "@/components/common/Container";
-import Modal from "@/components/common/Modal";
 import { Metadata } from "next";
 import React from "react";
 import Counter from "@/components/common/Counter";
@@ -31,11 +30,6 @@ export default function About() {
       </ul>
       <HealthCheck />
       <Counter />
-      <Modal
-        modal_id="about"
-        title="About Us Page"
-        text="Lorem ipsum dolor sit, amet consectetur adipisicing elit.Quidem aspernatur dolores provident commodi ratione explicabo ipsam"
-      />
     </Container>
   );
 }

@@ -1,52 +1,69 @@
 "use client";
-import React from "react";
-import Button from "./Button";
-import { ModalType } from "@/types/types";
+import { createPortal } from "react-dom";
+import React, { useEffect } from "react";
+import { IoClose } from "react-icons/io5";
+import { ModalWindowType } from "@/types/types";
 
-export default function Modal({
-  modal_id,
-  title,
-  text,
+const modalRoot = document.querySelector("#modal-root");
+
+export function CreateModal({
   children,
-  handleSubmit,
-}: ModalType) {
-  
-  const openModal = () => {
-    const modalElement = document.getElementById(
-      modal_id
-    ) as HTMLDialogElement | null;
-    if (modalElement) {
-      modalElement.showModal();
+  showModal,
+  toggleModal,
+}: ModalWindowType) {
+  if (!modalRoot) return null;
+
+  return createPortal(
+    <ModalWindow showModal={showModal} toggleModal={toggleModal}>
+      {children}
+    </ModalWindow>,
+    modalRoot as HTMLElement
+  );
+}
+
+export default function ModalWindow({
+  children,
+  showModal,
+  toggleModal,
+}: ModalWindowType) {
+  const handleOverlayClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement;
+    if (target.classList.contains("modal-overlay")) {
+      toggleModal();
     }
   };
 
-  const closeDialog = () => {
-    const modalElement = document.getElementById(
-      modal_id
-    ) as HTMLDialogElement | null;
-    if (modalElement) {
-      modalElement.close();
-    }
-  };
+  useEffect(() => {
+    document.body.style.overflow = showModal ? "hidden" : "auto";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [showModal]);
 
   return (
     <>
-      <div className="w-40">
-        <Button onClick={openModal} title="open modal" />
-      </div>
-
-      <dialog id={modal_id} className="modal modal-bottom sm:modal-middle">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">{title}</h3>
-          <p className="py-4">{text}</p>
-          <div className="modal-action">
-            <form method="dialog" onSubmit={handleSubmit}>
-              {children}
-              <Button title="Submit" onClick={closeDialog} />
-            </form>
+      {showModal ? (
+        <div
+          className="fixed top-0 left-0 overflow-hidden w-screen h-screen
+          backdrop-opacity-10 bg-[#11111199] modal-overlay"
+          onClick={handleOverlayClick}
+        >
+          <div
+            className="flex items-center justify-center absolute top-1/2 left-1/2 -translate-x-1/2
+              -translate-y-1/2 min-h-[50%] min-w-[30%] p-10 bg-white rounded-2xl "
+          >
+            <div className="absolute top-3 right-3 flex items-center justify-center w-8 h-8 rounded-full bg-zinc-200 hover:bg-zinc-400">
+              <button
+                className="flex items-center"
+                onClick={() => toggleModal()}
+              >
+                <IoClose />
+              </button>
+            </div>
+            {children}
           </div>
         </div>
-      </dialog>
+      ) : null}
     </>
   );
 }

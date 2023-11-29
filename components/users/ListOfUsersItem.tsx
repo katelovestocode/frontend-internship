@@ -15,9 +15,8 @@ export default function ListOfUsersItem({ user, key }: ListOfUsersItemType) {
             Name: <span className="font-bold text-gray-950">{user?.name}</span>
           </p>
 
-          <p className="font-bold text-amber-800">
-            Email:{" "}
-            <span className="font-bold text-gray-950">{user?.email}</span>
+          <p className="text-amber-800">
+            Email: <span className="text-gray-950">{user?.email}</span>
           </p>
         </Link>
       </li>

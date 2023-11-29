@@ -72,4 +72,4 @@ export async function middleware(request: any) {
   }
 
 
-export const config = { matcher: ["/login", "/register", "/users/:path*", '/profile/:path*', '/companies/:path*', '/company-profile/:path*'] };
+export const config = { matcher: ["/login", "/register", "/users/:path*", '/profile/:path*', '/companies/:path*'] };

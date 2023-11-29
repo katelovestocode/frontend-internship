@@ -53,11 +53,6 @@ export default function Navigation() {
                 label="Companies"
                 setIsSideBarOpen={setIsSideBarOpen}
               />
-              <NavLink
-                hrefLink="/company-profile"
-                label="Company Profile"
-                setIsSideBarOpen={setIsSideBarOpen}
-              />
 
               <div className="py-4 flex gap-2 items-center xl:gap-4 flex-col xl:flex-row">
                 <p className="flex gap-2 items-center text-xl ">
@@ -72,7 +67,7 @@ export default function Navigation() {
                 className="px-3 py-3 text-xl rounded-xl bg-gray-700 hover:bg-gray-600 shadow-md text-white"
                 onClick={() => logOutUser()}
               >
-                LogOut
+                Logout
               </button>
             </>
           ) : (

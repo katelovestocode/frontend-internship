@@ -10,14 +10,6 @@ export type ContainerProps = {
   children: React.ReactNode;
 }
 
-export type ModalType = {
-  modal_id: string;
-  title: string;
-  text: string;
-  children?: ReactNode;
-  handleSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
-};
-
 export type WrapperProps = {
   title: string;
   children: React.ReactNode;
@@ -126,4 +118,41 @@ export type IdProps = {
 export type ListOfUsersItemType =  {
   key?: number,
   user: UserType
+}
+
+export type ModalWindowType = {
+  children: ReactNode;
+  showModal: boolean;
+  toggleModal: () => void;
+};
+
+export type UpdateFieldsCompanyType = {
+  name: string; description: string
+}
+
+export type CreateCompanyType = {
+  name: string; description: string
+}
+
+export type CompanyDetailsType = {
+company: CompanyType
+}
+
+export type CompanyType = {
+    id: number,
+    name: string,
+    description: string,
+    owner: UserType,
+    admins: [],
+    members: [],
+    createdAt: Date,
+    updatedAt: Date
+}
+
+export type AllCompaniesType = {
+  companies: []
+}
+
+export type UpdateCompanyType = CompanyDetailsType & {
+  id: number,
 }

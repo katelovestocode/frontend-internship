@@ -5,7 +5,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   type: string;
   placeholder: string;
   pattern?: string;
-  isActive: boolean;
+  isActive?: boolean;
 }
 export default function UpdateFormInput({
   name,
@@ -21,7 +21,7 @@ export default function UpdateFormInput({
       placeholder={placeholder}
       className={`${
         isActive
-          ? "w-full p-2 border-solid border-gray-400 border-2 rounded-md text-zinc-800"
+          ? "w-full p-2 border-solid border-gray-400 border rounded-md text-zinc-800"
           : "w-full bg-white text-zinc-400"
       }`}
       {...rest}
