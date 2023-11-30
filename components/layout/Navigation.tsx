@@ -39,11 +39,6 @@ export default function Navigation() {
           {isLoggedIn ? (
             <>
               <NavLink
-                hrefLink="/profile"
-                label="Profile"
-                setIsSideBarOpen={setIsSideBarOpen}
-              />
-              <NavLink
                 hrefLink="/users"
                 label="Users"
                 setIsSideBarOpen={setIsSideBarOpen}
@@ -51,6 +46,11 @@ export default function Navigation() {
               <NavLink
                 hrefLink="/companies"
                 label="Companies"
+                setIsSideBarOpen={setIsSideBarOpen}
+              />
+              <NavLink
+                hrefLink="/profile"
+                label="Profile"
                 setIsSideBarOpen={setIsSideBarOpen}
               />
 

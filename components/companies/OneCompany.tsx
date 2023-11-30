@@ -22,6 +22,7 @@ import {
   UpdateFieldsCompanyType,
   UserType,
 } from "@/types/types";
+import { updateFormikFields } from "@/utils/helpers";
 
 export default function UpdateOneCompany({ id, company }: UpdateCompanyType) {
   const userId = useAppSelector((state) => state.authReducer.user?.id);
@@ -126,13 +127,11 @@ export default function UpdateOneCompany({ id, company }: UpdateCompanyType) {
     },
     validationSchema: updateCompanySchema,
     onSubmit: (values: any) => {
-      const updatedFields: Partial<typeof formik.values> = {};
-
-      for (const key in values) {
-        if (values[key] !== formik.initialValues[key]) {
-          updatedFields[key] = values[key];
-        }
-      }
+      const updatedFields = updateFormikFields(
+        values,
+        formik,
+        formik.initialValues
+      );
 
       if (formik.dirty) {
         handleUpdateCompany({ id, ...updatedFields });
@@ -146,7 +145,7 @@ export default function UpdateOneCompany({ id, company }: UpdateCompanyType) {
 
   return (
     <>
-      <div className="border-solid border-gray-700 border-1 rounded-xl p-8 flex gap-7 bg-white flex-col shadow-2xl">
+      <div className="border-solid border-gray-700 border-1 rounded-xl p-12 flex gap-7 bg-white flex-col shadow-2xl">
         <p className="flex gap-14 font-bold text-xl text-amber-800">
           Name: <span className="font-bold text-gray-950">{company?.name}</span>
         </p>

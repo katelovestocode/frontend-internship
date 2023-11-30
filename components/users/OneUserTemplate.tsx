@@ -17,6 +17,7 @@ import { ActiveFieldsType, OneUserType } from "@/types/types";
 import { useLazyCurrentUserQuery } from "@/redux/api/authApiSlice";
 import useLogout from "../../hooks/useLogout";
 import { omit } from "lodash";
+import { updateFormikFields } from "@/utils/helpers";
 
 export default function OneUserTemplate({ id, user }: OneUserType) {
   const [disabledFields, setDisabledFields] = useState(true);
@@ -126,13 +127,13 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
     validationSchema: updateUserSchema,
     onSubmit: (values: any) => {
       if (values.password === values.confirmPassword) {
-        const updatedFields: Partial<typeof formik.values> = {};
 
-        for (const key in values) {
-          if (values[key] !== formik.initialValues[key]) {
-            updatedFields[key] = values[key];
-          }
-        }
+        const updatedFields = updateFormikFields(
+          values,
+          formik,
+          formik.initialValues
+        );
+
         const fieldsToSend = omit(updatedFields, ["email", "confirmPassword"]);
 
         if (formik.dirty) {

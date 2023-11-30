@@ -3,7 +3,7 @@ import React from "react";
 import RefreshToken from "../auth/RefreshToken";
 import { IdProps } from "@/types/types";
 import { useGetOneCompanyQuery } from "@/redux/api/companyApiSlice";
-import UpdateOneCompany from "./UpdateOneCompany";
+import UpdateOneCompany from "./OneCompany";
 
 export default function GetOneCompany({ id }: IdProps) {
   const { data, error: getOneCompanyError } = useGetOneCompanyQuery(id);
