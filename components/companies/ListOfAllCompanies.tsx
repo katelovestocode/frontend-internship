@@ -8,11 +8,15 @@ import { CompanyType } from "@/types/types";
 export default function ListOfAllCompanies() {
   const { data, error } = useGetAllCompaniesQuery();
 
+  const sortedCompanies = [...(data?.companies || [])].sort(
+    (a: any, b: any) => b.id - a.id
+  );
+
   return (
     <>
       <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-        {data?.companies &&
-          data?.companies.map((company: CompanyType) => (
+        {sortedCompanies &&
+          sortedCompanies.map((company: CompanyType) => (
             <ListOfCompaniesItem company={company} key={company?.id} />
           ))}
       </ul>

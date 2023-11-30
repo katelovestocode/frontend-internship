@@ -1,8 +1,5 @@
 "use client";
-import {
-  useCreateCompanyMutation,
-  useLazyGetAllCompaniesQuery,
-} from "@/redux/api/companyApiSlice";
+import { useCreateCompanyMutation } from "@/redux/api/companyApiSlice";
 import { useEffect, useState } from "react";
 import React from "react";
 import { toast } from "react-toastify";
@@ -20,8 +17,7 @@ export default function CreateACompany() {
     name: true,
     description: true,
   });
-  const [getAllCompanies, { data, error: getAllCompaniesError }] =
-    useLazyGetAllCompaniesQuery();
+
   const [
     createACompany,
     {
@@ -47,7 +43,6 @@ export default function CreateACompany() {
     }
     if (isCreateSuccess) {
       toggleModal();
-      getAllCompanies();
     }
   }, [isCreateError, isCreateSuccess]);
 
@@ -137,7 +132,7 @@ export default function CreateACompany() {
           </form>
         </div>
       </ModalWindow>
-      <RefreshToken error={createError || getAllCompaniesError} />
+      <RefreshToken error={createError} />
     </>
   );
 }

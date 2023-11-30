@@ -11,12 +11,14 @@ export const userApi = commonApi.injectEndpoints({
         url: "/users",
         method: "GET",
       }),
+      providesTags: ["Users"],
     }),
     getOneUser: build.query<GetOneUserType, number>({
       query: (id) => ({
         url: `/users/${id}`,
         method: "GET",
       }),
+      providesTags: ["User"],
     }),
     updateUser: build.mutation<GetOneUserType, UpdateUserType>({
       query: ({ id, ...body }) => ({
@@ -24,6 +26,7 @@ export const userApi = commonApi.injectEndpoints({
         method: "PUT",
         body: body,
       }),
+      invalidatesTags: (result, error, arg) => [{ type: "User", id: arg.id }],
     }),
     deleteUser: build.mutation<GetOneUserType, number | undefined>({
       query: (id) => ({

@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 
 export const commonApi = createApi({
   reducerPath: "commonApi",
-  tagTypes: ["UserType"],
+  tagTypes: ["User", "Users", "Company", "Companies"],
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
     prepareHeaders: (headers) => {

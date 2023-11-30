@@ -5,43 +5,51 @@ import {
   CompanyDetailsType,
   CompanyType,
   CreateCompanyType,
+  UpdateCompanyIdType,
 } from "@/types/types";
 
 export type CompanyApi = ReturnType<typeof createApi>;
 
 export const companyApi = commonApi.injectEndpoints({
   endpoints: (build) => ({
-    createCompany: build.mutation<CompanyType, CreateCompanyType>({
-      query: (body: { name: string; description: string }) => ({
-        url: "/companies",
-        method: "POST",
-        body,
-      }),
-    }),
     getAllCompanies: build.query<AllCompaniesType, void>({
       query: () => ({
         url: "/companies",
         method: "GET",
       }),
+      providesTags: () => [{ type: "Companies" }],
     }),
     getOneCompany: build.query<CompanyDetailsType, number>({
       query: (id) => ({
         url: `/companies/${id}`,
         method: "GET",
       }),
+      providesTags: () => [{ type: "Company" }],
     }),
-    updateCompany: build.mutation<CompanyType, any>({
+    createCompany: build.mutation<CompanyType, CreateCompanyType>({
+      query: (body: { name: string; description: string }) => ({
+        url: "/companies",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: () => [{ type: "Companies" }],
+    }),
+    updateCompany: build.mutation<CompanyType, UpdateCompanyIdType>({
       query: ({ id, ...body }) => ({
         url: `/companies/${id}`,
         method: "PUT",
         body: body,
       }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "Company", id: arg.id },
+      ],
     }),
     deleteCompany: build.mutation<CompanyType, number | undefined>({
       query: (id) => ({
         url: `/companies/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: () => [{ type: "Companies" }],
     }),
   }),
 });

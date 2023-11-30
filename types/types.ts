@@ -137,6 +137,11 @@ export type CreateCompanyType = {
 export type CompanyDetailsType = {
 company: CompanyType
 }
+export type UpdateCompanyIdType = {
+  id: number;
+  name: string;
+  description: string
+}
 
 export type CompanyType = {
     id: number,
@@ -155,4 +160,14 @@ export type AllCompaniesType = {
 
 export type UpdateCompanyType = CompanyDetailsType & {
   id: number,
+}
+
+export type UpdateCompanyProps = {
+  id: number,
+  company: CompanyType | undefined,
+  showModal: boolean,
+  toggleModal: () => void,
+  disabledFields: boolean,
+  setDisabledFields: (status: boolean)=> void,
+  getOneCompany: (id: number) => void,
 }

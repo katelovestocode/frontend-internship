@@ -1,50 +1,31 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import RefreshToken from "../auth/RefreshToken";
-import {
-  useDeleteCompanyMutation,
-  useLazyGetAllCompaniesQuery,
-  useLazyGetOneCompanyQuery,
-  useUpdateCompanyMutation,
-} from "@/redux/api/companyApiSlice";
+import ModalWindow from "../common/Modal";
+import UpdateFormInput from "../users/UpdateFormInput";
+import { MdEdit } from "react-icons/md";
+import { FaCheck } from "react-icons/fa";
+import { useUpdateCompanyMutation } from "@/redux/api/companyApiSlice";
+import { UpdateCompanyProps, UpdateFieldsCompanyType } from "@/types/types";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
 import { updateCompanySchema } from "./CompanyValidation";
-import UpdateFormInput from "../users/UpdateFormInput";
-import { MdEdit } from "react-icons/md";
-import { FaCheck } from "react-icons/fa";
-import { useRouter } from "next/navigation";
-import { useAppSelector } from "@/redux/store";
-import ModalWindow from "../common/Modal";
-import {
-  UpdateCompanyType,
-  UpdateFieldsCompanyType,
-  UserType,
-} from "@/types/types";
 import { updateFormikFields } from "@/utils/helpers";
+import RefreshToken from "../auth/RefreshToken";
 
-export default function UpdateOneCompany({ id, company }: UpdateCompanyType) {
-  const userId = useAppSelector((state) => state.authReducer.user?.id);
-  const [disabledFields, setDisabledFields] = useState(true);
+export default function UpdateCompany({
+  id,
+  company,
+  showModal,
+  toggleModal,
+  disabledFields,
+  setDisabledFields,
+  getOneCompany,
+}: UpdateCompanyProps) {
   const [isActive, setIsActive] = useState({
     name: false,
     description: false,
   });
-  const router = useRouter();
-
-  const [showModal, setShowModal] = useState(false);
-
-  const toggleModal = () => {
-    setShowModal((prevState) => !prevState);
-    formik.resetForm();
-  };
-
-  const [getOneCompany, { error: getOneCompanyError }] =
-    useLazyGetOneCompanyQuery();
-  const [getAllCompanies, { error: getAllCompaniesError }] =
-    useLazyGetAllCompaniesQuery();
-
   const [
     updateCompany,
     {
@@ -54,25 +35,6 @@ export default function UpdateOneCompany({ id, company }: UpdateCompanyType) {
       error: updatedError,
     },
   ] = useUpdateCompanyMutation();
-
-  const [
-    deleteCompany,
-    {
-      data: deletedData,
-      isSuccess: isDeletedSuccess,
-      isError: isDeletedError,
-      error: deletedError,
-    },
-  ] = useDeleteCompanyMutation();
-
-  const toggleActiveState = (field: keyof UpdateFieldsCompanyType) => {
-    setIsActive((prev) => ({ ...prev, [field]: !prev[field] }));
-  };
-
-  const editCompany = () => {
-    setDisabledFields((prevState) => !prevState);
-    toggleModal();
-  };
 
   useEffect(() => {
     if (isUpdatedSuccess) {
@@ -89,30 +51,9 @@ export default function UpdateOneCompany({ id, company }: UpdateCompanyType) {
     }
   }, [updatedError, isUpdatedSuccess]);
 
-  useEffect(() => {
-    if (isDeletedError) {
-      setDisabledFields(true);
-      formik.resetForm();
-    }
-    if (isDeletedSuccess) {
-      router.push("/companies");
-      getAllCompanies();
-    }
-  }, [isDeletedSuccess, isDeletedError]);
-
   const handleUpdateCompany = async (data: any) => {
     try {
       await updateCompany(data);
-    } catch (error: any) {
-      toast.error(error.message, {
-        position: toast.POSITION.TOP_CENTER,
-      });
-    }
-  };
-
-  const handleDeleteCompany = async (id: number | undefined) => {
-    try {
-      await deleteCompany(id);
     } catch (error: any) {
       toast.error(error.message, {
         position: toast.POSITION.TOP_CENTER,
@@ -143,60 +84,21 @@ export default function UpdateOneCompany({ id, company }: UpdateCompanyType) {
     },
   });
 
+  useEffect(() => {
+    if (showModal) formik.resetForm();
+    setDisabledFields(false);
+    setIsActive({
+      name: false,
+      description: false,
+    });
+  }, [formik.resetForm, showModal]);
+
+  const toggleActiveState = (field: keyof UpdateFieldsCompanyType) => {
+    setIsActive((prev) => ({ ...prev, [field]: !prev[field] }));
+  };
+
   return (
     <>
-      <div className="border-solid border-gray-700 border-1 rounded-xl p-12 flex gap-7 bg-white flex-col shadow-2xl">
-        <p className="flex gap-14 font-bold text-xl text-amber-800">
-          Name: <span className="font-bold text-gray-950">{company?.name}</span>
-        </p>
-        <p className="flex gap-3 flex-wrap font-bold text-lg text-amber-800">
-          Description:{" "}
-          <span className="font-medium text-gray-950 max-w-xs">
-            {company?.description}
-          </span>
-        </p>
-        <p className="flex gap-14 font-bold text-lg text-amber-800">
-          Owner:{" "}
-          <span className="font-medium text-gray-950">
-            {company?.owner?.name}
-          </span>
-        </p>
-        <p className="flex gap-9 font-bold text-lg text-amber-800">
-          Members:{" "}
-          {company?.members.map((member: UserType, index: number) => (
-            <span className="font-medium text-gray-950" key={index}>
-              {" "}
-              {member.name}
-            </span>
-          ))}
-        </p>
-        <p className="flex gap-14 font-bold text-lg text-amber-800">
-          Admins:{" "}
-          {company?.admins.map((admin: UserType, index: number) => (
-            <span className="font-medium text-gray-950" key={index}>
-              {admin.name}
-            </span>
-          ))}
-        </p>
-        {company?.owner?.id === userId && (
-          <div className="flex gap-4 mt-4">
-            {disabledFields && (
-              <>
-                <button className="btn btn-outline" onClick={editCompany}>
-                  Edit
-                </button>
-                <button
-                  className="btn btn-outline btn-error"
-                  onClick={() => handleDeleteCompany(id)}
-                >
-                  Delete
-                </button>
-              </>
-            )}
-          </div>
-        )}
-      </div>
-
       <ModalWindow showModal={showModal} toggleModal={toggleModal}>
         <div className="flex flex-col border-solid border-gray-700 border-1 rounded-xl p-4 flex gap-2 bg-white ">
           <h2 className="text-center font-bold text-2xl mb-4">
@@ -216,7 +118,7 @@ export default function UpdateOneCompany({ id, company }: UpdateCompanyType) {
                 <UpdateFormInput
                   type="text"
                   name="name"
-                  placeholder={`${company.name}`}
+                  placeholder={`${company?.name}`}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.name}
@@ -247,7 +149,7 @@ export default function UpdateOneCompany({ id, company }: UpdateCompanyType) {
                 <UpdateFormInput
                   type="text"
                   name="description"
-                  placeholder={`${company.description}`}
+                  placeholder={`${company?.description}`}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.description}
@@ -279,15 +181,7 @@ export default function UpdateOneCompany({ id, company }: UpdateCompanyType) {
           </form>
         </div>
       </ModalWindow>
-
-      <RefreshToken
-        error={
-          getOneCompanyError ||
-          updatedError ||
-          deletedError ||
-          getAllCompaniesError
-        }
-      />
+      <RefreshToken error={updatedError} />
     </>
   );
 }
