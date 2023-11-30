@@ -169,5 +169,4 @@ export type UpdateCompanyProps = {
   toggleModal: () => void,
   disabledFields: boolean,
   setDisabledFields: (status: boolean)=> void,
-  getOneCompany: (id: number) => void,
 }

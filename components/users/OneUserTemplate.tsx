@@ -127,7 +127,6 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
     validationSchema: updateUserSchema,
     onSubmit: (values: any) => {
       if (values.password === values.confirmPassword) {
-
         const updatedFields = updateFormikFields(
           values,
           formik,

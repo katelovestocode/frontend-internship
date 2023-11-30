@@ -130,7 +130,6 @@ export default function GetOneCompany({ id }: IdProps) {
         toggleModal={toggleModal}
         disabledFields={disabledFields}
         setDisabledFields={setDisabledFields}
-        getOneCompany={getOneCompany}
       />
       <RefreshToken error={getOneCompanyError || deletedError} />
     </>

@@ -20,7 +20,6 @@ export default function UpdateCompany({
   toggleModal,
   disabledFields,
   setDisabledFields,
-  getOneCompany,
 }: UpdateCompanyProps) {
   const [isActive, setIsActive] = useState({
     name: false,
@@ -39,7 +38,6 @@ export default function UpdateCompany({
   useEffect(() => {
     if (isUpdatedSuccess) {
       toggleModal();
-      getOneCompany(id);
     }
     if (isUpdatedSuccess || updatedError) {
       setDisabledFields(true);

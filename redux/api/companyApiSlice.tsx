@@ -40,9 +40,7 @@ export const companyApi = commonApi.injectEndpoints({
         method: "PUT",
         body: body,
       }),
-      invalidatesTags: (result, error, arg) => [
-        { type: "Company", id: arg.id },
-      ],
+      invalidatesTags: ["Company", "Companies"],
     }),
     deleteCompany: build.mutation<CompanyType, number | undefined>({
       query: (id) => ({
