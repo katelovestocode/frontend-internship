@@ -4,21 +4,23 @@ import React, { useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { ModalWindowType } from "@/types/types";
 
-const modalRoot = document.querySelector("#modal-root");
-
 export function CreateModal({
   children,
   showModal,
   toggleModal,
 }: ModalWindowType) {
-  if (!modalRoot) return null;
+  if (typeof window !== "undefined") {
+    const modalRoot = document.querySelector("#modal-root");
+    if (!modalRoot) return null;
 
-  return createPortal(
-    <ModalWindow showModal={showModal} toggleModal={toggleModal}>
-      {children}
-    </ModalWindow>,
-    modalRoot as HTMLElement
-  );
+    return createPortal(
+      <ModalWindow showModal={showModal} toggleModal={toggleModal}>
+        {children}
+      </ModalWindow>,
+      modalRoot as HTMLElement
+    );
+  }
+  return null;
 }
 
 export default function ModalWindow({
