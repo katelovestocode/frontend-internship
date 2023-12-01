@@ -8,7 +8,9 @@ const Auth0ProviderWithNavigate = ({ children }: Children) => {
   const router = useRouter();
 
   const redirectUri =
-    typeof window !== "undefined" ? window.location.origin : "";
+    typeof window !== "undefined"
+      ? window.location.origin
+      : process.env.NEXT_PUBLIC_URL;
 
   const onRedirectCallback = (appState?: AppState) => {
     router.push(appState?.returnTo || window.location.pathname);

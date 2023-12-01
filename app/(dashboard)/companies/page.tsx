@@ -1,4 +1,6 @@
 import Container from "@/components/common/Container";
+import CreateACompany from "@/components/companies/CreateACompany";
+import ListOfAllCompanies from "@/components/companies/ListOfAllCompanies";
 import { Metadata } from "next";
 import React from "react";
 
@@ -9,11 +11,10 @@ export const metadata: Metadata = {
 export default function Companies() {
   return (
     <Container title="List of Companies">
-      <p className="text-xl">
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quidem
-        aspernatur dolores provident commodi ratione explicabo ipsam nesciunt
-        optio eaque unde qui sit tempora sunt dolor neque, illo, aliquid et ad.
-      </p>
+      <div className="flex flex-col gap-4">
+        <CreateACompany />
+        <ListOfAllCompanies />
+      </div>
     </Container>
   );
 }

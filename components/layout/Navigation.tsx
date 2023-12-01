@@ -39,11 +39,6 @@ export default function Navigation() {
           {isLoggedIn ? (
             <>
               <NavLink
-                hrefLink="/profile"
-                label="Profile"
-                setIsSideBarOpen={setIsSideBarOpen}
-              />
-              <NavLink
                 hrefLink="/users"
                 label="Users"
                 setIsSideBarOpen={setIsSideBarOpen}
@@ -54,8 +49,8 @@ export default function Navigation() {
                 setIsSideBarOpen={setIsSideBarOpen}
               />
               <NavLink
-                hrefLink="/company-profile"
-                label="Company Profile"
+                hrefLink="/profile"
+                label="Profile"
                 setIsSideBarOpen={setIsSideBarOpen}
               />
 
@@ -72,7 +67,7 @@ export default function Navigation() {
                 className="px-3 py-3 text-xl rounded-xl bg-gray-700 hover:bg-gray-600 shadow-md text-white"
                 onClick={() => logOutUser()}
               >
-                LogOut
+                Logout
               </button>
             </>
           ) : (

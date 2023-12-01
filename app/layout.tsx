@@ -24,12 +24,13 @@ export default function RootLayout({ children }: Children) {
     <html lang="en">
       <Auth0ProviderWithNavigate>
         <ReduxProvider>
-          <body>
+          <body className={adamina.className}>
             <CurrentUser>
               <TheHeader />
-              <main className={adamina.className}>{children}</main>
+              <main>{children}</main>
             </CurrentUser>
             <ToastContainer />
+            <div id="modal-root"></div>
           </body>
         </ReduxProvider>
       </Auth0ProviderWithNavigate>

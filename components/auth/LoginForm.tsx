@@ -25,31 +25,24 @@ export default function LoginForm() {
     },
   ] = useLoginUserMutation();
 
-
   useEffect(() => {
     if (isLoginError) {
       toast.error((loginError as any)?.error, {
         position: toast.POSITION.TOP_CENTER,
       });
     }
+    if (isLoginSuccess && loginData) {
+      Cookies.set("accessToken", loginData?.user?.accessToken as string);
+      Cookies.set("refreshToken", loginData?.user?.refreshToken as string);
+      Cookies.set("provider", "jwt");
 
-    if (isLoginSuccess) {
       router.push("/profile");
     }
   }, [isLoginError, isLoginSuccess, loginData, loginError, router]);
 
   const handleLogin = async (user: LoginState) => {
     try {
-      const response = await loginUser(user);
-
-      if (!isLoginError && "data" in response) {
-        Cookies.set("accessToken", response.data?.user?.accessToken as string);
-        Cookies.set(
-          "refreshToken",
-          response.data?.user?.refreshToken as string
-        );
-        Cookies.set("provider", "jwt");
-      }
+      await loginUser(user);
     } catch (error: any) {
       toast.error(error.message, {
         position: toast.POSITION.TOP_CENTER,
