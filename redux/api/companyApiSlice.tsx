@@ -24,7 +24,7 @@ export const companyApi = commonApi.injectEndpoints({
         url: `/companies/${id}`,
         method: "GET",
       }),
-      providesTags: () => [{ type: "Company" }],
+      providesTags: (result, error, arg) => [{ type: "Company", id: arg }],
     }),
     createCompany: build.mutation<CompanyType, CreateCompanyType>({
       query: (body: { name: string; description: string }) => ({
@@ -40,7 +40,10 @@ export const companyApi = commonApi.injectEndpoints({
         method: "PUT",
         body: body,
       }),
-      invalidatesTags: ["Company", "Companies"],
+      invalidatesTags: (result, error, arg) => [
+        { type: "Company", id: arg.id },
+        { type: "Companies" },
+      ],
     }),
     deleteCompany: build.mutation<CompanyType, number | undefined>({
       query: (id) => ({
