@@ -68,6 +68,11 @@ export type NavLinkType = {
   setIsSideBarOpen: (status: boolean) => void 
 }
 
+export type SubNavLinkType = {
+  hrefLink: string,
+  label: string
+}
+
 export interface CustomError extends Error {
   status?: number;
 }
@@ -170,3 +175,7 @@ export type UpdateCompanyProps = {
   disabledFields: boolean,
   setDisabledFields: (status: boolean)=> void,
 }
+
+export type IdParamsProps = {
+  params: { id: number };
+};

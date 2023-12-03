@@ -37,6 +37,12 @@ export const userApi = commonApi.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    userLeavesCompany: build.mutation<any, any>({
+      query: ({ userId, companyId }) => ({
+        url: `/users/${userId}/companies/${companyId}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 

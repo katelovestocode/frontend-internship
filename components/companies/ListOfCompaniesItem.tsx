@@ -1,12 +1,18 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { CompanyDetailsType } from "@/types/types";
+import { FiSend } from "react-icons/fi";
+import { useSendUserRequestMutation } from "@/redux/api/requestApiSlice";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useAppSelector } from "@/redux/store";
+import RefreshToken from "../auth/RefreshToken";
 
 export default function ListOfCompaniesItem({ company }: CompanyDetailsType) {
   return (
     <>
-      <li className="border-solid border-gray-700 border-1 rounded-xl p-6 flex gap-2 bg-white xl:gap-3 flex-col xl:flex-row shadow-lg">
+      <li className="border-solid border-gray-700 border-1 rounded-xl p-6 flex flex-col place-content-between gap-4 bg-white shadow-lg">
         <Link
           href={`/companies/${company?.id}`}
           className="flex gap-4 flex-col"

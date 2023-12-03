@@ -15,8 +15,11 @@ export async function generateMetadata({
 
 export default function CompanyProfile({ params: { id } }: IdProps) {
   return (
-    <Container title="Company Profile">
-      <GetOneCompany id={Number(id)} />
-    </Container>
+    // <Container title="Company Profile">
+    // {
+    /* <GetOneCompany id={Number(id)} /> */
+    // }
+    // </Container>
+    <></>
   );
 }

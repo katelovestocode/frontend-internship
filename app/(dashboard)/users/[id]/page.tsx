@@ -15,8 +15,9 @@ export async function generateMetadata({
 
 export default function UserProfile({ params: { id } }: IdProps) {
   return (
-    <Container title="User Profile">
-      <OneUser id={Number(id)} />
-    </Container>
+    <></>
+    // <Container title="User Profile">
+    //   <OneUser id={Number(id)} />
+    // </Container>
   );
 }
