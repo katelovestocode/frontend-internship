@@ -1,3 +1,4 @@
+import React from "react";
 import RefreshToken from "@/components/auth/RefreshToken";
 import ModalWindow from "@/components/common/Modal";
 import { useUserCancelRequestMutation } from "@/redux/api/requestApiSlice";
@@ -8,14 +9,14 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FcCancel } from "react-icons/fc";
 import { FaCheck } from "react-icons/fa";
+import { OneRequestType, ReqIdsType } from "@/types/types";
 
-export default function ListOfUserRequestsItem({ request }) {
+export default function ListOfUserRequestsItem({ request }: OneRequestType) {
   const userId = useAppSelector((state) => state.authReducer.user?.id);
-
   const [cancelRequest, { error: cancelRequestError }] =
     useUserCancelRequestMutation();
 
-  const handleCancelRequest = async (requestId, userId) => {
+  const handleCancelRequest = async ({ requestId, userId }: ReqIdsType) => {
     try {
       await cancelRequest({ requestId, userId });
       toggleModal();
@@ -25,9 +26,7 @@ export default function ListOfUserRequestsItem({ request }) {
       });
     }
   };
-
   const [showModal, setShowModal] = useState(false);
-
   const toggleModal = () => {
     setShowModal((prevState) => !prevState);
   };
@@ -69,7 +68,10 @@ export default function ListOfUserRequestsItem({ request }) {
           <button
             className="btn btn-outline mt-6"
             onClick={() =>
-              handleCancelRequest(Number(request.id), Number(userId))
+              handleCancelRequest({
+                requestId: Number(request.id),
+                userId: Number(userId),
+              })
             }
           >
             <FaCheck />

@@ -1,25 +1,33 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { commonApi } from "./commonApi";
+import {
+  UserReqIdsType,
+  RequestType,
+  ReqIdsType,
+  CompReqIdsType,
+  OneRequestType,
+  CancelRequestType,
+} from "@/types/types";
 
 export type RequestApi = ReturnType<typeof createApi>;
 
 export const requestApi = commonApi.injectEndpoints({
   endpoints: (build) => ({
-    getUsersAllRequests: build.query<any, number>({
+    getUsersAllRequests: build.query<RequestType, number>({
       query: (userId) => ({
         url: `/users/${userId}/requests`,
         method: "GET",
       }),
       providesTags: () => [{ type: "User-Requests" }],
     }),
-    sendUserRequest: build.mutation<any, any>({
+    sendUserRequest: build.mutation<OneRequestType, UserReqIdsType>({
       query: ({ companyId, userId }) => ({
         url: `/users/${userId}/requests/${companyId}`,
         method: "POST",
       }),
       invalidatesTags: () => [{ type: "User-Requests" }],
     }),
-    userCancelRequest: build.mutation<any, any>({
+    userCancelRequest: build.mutation<CancelRequestType, ReqIdsType>({
       query: ({ requestId, userId }) => ({
         url: `/users/${userId}/requests/${requestId}`,
         method: "PUT",
@@ -27,14 +35,14 @@ export const requestApi = commonApi.injectEndpoints({
       invalidatesTags: () => [{ type: "User-Requests" }],
     }),
 
-    getCompanyAllRequests: build.query<any, number>({
+    getCompanyAllRequests: build.query<RequestType, number>({
       query: (companyId) => ({
         url: `/companies/${companyId}/requests`,
         method: "GET",
       }),
       providesTags: () => [{ type: "Company-Requests" }],
     }),
-    companyAcceptsRequest: build.mutation<any, any>({
+    companyAcceptsRequest: build.mutation<RequestType, CompReqIdsType>({
       query: ({ companyId, requestId }) => ({
         url: `/companies/${companyId}/requests/${requestId}/accept`,
         method: "PUT",
@@ -45,7 +53,7 @@ export const requestApi = commonApi.injectEndpoints({
         { type: "Companies" },
       ],
     }),
-    companyDeclinesRequest: build.mutation<any, any>({
+    companyDeclinesRequest: build.mutation<RequestType, CompReqIdsType>({
       query: ({ companyId, requestId }) => ({
         url: `/companies/${companyId}/requests/${requestId}/decline`,
         method: "PUT",

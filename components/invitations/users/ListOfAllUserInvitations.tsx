@@ -2,6 +2,7 @@
 import { useGetAllUsersInvitationsQuery } from "@/redux/api/invitationApiSlice";
 import RefreshToken from "../../auth/RefreshToken";
 import ListOfUserInviteItem from "./ListOfUserInviteItem";
+import React from "react";
 
 export default function ListOfAllUserInvitations({ id }: { id: number }) {
   const { data, error } = useGetAllUsersInvitationsQuery(id);

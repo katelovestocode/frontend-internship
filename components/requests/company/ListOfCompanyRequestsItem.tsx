@@ -9,8 +9,13 @@ import { FaCheck } from "react-icons/fa";
 import { useState } from "react";
 import ModalWindow from "@/components/common/Modal";
 import RefreshToken from "@/components/auth/RefreshToken";
+import { CompReqIdsType, RequestAndIdType } from "@/types/types";
+import React from "react";
 
-export default function ListOfCompanyRequestsItem({ request, companyId }) {
+export default function ListOfCompanyRequestsItem({
+  request,
+  companyId,
+}: RequestAndIdType) {
   const [acceptRequest, { error: acceptError }] =
     useCompanyAcceptsRequestMutation();
   const [declineRequest, { error: requestError }] =
@@ -22,7 +27,10 @@ export default function ListOfCompanyRequestsItem({ request, companyId }) {
     setShowModal((prevState) => !prevState);
   };
 
-  const handleDeclinedRequest = async (companyId, requestId) => {
+  const handleDeclinedRequest = async ({
+    companyId,
+    requestId,
+  }: CompReqIdsType) => {
     try {
       await declineRequest({ companyId, requestId });
       toggleModal();
@@ -33,7 +41,10 @@ export default function ListOfCompanyRequestsItem({ request, companyId }) {
     }
   };
 
-  const handleAcceptedRequest = async (companyId, requestId) => {
+  const handleAcceptedRequest = async ({
+    companyId,
+    requestId,
+  }: CompReqIdsType) => {
     try {
       await acceptRequest({ companyId, requestId });
       toggleModal();
@@ -90,7 +101,10 @@ export default function ListOfCompanyRequestsItem({ request, companyId }) {
             <button
               className="btn btn-outline mt-6"
               onClick={() =>
-                handleAcceptedRequest(Number(companyId), Number(request.id))
+                handleAcceptedRequest({
+                  companyId: Number(companyId),
+                  requestId: Number(request.id),
+                })
               }
             >
               <FaCheck />
@@ -100,7 +114,10 @@ export default function ListOfCompanyRequestsItem({ request, companyId }) {
             <button
               className="btn btn-outline mt-6"
               onClick={() =>
-                handleDeclinedRequest(Number(companyId), Number(request.id))
+                handleDeclinedRequest({
+                  companyId: Number(companyId),
+                  requestId: Number(request.id),
+                })
               }
             >
               <FcCancel /> No, I Decline it

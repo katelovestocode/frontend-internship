@@ -1,4 +1,5 @@
-import { useOwnerRemovesUserMutation } from "@/redux/api/companyApiSlice";
+import React from "react";
+import { useDeleteCompanyMutation } from "@/redux/api/companyApiSlice";
 import ModalWindow from "../common/Modal";
 import { FaCheck } from "react-icons/fa";
 import { FcCancel } from "react-icons/fc";
@@ -6,21 +7,34 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import RefreshToken from "../auth/RefreshToken";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { DeleteCompanyType } from "@/types/types";
 
-export default function RemoveMember({
+export default function OwnerDeletesCompany({
   id,
   showModal,
   toggleModal,
-  selectedMember,
-}) {
+}: DeleteCompanyType) {
   const [
-    removeMember,
-    { error: removeMemberError, isSuccess: isRemoveMemberSuccess },
-  ] = useOwnerRemovesUserMutation();
+    deleteCompany,
+    {
+      data: deletedData,
+      isSuccess: isDeletedSuccess,
+      isError: isDeletedError,
+      error: deletedError,
+    },
+  ] = useDeleteCompanyMutation();
+  const router = useRouter();
 
-  const handleRemoveMember = async (companyId, userId) => {
+  useEffect(() => {
+    if (isDeletedSuccess) {
+      router.push("/companies");
+    }
+  }, [isDeletedSuccess]);
+
+  const handleDeleteCompany = async (id: number | undefined) => {
     try {
-      await removeMember({ companyId, userId });
+      await deleteCompany(id);
     } catch (error: any) {
       toast.error(error.message, {
         position: toast.POSITION.TOP_CENTER,
@@ -28,25 +42,17 @@ export default function RemoveMember({
     }
   };
 
-  useEffect(() => {
-    if (isRemoveMemberSuccess) {
-      toggleModal();
-    }
-  }, [isRemoveMemberSuccess]);
-
   return (
     <>
       <ModalWindow showModal={showModal} toggleModal={toggleModal}>
         <div className="flex flex-col border-solid mb-6 border-gray-700 border-1 rounded-xl p-10 flex gap-2 bg-white shadow-2xl">
           <h2 className="text-center font-bold text-2xl mb-4">
-            Are you sure you want to delete this user?
+            Are you sure you want to delete this company?
           </h2>
 
           <button
             className="btn btn-outline mt-6"
-            onClick={() =>
-              handleRemoveMember(Number(id), Number(selectedMember))
-            }
+            onClick={() => handleDeleteCompany(Number(id))}
           >
             <FaCheck />
             Yes, I made my mind
@@ -61,7 +67,7 @@ export default function RemoveMember({
         </div>
       </ModalWindow>
 
-      <RefreshToken error={removeMemberError} />
+      <RefreshToken error={deletedError} />
     </>
   );
 }

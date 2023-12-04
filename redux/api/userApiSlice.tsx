@@ -1,6 +1,12 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { commonApi } from "./commonApi";
-import { GetAllUsersType, GetOneUserType, UpdateUserType } from "@/types/types";
+import {
+  CompanyType,
+  GetAllUsersType,
+  GetOneUserType,
+  IdTypes,
+  UpdateUserType,
+} from "@/types/types";
 
 export type UserApi = ReturnType<typeof createApi>;
 
@@ -37,11 +43,14 @@ export const userApi = commonApi.injectEndpoints({
         method: "DELETE",
       }),
     }),
-    userLeavesCompany: build.mutation<any, any>({
+    userLeavesCompany: build.mutation<CompanyType, IdTypes>({
       query: ({ userId, companyId }) => ({
         url: `/users/${userId}/companies/${companyId}`,
         method: "DELETE",
       }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "Company", id: arg.companyId },
+      ],
     }),
   }),
 });
@@ -52,4 +61,5 @@ export const {
   useGetAllUsersQuery,
   useUpdateUserMutation,
   useDeleteUserMutation,
+  useUserLeavesCompanyMutation,
 } = userApi;

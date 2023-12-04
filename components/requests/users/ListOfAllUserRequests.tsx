@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import {
   useGetUsersAllRequestsQuery,
   useSendUserRequestMutation,
@@ -12,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useLazyGetAllCompaniesQuery } from "@/redux/api/companyApiSlice";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/store";
+import { UserReqIdsType } from "@/types/types";
 
 export default function ListOfAllUserRequests({ id }: { id: number }) {
   const { data, error } = useGetUsersAllRequestsQuery(id);
@@ -29,6 +31,7 @@ export default function ListOfAllUserRequests({ id }: { id: number }) {
 
   const toggleModal = () => {
     setShowModal((prevState) => !prevState);
+    setSelectedCompany(null);
   };
 
   const handleClick = async () => {
@@ -36,7 +39,7 @@ export default function ListOfAllUserRequests({ id }: { id: number }) {
     toggleModal();
   };
 
-  const handleSendRequest = async (companyId, userId) => {
+  const handleSendRequest = async ({ companyId, userId }: UserReqIdsType) => {
     try {
       await sendRequest({ companyId, userId });
     } catch (error: any) {
@@ -51,13 +54,16 @@ export default function ListOfAllUserRequests({ id }: { id: number }) {
       toggleModal();
     }
   }, [sendRequestSuccess]);
+
   return (
     <>
-      <div className="ml-auto">
-        <button className="btn btn-active btn-neutral" onClick={handleClick}>
-          <FiSend /> Send Request
-        </button>
-      </div>
+      {Number(userId) === Number(id) && (
+        <div className="">
+          <button className="btn btn-neutral" onClick={handleClick}>
+            <FiSend /> Send Request
+          </button>
+        </div>
+      )}
 
       <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {data?.requests &&
@@ -89,7 +95,12 @@ export default function ListOfAllUserRequests({ id }: { id: number }) {
           </ul>
           <button
             className="btn btn-outline mt-6"
-            onClick={() => handleSendRequest(selectedCompany, userId)}
+            onClick={() =>
+              handleSendRequest({
+                companyId: Number(selectedCompany),
+                userId: Number(userId),
+              })
+            }
           >
             <FiSend /> Send Request
           </button>

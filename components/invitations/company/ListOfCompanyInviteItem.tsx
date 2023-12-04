@@ -1,4 +1,5 @@
 import ModalWindow from "@/components/common/Modal";
+import React from "react";
 import { BsSendX } from "react-icons/bs";
 import { FcCancel } from "react-icons/fc";
 import { FaCheck } from "react-icons/fa";
@@ -7,8 +8,12 @@ import RefreshToken from "@/components/auth/RefreshToken";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
+import { CompInviteIdsType, InviteAndIdType } from "@/types/types";
 
-export default function ListOfCompanyInviteItem({ invite, id }) {
+export default function ListOfCompanyInviteItem({
+  invite,
+  id,
+}: InviteAndIdType) {
   const [companyCancelsInvitation, { error: cancelInviteError }] =
     useCompanyCancelInvitationMutation();
 
@@ -18,7 +23,10 @@ export default function ListOfCompanyInviteItem({ invite, id }) {
     setShowModal((prevState) => !prevState);
   };
 
-  const handleCancelInvite = async (companyId, invitationId) => {
+  const handleCancelInvite = async ({
+    companyId,
+    invitationId,
+  }: CompInviteIdsType) => {
     try {
       await companyCancelsInvitation({ companyId, invitationId });
       toggleModal();
@@ -64,7 +72,12 @@ export default function ListOfCompanyInviteItem({ invite, id }) {
 
           <button
             className="btn btn-outline mt-6"
-            onClick={() => handleCancelInvite(Number(id), Number(invite.id))}
+            onClick={() =>
+              handleCancelInvite({
+                companyId: Number(id),
+                invitationId: Number(invite.id),
+              })
+            }
           >
             <FaCheck />
             Yes, I want to cancel it

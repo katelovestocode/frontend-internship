@@ -1,5 +1,10 @@
 import { ReactNode } from "react";
 
+export type IdChildrenProps = {
+  id: number;
+  children: React.ReactNode;
+};
+
 export type ButtonProps = {
   title: string;
   onClick?: () => void;
@@ -179,3 +184,124 @@ export type UpdateCompanyProps = {
 export type IdParamsProps = {
   params: { id: number };
 };
+
+export type InvitationType = {
+invitations: []
+}
+
+export type CompIdsType = {
+  companyId: number;
+  inviteeId: number | null;
+}
+
+export type CompInviteIdsType = {
+  companyId: number;
+  invitationId: number | null;
+}
+
+export type InviteType = {
+  invitation: {
+    id: number,
+    status: string,
+    inviter: UserType,
+    invitee: UserType
+    }
+}
+
+export type OneInviteType = {
+  invite: {
+    id: number,
+    status: string,
+    inviter: UserType,
+    company: CompanyType
+  }
+}
+export type UserInviteIdsType = {
+  userId: number | undefined;
+  invitationId: number;
+}
+
+export type InviteAndIdType = {
+  id: number,
+  invite: {
+    id: number,
+    inviter: UserType,
+    status: string,
+    invitee: UserType
+  }
+}
+
+export type RequestType = {
+requests: []
+}
+
+export type UserReqIdsType = {
+  companyId: number | null;
+  userId: number | undefined;
+}
+
+export type ReqIdsType = {
+  requestId: number;
+  userId: number;
+}
+
+export type CompReqIdsType = {
+  companyId: number;
+  requestId: number | null;
+}
+
+export type OneRequestType = {
+  request: {
+    id: number,
+    status: string,
+    company: CompanyType
+    requester: UserType
+  }
+}
+
+export type CancelRequestType = {
+  request: {
+    id: number,
+    requester: UserType,
+    status: string 
+    }
+}
+
+export type RequestAndIdType = {
+  companyId: number,
+  request: {
+    id: number,
+    status: string,
+    company: CompanyType
+    requester: UserType
+  }
+}
+
+export type RemoveMemberProps = {
+  id: number,
+  showModal: boolean,
+  toggleModal: () => void,
+  selectedMember: number | null,
+}
+
+export type UserLeavesProps = {
+  id: number,
+  showModal: boolean,
+  toggleModal: () => void,
+}
+
+export type UserIdsType = {
+  companyId: number | null;
+  userId: number | undefined;
+}
+
+export type DeleteCompanyType = {
+  id: number,
+  showModal: boolean,
+  toggleModal: () => void,
+}
+
+export type IdTypes = {
+  companyId: number;
+  userId: number ;
+}

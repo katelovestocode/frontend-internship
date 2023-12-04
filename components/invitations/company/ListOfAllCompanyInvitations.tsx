@@ -11,6 +11,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { useLazyGetAllUsersQuery } from "@/redux/api/userApiSlice";
 import { useEffect, useState } from "react";
 import ModalWindow from "@/components/common/Modal";
+import { CompIdsType } from "@/types/types";
+import React from "react";
 
 export default function ListOfAllCompanyInvitations({ id }: { id: number }) {
   const { data, error } = useGetAllCompanyInvitationsQuery(id);
@@ -18,12 +20,7 @@ export default function ListOfAllCompanyInvitations({ id }: { id: number }) {
     useLazyGetAllUsersQuery();
   const [
     sendInvitatation,
-    {
-      data: sendInvitatationData,
-      isError: sendInvitatationError,
-      isSuccess: sendInvitatationSuccess,
-      error: invitationError,
-    },
+    { isSuccess: sendInvitatationSuccess, error: invitationError },
   ] = useCompanySendsInvitationMutation();
 
   const [selectedUser, setSelectedUser] = useState(null);
@@ -31,6 +28,7 @@ export default function ListOfAllCompanyInvitations({ id }: { id: number }) {
 
   const toggleModal = () => {
     setShowModal((prevState) => !prevState);
+    setSelectedUser(null);
   };
 
   const handleClick = async () => {
@@ -44,7 +42,10 @@ export default function ListOfAllCompanyInvitations({ id }: { id: number }) {
     }
   }, [sendInvitatationSuccess]);
 
-  const handleSendInvitation = async (companyId, inviteeId) => {
+  const handleSendInvitation = async ({
+    companyId,
+    inviteeId,
+  }: CompIdsType) => {
     try {
       await sendInvitatation({ companyId, inviteeId });
     } catch (error: any) {
@@ -56,20 +57,20 @@ export default function ListOfAllCompanyInvitations({ id }: { id: number }) {
 
   return (
     <>
+      {id && (
+        <div className="">
+          <button className="btn btn-neutral" onClick={handleClick}>
+            <FiSend /> Send Invitation
+          </button>
+        </div>
+      )}
+
       <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {data &&
           data?.invitations?.map((invite: any) => (
             <ListOfCompanyInviteItem invite={invite} key={invite?.id} id={id} />
           ))}
       </ul>
-
-      {id && (
-        <div className="mt-auto">
-          <button className="btn btn-neutral" onClick={handleClick}>
-            <FiSend /> Send Invitation
-          </button>
-        </div>
-      )}
 
       <ModalWindow showModal={showModal} toggleModal={toggleModal}>
         <div className="flex flex-col border-solid mb-6 border-gray-700 border-1 rounded-xl p-10 flex gap-2 bg-white shadow-2xl">
@@ -94,7 +95,12 @@ export default function ListOfAllCompanyInvitations({ id }: { id: number }) {
           </ul>
           <button
             className="btn btn-outline mt-6"
-            onClick={() => handleSendInvitation(id, selectedUser)}
+            onClick={() =>
+              handleSendInvitation({
+                companyId: Number(id),
+                inviteeId: Number(selectedUser),
+              })
+            }
           >
             <FiSend /> Send Invitation
           </button>

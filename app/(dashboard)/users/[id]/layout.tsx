@@ -1,6 +1,7 @@
 import SubNavLink from "@/components/common/SubNavLink";
 import OneUser from "@/components/users/GetOneUser";
 import type { Metadata } from "next";
+import React from "react";
 
 type IdProps = {
   params: { id: number };

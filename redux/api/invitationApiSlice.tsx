@@ -1,25 +1,32 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { commonApi } from "./commonApi";
+import {
+  InvitationType,
+  InviteType,
+  UserInviteIdsType,
+  CompInviteIdsType,
+  CompIdsType,
+} from "@/types/types";
 
 export type InvitationApi = ReturnType<typeof createApi>;
 
 export const invitationApi = commonApi.injectEndpoints({
   endpoints: (build) => ({
-    getAllCompanyInvitations: build.query<any, number>({
+    getAllCompanyInvitations: build.query<InvitationType, number>({
       query: (companyId) => ({
         url: `/companies/${companyId}/invitations`,
         method: "GET",
       }),
       providesTags: () => [{ type: "Company-Invitations" }],
     }),
-    companySendsInvitation: build.mutation<any, any>({
+    companySendsInvitation: build.mutation<InvitationType, CompIdsType>({
       query: ({ companyId, inviteeId }) => ({
         url: `/companies/${companyId}/invitations/${inviteeId}`,
         method: "POST",
       }),
       invalidatesTags: () => [{ type: "Company-Invitations" }],
     }),
-    companyCancelInvitation: build.mutation<any, any>({
+    companyCancelInvitation: build.mutation<InviteType, CompInviteIdsType>({
       query: ({ companyId, invitationId }) => ({
         url: `/companies/${companyId}/invitations/${invitationId}`,
         method: "PUT",
@@ -27,21 +34,21 @@ export const invitationApi = commonApi.injectEndpoints({
       invalidatesTags: () => [{ type: "Company-Invitations" }],
     }),
 
-    getAllUsersInvitations: build.query<any, number>({
+    getAllUsersInvitations: build.query<InvitationType, number>({
       query: (userId) => ({
         url: `/users/${userId}/invitations`,
         method: "GET",
       }),
       providesTags: () => [{ type: "User-Invitations" }],
     }),
-    userAcceptsInvitation: build.mutation<any, any>({
+    userAcceptsInvitation: build.mutation<InvitationType, UserInviteIdsType>({
       query: ({ userId, invitationId }) => ({
         url: `/users/${userId}/invitations/${invitationId}/accept`,
         method: "PUT",
       }),
       invalidatesTags: () => [{ type: "User-Invitations" }],
     }),
-    userDeclineInvitation: build.mutation<any, any>({
+    userDeclineInvitation: build.mutation<InvitationType, UserInviteIdsType>({
       query: ({ invitationId, userId }) => ({
         url: `/users/${userId}/invitations/${invitationId}/decline`,
         method: "PUT",

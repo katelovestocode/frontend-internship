@@ -1,5 +1,6 @@
 import RefreshToken from "@/components/auth/RefreshToken";
 import ModalWindow from "@/components/common/Modal";
+import React from "react";
 import {
   useUserAcceptsInvitationMutation,
   useUserDeclineInvitationMutation,
@@ -10,8 +11,9 @@ import { FcCancel } from "react-icons/fc";
 import { FaCheck } from "react-icons/fa";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { OneInviteType, UserInviteIdsType } from "@/types/types";
 
-export default function ListOfUserInviteItem({ invite }) {
+export default function ListOfUserInviteItem({ invite }: OneInviteType) {
   const userId = useAppSelector((state) => state.authReducer.user?.id);
 
   const [acceptedInvite, { error: acceptInviteError }] =
@@ -25,7 +27,10 @@ export default function ListOfUserInviteItem({ invite }) {
     setShowModal((prevState) => !prevState);
   };
 
-  const handleDeclinedInvite = async (userId, invitationId) => {
+  const handleDeclinedInvite = async ({
+    userId,
+    invitationId,
+  }: UserInviteIdsType) => {
     try {
       await declinedInvite({ userId, invitationId });
       toggleModal();
@@ -36,7 +41,10 @@ export default function ListOfUserInviteItem({ invite }) {
     }
   };
 
-  const handleAcceptedInvite = async (userId, invitationId) => {
+  const handleAcceptedInvite = async ({
+    userId,
+    invitationId,
+  }: UserInviteIdsType) => {
     try {
       await acceptedInvite({ userId, invitationId });
       toggleModal();
@@ -93,7 +101,10 @@ export default function ListOfUserInviteItem({ invite }) {
           <button
             className="btn btn-outline mt-6"
             onClick={() =>
-              handleAcceptedInvite(Number(userId), Number(invite.id))
+              handleAcceptedInvite({
+                userId: Number(userId),
+                invitationId: Number(invite.id),
+              })
             }
           >
             <FaCheck />
@@ -103,7 +114,10 @@ export default function ListOfUserInviteItem({ invite }) {
           <button
             className="btn btn-outline mt-6"
             onClick={() =>
-              handleDeclinedInvite(Number(userId), Number(invite.id))
+              handleDeclinedInvite({
+                userId: Number(userId),
+                invitationId: Number(invite.id),
+              })
             }
           >
             <FcCancel /> No, I Decline it

@@ -1,5 +1,6 @@
 import GetOneCompany from "@/components/companies/GetOneCompany";
 import type { Metadata } from "next";
+import React from "react";
 
 type IdProps = {
   params: { id: number };

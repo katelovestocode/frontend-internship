@@ -1,5 +1,3 @@
-import Container from "@/components/common/Container";
-import GetOneCompany from "@/components/companies/GetOneCompany";
 import { Metadata } from "next";
 import React from "react";
 
@@ -13,13 +11,6 @@ export async function generateMetadata({
   return { title: `Company ${id} Profile` };
 }
 
-export default function CompanyProfile({ params: { id } }: IdProps) {
-  return (
-    // <Container title="Company Profile">
-    // {
-    /* <GetOneCompany id={Number(id)} /> */
-    // }
-    // </Container>
-    <></>
-  );
+export default function CompanyProfile() {
+  return <></>;
 }
