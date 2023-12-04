@@ -3,9 +3,9 @@ import React from "react";
 import OneUserTemplate from "./OneUserTemplate";
 import { useAppSelector } from "@/redux/store";
 import SubNavLink from "../common/SubNavLink";
-import { Children } from "@/types/types";
+import { ChildrenProps } from "@/types/types";
 
-export default function UserProfile({ children }: Children) {
+export default function UserProfile({ children }: ChildrenProps) {
   const user = useAppSelector((state) => state.authReducer.user);
 
   return (

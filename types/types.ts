@@ -1,4 +1,7 @@
 import { ReactNode } from "react";
+export type ChildrenProps = {
+  children: React.ReactNode;
+}
 
 export type IdChildrenProps = {
   id: number;
