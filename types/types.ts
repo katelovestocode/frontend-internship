@@ -308,3 +308,14 @@ export type IdTypes = {
   companyId: number;
   userId: number ;
 }
+
+export type CommonModalType = {
+  ids: any[],
+  showModal: boolean,
+  toggleModal: () => void,
+  titleText: string,
+  handleOnClick: (ids: number[]) => void,
+  yesText: string,
+  noText: string,
+  error: {} | undefined,
+}

@@ -33,12 +33,6 @@ export const commonApi = createApi({
           position: toast.POSITION.TOP_CENTER,
         });
       }
-
-      if (response.ok) {
-        toast.success(data?.result, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-      }
       return data.details;
     },
   }),

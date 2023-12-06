@@ -69,6 +69,9 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
   useEffect(() => {
     if (isUpdateSuccess) {
       getCurrentUser();
+      toast.success("User information has been successfully updated", {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
     if (isUpdateSuccess || isUpdateError) {
       setDisabledFields(true);

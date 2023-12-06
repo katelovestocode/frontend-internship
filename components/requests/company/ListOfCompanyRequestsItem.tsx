@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FcCancel } from "react-icons/fc";
 import { FaCheck } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalWindow from "@/components/common/Modal";
 import RefreshToken from "@/components/auth/RefreshToken";
 import { CompReqIdsType, RequestAndIdType } from "@/types/types";
@@ -16,9 +16,9 @@ export default function ListOfCompanyRequestsItem({
   request,
   companyId,
 }: RequestAndIdType) {
-  const [acceptRequest, { error: acceptError }] =
+  const [acceptRequest, { error: acceptError, isSuccess: isAcceptSuccess }] =
     useCompanyAcceptsRequestMutation();
-  const [declineRequest, { error: requestError }] =
+  const [declineRequest, { error: requestError, isSuccess: isDeclineSuccess }] =
     useCompanyDeclinesRequestMutation();
 
   const [showModal, setShowModal] = useState(false);
@@ -54,6 +54,14 @@ export default function ListOfCompanyRequestsItem({
       });
     }
   };
+
+  useEffect(() => {
+    if (isAcceptSuccess || isDeclineSuccess) {
+      toast.success("Request has been accepted/declined successfully", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    }
+  }, [isAcceptSuccess, isDeclineSuccess]);
 
   return (
     <>

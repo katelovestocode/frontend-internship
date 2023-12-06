@@ -52,6 +52,9 @@ export default function ListOfAllUserRequests({ id }: { id: number }) {
   useEffect(() => {
     if (sendRequestSuccess) {
       toggleModal();
+      toast.success("Request has been send successfully", {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
   }, [sendRequestSuccess]);
 
@@ -106,7 +109,7 @@ export default function ListOfAllUserRequests({ id }: { id: number }) {
           </button>
         </div>
       </ModalWindow>
-      <RefreshToken error={error || sendRequestError} />
+      <RefreshToken error={error || sendRequestError || getCompanyError} />
     </>
   );
 }

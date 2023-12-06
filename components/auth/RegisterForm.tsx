@@ -30,6 +30,9 @@ export default function RegisterForm() {
       });
     }
     if (isRegisterSuccess) {
+      toast.success("You have been successfully registered", {
+        position: toast.POSITION.TOP_CENTER,
+      });
       router.push("/login");
     }
   }, [isRegisterError, isRegisterSuccess, registerData, registerError, router]);

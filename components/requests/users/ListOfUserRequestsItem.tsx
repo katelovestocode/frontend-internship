@@ -1,24 +1,23 @@
-import React from "react";
-import RefreshToken from "@/components/auth/RefreshToken";
-import ModalWindow from "@/components/common/Modal";
+import React, { useEffect } from "react";
 import { useUserCancelRequestMutation } from "@/redux/api/requestApiSlice";
 import { useAppSelector } from "@/redux/store";
 import { useState } from "react";
 import { BsSendX } from "react-icons/bs";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FcCancel } from "react-icons/fc";
-import { FaCheck } from "react-icons/fa";
-import { OneRequestType, ReqIdsType } from "@/types/types";
+import { OneRequestType } from "@/types/types";
+import CommonModal from "@/components/common/CommonModal";
 
 export default function ListOfUserRequestsItem({ request }: OneRequestType) {
   const userId = useAppSelector((state) => state.authReducer.user?.id);
-  const [cancelRequest, { error: cancelRequestError }] =
-    useUserCancelRequestMutation();
+  const [
+    cancelRequest,
+    { error: cancelRequestError, isSuccess: isCancelRequestSuccess },
+  ] = useUserCancelRequestMutation();
 
-  const handleCancelRequest = async ({ requestId, userId }: ReqIdsType) => {
+  const handleCancelRequest = async (ids: any) => {
     try {
-      await cancelRequest({ requestId, userId });
+      await cancelRequest({ requestId: ids[0], userId: ids[1] });
       toggleModal();
     } catch (error: any) {
       toast.error(error.message, {
@@ -30,6 +29,14 @@ export default function ListOfUserRequestsItem({ request }: OneRequestType) {
   const toggleModal = () => {
     setShowModal((prevState) => !prevState);
   };
+
+  useEffect(() => {
+    if (isCancelRequestSuccess) {
+      toast.success("Request has been cancelled successfully", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    }
+  }, [isCancelRequestSuccess]);
 
   return (
     <>
@@ -58,35 +65,16 @@ export default function ListOfUserRequestsItem({ request }: OneRequestType) {
           </button>
         )}
       </li>
-
-      <ModalWindow showModal={showModal} toggleModal={toggleModal}>
-        <div className="flex flex-col border-solid mb-6 border-gray-700 border-1 rounded-xl p-10 flex gap-2 bg-white shadow-2xl">
-          <h2 className="text-center font-bold text-2xl mb-4">
-            Are you sure you want to cancel request?
-          </h2>
-
-          <button
-            className="btn btn-outline mt-6"
-            onClick={() =>
-              handleCancelRequest({
-                requestId: Number(request.id),
-                userId: Number(userId),
-              })
-            }
-          >
-            <FaCheck />
-            Yes, want to cancel it
-          </button>
-
-          <button
-            className="btn btn-outline mt-6"
-            onClick={() => toggleModal()}
-          >
-            <FcCancel /> No, I changed my mind
-          </button>
-        </div>
-      </ModalWindow>
-      <RefreshToken error={cancelRequestError} />
+      <CommonModal
+        ids={[request.id, userId]}
+        showModal={showModal}
+        toggleModal={toggleModal}
+        handleOnClick={handleCancelRequest}
+        titleText="Are you sure you want to cancel request?"
+        yesText="Yes, I want to cancel it"
+        noText="No, I changed my mind"
+        error={cancelRequestError}
+      />
     </>
   );
 }

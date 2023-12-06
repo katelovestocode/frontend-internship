@@ -1,7 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import RefreshToken from "../auth/RefreshToken";
-import { useLazyGetOneCompanyQuery } from "@/redux/api/companyApiSlice";
+import {
+  useDeleteCompanyMutation,
+  useLazyGetOneCompanyQuery,
+  useOwnerRemovesUserMutation,
+} from "@/redux/api/companyApiSlice";
 import "react-toastify/dist/ReactToastify.css";
 import { useAppSelector } from "@/redux/store";
 import { IdChildrenProps, UserType } from "@/types/types";
@@ -9,9 +13,11 @@ import Loader from "../common/Loader";
 import UpdateCompany from "./UpdateCompany";
 import SubNavLink from "../common/SubNavLink";
 import { RiDeleteBin5Fill } from "react-icons/ri";
-import OwnerRemovesMember from "./OwnerRemovesMember";
-import UserLeavesCompany from "../users/UserLeavesCompany";
-import OwnerDeletesCompany from "./OwnerDeletesCompany";
+import CommonModal from "../common/CommonModal";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useUserLeavesCompanyMutation } from "@/redux/api/userApiSlice";
 
 export default function GetOneCompany({ id, children }: IdChildrenProps) {
   const userId = useAppSelector((state) => state.authReducer.user?.id);
@@ -47,18 +53,102 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
     getOneCompany(id);
   }, [getOneCompany, id]);
 
-  const updateCompany = () => {
-    setDisabledFields((prevState) => !prevState);
-    toggleUpdateCompanyModal();
-  };
+  const [
+    deleteCompany,
+    {
+      data: deletedData,
+      isSuccess: isDeletedSuccess,
+      isError: isDeletedError,
+      error: deletedError,
+    },
+  ] = useDeleteCompanyMutation();
+  const router = useRouter();
 
+  useEffect(() => {
+    if (isDeletedSuccess) {
+      toast.success("Company has been successfully deleted", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      router.push("/companies");
+    }
+  }, [isDeletedSuccess]);
+
+  const handleDeleteCompany = async (ids: any) => {
+    try {
+      await deleteCompany(ids[0]);
+    } catch (error: any) {
+      toast.error(error.message, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    }
+  };
   const ownerDeletesCompany = () => {
     toggleDeleteCompanyModal();
   };
 
+  const [
+    removeMember,
+    {
+      data: removeMemberData,
+      error: removeMemberError,
+      isSuccess: isRemoveMemberSuccess,
+    },
+  ] = useOwnerRemovesUserMutation();
+
+  const handleRemoveMember = async (ids: any) => {
+    try {
+      await removeMember({ companyId: ids[0], userId: ids[1] });
+    } catch (error: any) {
+      toast.error(error.message, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    }
+  };
+  useEffect(() => {
+    if (isRemoveMemberSuccess) {
+      toggleRemoveUserModal();
+      toast.success("Member has been successfully removed", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    }
+  }, [isRemoveMemberSuccess]);
+
   const deleteCompanyMember = (id: any) => {
     setSelectedMember(id);
     toggleRemoveUserModal();
+  };
+
+  const [
+    leaveCompany,
+    {
+      data: leaveCompanyData,
+      error: leaveCompanyError,
+      isSuccess: isLeaveCompanySuccess,
+    },
+  ] = useUserLeavesCompanyMutation();
+
+  const handleLeaveCompany = async (ids: any) => {
+    try {
+      await leaveCompany({ userId: ids[0], companyId: ids[1] });
+    } catch (error: any) {
+      toast.error(error.message, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    }
+  };
+  useEffect(() => {
+    if (isLeaveCompanySuccess) {
+      toggleLeaveCompanyModal();
+      setUserIsMember(false);
+      toast.success("You successfully has left company", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    }
+  }, [isLeaveCompanySuccess]);
+
+  const updateCompany = () => {
+    setDisabledFields((prevState) => !prevState);
+    toggleUpdateCompanyModal();
   };
 
   // check if the logged-in user is the member of the company
@@ -187,7 +277,6 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
           )}
         </div>
       )}
-
       <UpdateCompany
         id={id}
         company={company}
@@ -197,23 +286,40 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
         setDisabledFields={setDisabledFields}
       />
 
-      <OwnerDeletesCompany
-        id={id}
+      {/* owner deletes company*/}
+      <CommonModal
+        ids={[id]}
         showModal={showDeleteCompanyModal}
         toggleModal={toggleDeleteCompanyModal}
+        handleOnClick={handleDeleteCompany}
+        titleText="Are you sure you want to delete this company?"
+        yesText="Yes, I made my mind"
+        noText="No, I changed my mind"
+        error={deletedError}
       />
 
-      <OwnerRemovesMember
-        id={id}
+      {/* owner removes user from company member's list*/}
+      <CommonModal
+        ids={[id, selectedMember]}
         showModal={showRemoveUserModal}
         toggleModal={toggleRemoveUserModal}
-        selectedMember={selectedMember}
+        handleOnClick={handleRemoveMember}
+        titleText="Are you sure you want to delete this user?"
+        yesText="Yes, I made my mind"
+        noText="No, I changed my mind"
+        error={removeMemberError}
       />
 
-      <UserLeavesCompany
-        id={id}
+      {/* user leaves company*/}
+      <CommonModal
+        ids={[userId, id]}
         showModal={showLeaveCompanyModal}
         toggleModal={toggleLeaveCompanyModal}
+        handleOnClick={handleLeaveCompany}
+        titleText=" Are you sure you want to leave this company?"
+        yesText=" Yes, I want to leave"
+        noText="No, I changed my mind"
+        error={leaveCompanyError}
       />
       <RefreshToken error={getOneCompanyError} />
     </>

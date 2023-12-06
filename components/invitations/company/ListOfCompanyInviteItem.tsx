@@ -1,21 +1,20 @@
-import ModalWindow from "@/components/common/Modal";
-import React from "react";
+import React, { useEffect } from "react";
 import { BsSendX } from "react-icons/bs";
-import { FcCancel } from "react-icons/fc";
-import { FaCheck } from "react-icons/fa";
 import { useCompanyCancelInvitationMutation } from "@/redux/api/invitationApiSlice";
-import RefreshToken from "@/components/auth/RefreshToken";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
-import { CompInviteIdsType, InviteAndIdType } from "@/types/types";
+import { InviteAndIdType } from "@/types/types";
+import CommonModal from "@/components/common/CommonModal";
 
 export default function ListOfCompanyInviteItem({
   invite,
   id,
 }: InviteAndIdType) {
-  const [companyCancelsInvitation, { error: cancelInviteError }] =
-    useCompanyCancelInvitationMutation();
+  const [
+    companyCancelsInvitation,
+    { error: cancelInviteError, isSuccess: isCancelSuccess },
+  ] = useCompanyCancelInvitationMutation();
 
   const [showModal, setShowModal] = useState(false);
 
@@ -23,12 +22,12 @@ export default function ListOfCompanyInviteItem({
     setShowModal((prevState) => !prevState);
   };
 
-  const handleCancelInvite = async ({
-    companyId,
-    invitationId,
-  }: CompInviteIdsType) => {
+  const handleCancelInvite = async (ids: any) => {
     try {
-      await companyCancelsInvitation({ companyId, invitationId });
+      await companyCancelsInvitation({
+        companyId: ids[0],
+        invitationId: ids[1],
+      });
       toggleModal();
     } catch (error: any) {
       toast.error(error.message, {
@@ -36,6 +35,14 @@ export default function ListOfCompanyInviteItem({
       });
     }
   };
+
+  useEffect(() => {
+    if (isCancelSuccess) {
+      toast.success("Invitation has been successfully cancelled", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    }
+  }, [isCancelSuccess]);
 
   return (
     <>
@@ -64,35 +71,16 @@ export default function ListOfCompanyInviteItem({
         )}
       </li>
 
-      <ModalWindow showModal={showModal} toggleModal={toggleModal}>
-        <div className="flex flex-col border-solid mb-6 border-gray-700 border-1 rounded-xl p-10 flex gap-2 bg-white shadow-2xl">
-          <h2 className="text-center font-bold text-2xl mb-4">
-            Are you sure you want to cancel invitation?
-          </h2>
-
-          <button
-            className="btn btn-outline mt-6"
-            onClick={() =>
-              handleCancelInvite({
-                companyId: Number(id),
-                invitationId: Number(invite.id),
-              })
-            }
-          >
-            <FaCheck />
-            Yes, I want to cancel it
-          </button>
-
-          <button
-            className="btn btn-outline mt-6"
-            onClick={() => toggleModal()}
-          >
-            <FcCancel /> No, I changed my mind
-          </button>
-        </div>
-      </ModalWindow>
-
-      <RefreshToken error={cancelInviteError} />
+      <CommonModal
+        ids={[id, invite.id]}
+        showModal={showModal}
+        toggleModal={toggleModal}
+        handleOnClick={handleCancelInvite}
+        titleText="Are you sure you want to cancel invitation?"
+        yesText="Yes, I want to cancel it"
+        noText="No, I changed my mind"
+        error={cancelInviteError}
+      />
     </>
   );
 }

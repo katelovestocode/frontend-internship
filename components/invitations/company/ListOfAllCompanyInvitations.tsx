@@ -38,6 +38,9 @@ export default function ListOfAllCompanyInvitations({ id }: { id: number }) {
 
   useEffect(() => {
     if (sendInvitatationSuccess) {
+      toast.success("All invitations successfully retrieved", {
+        position: toast.POSITION.TOP_CENTER,
+      });
       toggleModal();
     }
   }, [sendInvitatationSuccess]);

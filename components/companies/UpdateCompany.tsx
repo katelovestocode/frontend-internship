@@ -38,6 +38,9 @@ export default function UpdateCompany({
   useEffect(() => {
     if (isUpdatedSuccess) {
       toggleModal();
+      toast.success("You successfully has updated company information", {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
     if (isUpdatedSuccess || updatedError) {
       setDisabledFields(true);

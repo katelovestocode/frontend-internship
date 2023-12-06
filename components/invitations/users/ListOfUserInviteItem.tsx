@@ -1,6 +1,6 @@
 import RefreshToken from "@/components/auth/RefreshToken";
 import ModalWindow from "@/components/common/Modal";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   useUserAcceptsInvitationMutation,
   useUserDeclineInvitationMutation,
@@ -16,10 +16,14 @@ import { OneInviteType, UserInviteIdsType } from "@/types/types";
 export default function ListOfUserInviteItem({ invite }: OneInviteType) {
   const userId = useAppSelector((state) => state.authReducer.user?.id);
 
-  const [acceptedInvite, { error: acceptInviteError }] =
-    useUserAcceptsInvitationMutation();
-  const [declinedInvite, { error: declineInviteError }] =
-    useUserDeclineInvitationMutation();
+  const [
+    acceptedInvite,
+    { error: acceptInviteError, isSuccess: isAcceptSuccess },
+  ] = useUserAcceptsInvitationMutation();
+  const [
+    declinedInvite,
+    { error: declineInviteError, isSuccess: isDeclineSuccess },
+  ] = useUserDeclineInvitationMutation();
 
   const [showModal, setShowModal] = useState(false);
 
@@ -55,6 +59,13 @@ export default function ListOfUserInviteItem({ invite }: OneInviteType) {
     }
   };
 
+  useEffect(() => {
+    if (isAcceptSuccess || isDeclineSuccess) {
+      toast.success("Invitation has been accepted/declined successfully", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    }
+  }, [isAcceptSuccess, isDeclineSuccess]);
   return (
     <>
       <li className="border-solid border-gray-700 border-1 rounded-xl p-6 flex gap-2 bg-white flex-col shadow-lg">
