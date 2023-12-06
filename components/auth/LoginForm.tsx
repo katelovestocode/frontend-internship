@@ -32,6 +32,10 @@ export default function LoginForm() {
       });
     }
     if (isLoginSuccess && loginData) {
+      toast.success("You have been successfully logged-in", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+
       Cookies.set("accessToken", loginData?.user?.accessToken as string);
       Cookies.set("refreshToken", loginData?.user?.refreshToken as string);
       Cookies.set("provider", "jwt");

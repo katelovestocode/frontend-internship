@@ -69,6 +69,9 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
   useEffect(() => {
     if (isUpdateSuccess) {
       getCurrentUser();
+      toast.success("User information has been successfully updated", {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
     if (isUpdateSuccess || isUpdateError) {
       setDisabledFields(true);
@@ -147,7 +150,7 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
   });
 
   return (
-    <div className="flex flex-col border-solid border-gray-700 border-1 rounded-xl p-10 flex gap-2 bg-white shadow-lg">
+    <div className="flex flex-col justify-between border-solid border-gray-700 border-1 rounded-xl p-10 flex gap-2 bg-white shadow-lg">
       <form
         autoComplete="off"
         onSubmit={formik.handleSubmit}

@@ -5,6 +5,7 @@ import {
   CompanyDetailsType,
   CompanyType,
   CreateCompanyType,
+  IdTypes,
   UpdateCompanyIdType,
 } from "@/types/types";
 
@@ -52,6 +53,16 @@ export const companyApi = commonApi.injectEndpoints({
       }),
       invalidatesTags: () => [{ type: "Companies" }],
     }),
+    ownerRemovesUser: build.mutation<CompanyType, IdTypes>({
+      query: ({ companyId, userId }) => ({
+        url: `/companies/${companyId}/members/${userId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "Company", id: arg.companyId },
+        { type: "Companies" },
+      ],
+    }),
   }),
 });
 
@@ -63,4 +74,5 @@ export const {
   useLazyGetAllCompaniesQuery,
   useLazyGetOneCompanyQuery,
   useUpdateCompanyMutation,
+  useOwnerRemovesUserMutation,
 } = companyApi;

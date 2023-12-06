@@ -43,6 +43,9 @@ export default function CreateACompany() {
     }
     if (isCreateSuccess) {
       toggleModal();
+      toast.success("New Company has been created", {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
   }, [isCreateError, isCreateSuccess]);
 

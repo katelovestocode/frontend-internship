@@ -4,7 +4,7 @@ import React from "react";
 
 export default function Home() {
   return (
-    <main className="flex flex-row gap-10 place-content-around px-20 py-8">
+    <div className="flex flex-row gap-10 place-content-around px-20 py-8">
       <div className="flex flex-col gap-16 justify-center w-3/6">
         <h1 className="font-bold text-3xl">
           Unlock Your Potential with Our Engaging Quizzes
@@ -27,6 +27,6 @@ export default function Home() {
         </div>
       </div>
       <Auth0Login />
-    </main>
+    </div>
   );
 }
