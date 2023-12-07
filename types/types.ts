@@ -319,3 +319,18 @@ export type CommonModalType = {
   noText: string,
   error: {} | undefined,
 }
+
+
+export type IdTypesAndBody = {
+  companyId: number;
+  userId: number;
+  isAdmin: boolean
+}
+
+
+export type AddAdminType = {
+  id: number,
+  company: CompanyType | undefined,
+  showModal: boolean,
+  toggleModal: () => void,
+}

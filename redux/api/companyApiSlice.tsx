@@ -7,6 +7,7 @@ import {
   CreateCompanyType,
   IdTypes,
   UpdateCompanyIdType,
+  IdTypesAndBody,
 } from "@/types/types";
 
 export type CompanyApi = ReturnType<typeof createApi>;
@@ -63,6 +64,17 @@ export const companyApi = commonApi.injectEndpoints({
         { type: "Companies" },
       ],
     }),
+    ownerAddsOrRemovesAdmin: build.mutation<CompanyType, IdTypesAndBody>({
+      query: ({ companyId, userId, ...body }) => ({
+        url: `/companies/${companyId}/members/${userId}/admin`,
+        method: "POST",
+        body: body,
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "Company", id: arg.companyId },
+        { type: "Companies" },
+      ],
+    }),
   }),
 });
 
@@ -75,4 +87,5 @@ export const {
   useLazyGetOneCompanyQuery,
   useUpdateCompanyMutation,
   useOwnerRemovesUserMutation,
+  useOwnerAddsOrRemovesAdminMutation,
 } = companyApi;
