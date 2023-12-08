@@ -14,8 +14,7 @@ export default function AddAdmin({
   showModal,
   toggleModal,
 }: AddAdminType) {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [selectedMember, setSelectedMember] = useState(null);
+  const [selectedMember, setSelectedMember] = useState<number | null>(null);
   const [
     ownerAddsAdmin,
     {
@@ -25,9 +24,8 @@ export default function AddAdmin({
     },
   ] = useOwnerAddsOrRemovesAdminMutation();
 
-  const currentUserAsAdmin = (id: any) => {
+  const currentUserAsAdmin = (id: number | null) => {
     setSelectedMember(id);
-    setIsAdmin(true);
   };
 
   const handleAddAdmin = async ({ companyId, userId }: IdTypes) => {
@@ -35,7 +33,7 @@ export default function AddAdmin({
       await ownerAddsAdmin({
         companyId: companyId,
         userId: userId,
-        isAdmin: isAdmin,
+        isAdmin: true,
       });
     } catch (error: any) {
       toast.error(error.message, {

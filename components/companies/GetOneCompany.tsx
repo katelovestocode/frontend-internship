@@ -13,7 +13,6 @@ import { IdChildrenProps, UserType } from "@/types/types";
 import Loader from "../common/Loader";
 import UpdateCompany from "./UpdateCompany";
 import SubNavLink from "../common/SubNavLink";
-import { RiDeleteBin5Fill } from "react-icons/ri";
 import CommonModal from "../common/CommonModal";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -25,7 +24,9 @@ import MemberOrAdminItem from "./MemberOrAdminItem";
 export default function GetOneCompany({ id, children }: IdChildrenProps) {
   const userId = useAppSelector((state) => state.authReducer.user?.id);
   const [disabledFields, setDisabledFields] = useState(true);
-  const [selectedMember, setSelectedMember] = useState(null);
+  const [selectedMember, setSelectedMember] = useState<
+    number | null | undefined
+  >(null);
   const [userIsMember, setUserIsMember] = useState(false);
   const [showUpdateCompanyModal, setShowUpdateCompanyModal] = useState(false);
   const [showDeleteCompanyModal, setShowDeleteCompanyModal] = useState(false);
@@ -34,7 +35,9 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
   const [showAddAdminModal, setShowAddAdminModal] = useState(false);
   const [showDeleteAdminModal, setShowDeleteAdminModal] = useState(false);
   const [isAdmin, setIsAdmin] = useState(true);
-  const [selectedAdmin, setSelectedAdmin] = useState(null);
+  const [selectedAdmin, setSelectedAdmin] = useState<number | null | undefined>(
+    null
+  );
 
   const toggleUpdateCompanyModal = () => {
     setShowUpdateCompanyModal((prev) => !prev);
@@ -86,7 +89,7 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
     }
   }, [isDeletedSuccess]);
 
-  const handleDeleteCompany = async (ids: any) => {
+  const handleDeleteCompany = async (ids: any[]) => {
     try {
       await deleteCompany(ids[0]);
     } catch (error: any) {
@@ -108,7 +111,7 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
     },
   ] = useOwnerRemovesUserMutation();
 
-  const handleRemoveMember = async (ids: any) => {
+  const handleRemoveMember = async (ids: any[]) => {
     try {
       await removeMember({ companyId: ids[0], userId: ids[1] });
     } catch (error: any) {
@@ -126,7 +129,7 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
     }
   }, [isRemoveMemberSuccess]);
 
-  const deleteCompanyMember = (id: any) => {
+  const deleteCompanyMember = (id: number | null | undefined) => {
     setSelectedMember(id);
     toggleRemoveUserModal();
   };
@@ -140,7 +143,7 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
     },
   ] = useUserLeavesCompanyMutation();
 
-  const handleLeaveCompany = async (ids: any) => {
+  const handleLeaveCompany = async (ids: any[]) => {
     try {
       await leaveCompany({ userId: ids[0], companyId: ids[1] });
     } catch (error: any) {
@@ -179,7 +182,7 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
     toggleAddAdminModal();
   };
 
-  const deleteCompanyAdmin = (id: any) => {
+  const deleteCompanyAdmin = (id: number | null | undefined) => {
     setSelectedAdmin(id);
     toggleDeleteAdminModal();
     setIsAdmin(false);
@@ -194,7 +197,7 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
     },
   ] = useOwnerAddsOrRemovesAdminMutation();
 
-  const handleRemoveAdmin = async (ids: any) => {
+  const handleRemoveAdmin = async (ids: any[]) => {
     try {
       await removeAdmin({
         companyId: ids[0],
@@ -274,7 +277,7 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
             </div>
 
             {company?.owner?.id === userId && (
-              <div className="flex mt-4">
+              <div className="flex mt-4 gap-4">
                 <div className="flex gap-4 mr-auto">
                   <button className="btn btn-outline" onClick={updateCompany}>
                     Edit

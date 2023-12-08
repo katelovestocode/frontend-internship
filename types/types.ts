@@ -338,7 +338,7 @@ export type AddAdminType = {
 export type MemberOrAdminItemType = {
   company: CompanyType,
   memberOrAdmin: UserType,
-  selectedUser: number | null,
+  selectedUser: number | null | undefined,
   userId: number | undefined,
-  deleteMemberOrAdmin: (id: number | undefined) => void,
+  deleteMemberOrAdmin: (id: number | null | undefined) => void,
 }
