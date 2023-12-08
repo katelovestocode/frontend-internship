@@ -334,3 +334,11 @@ export type AddAdminType = {
   showModal: boolean,
   toggleModal: () => void,
 }
+
+export type MemberOrAdminItemType = {
+  company: CompanyType,
+  memberOrAdmin: UserType,
+  selectedUser: number | null,
+  userId: number | undefined,
+  deleteMemberOrAdmin: (id: number | undefined) => void,
+}

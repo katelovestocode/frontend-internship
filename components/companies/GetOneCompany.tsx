@@ -20,6 +20,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useUserLeavesCompanyMutation } from "@/redux/api/userApiSlice";
 import AddAdmin from "./AddAdmin";
+import MemberOrAdminItem from "./MemberOrAdminItem";
 
 export default function GetOneCompany({ id, children }: IdChildrenProps) {
   const userId = useAppSelector((state) => state.authReducer.user?.id);
@@ -245,49 +246,29 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
               <ul className="flex gap-8 font-bold text-lg text-amber-800">
                 Members:{" "}
                 {company?.members.map((member: UserType, index: number) => (
-                  <li
-                    onClick={
-                      company?.owner?.id === userId
-                        ? () => deleteCompanyMember(member.id)
-                        : undefined
-                    }
-                    className={`flex gap-2 place-items-center border-solid border rounded-xl p-2.5 bg-white shadow-lg ${
-                      selectedMember === member.id
-                        ? "border-amber-800 border-4"
-                        : "border-zinc-200"
-                    } `}
+                  <MemberOrAdminItem
                     key={index}
-                  >
-                    <p className="font-medium text-gray-950">{member.name} </p>
-                    {company?.owner?.id === userId ? (
-                      <RiDeleteBin5Fill className="text-red-500" />
-                    ) : undefined}
-                  </li>
+                    company={company}
+                    memberOrAdmin={member}
+                    selectedUser={selectedMember}
+                    userId={userId}
+                    deleteMemberOrAdmin={deleteCompanyMember}
+                  />
                 ))}
               </ul>
 
               {/*  admins, owner can remove admins from the company */}
-              <ul className="flex gap-12 font-bold text-lg text-amber-800">
+              <ul className="flex gap-10 font-bold text-lg text-amber-800">
                 Admins:{" "}
                 {company?.admins.map((admin: UserType, index: number) => (
-                  <li
-                    onClick={
-                      company?.owner?.id === userId
-                        ? () => deleteCompanyAdmin(admin.id)
-                        : undefined
-                    }
-                    className={`flex gap-2 place-items-center border-solid border rounded-xl p-2.5 bg-white shadow-lg ${
-                      selectedAdmin === admin.id
-                        ? "border-amber-800 border-4"
-                        : "border-zinc-200"
-                    } `}
+                  <MemberOrAdminItem
                     key={index}
-                  >
-                    <p className="font-medium text-gray-950">{admin.name} </p>
-                    {company?.owner?.id === userId ? (
-                      <RiDeleteBin5Fill className="text-red-500" />
-                    ) : undefined}
-                  </li>
+                    company={company}
+                    memberOrAdmin={admin}
+                    selectedUser={selectedAdmin}
+                    userId={userId}
+                    deleteMemberOrAdmin={deleteCompanyAdmin}
+                  />
                 ))}
               </ul>
             </div>
