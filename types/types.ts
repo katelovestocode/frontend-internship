@@ -338,7 +338,13 @@ export type AddAdminType = {
 export type MemberOrAdminItemType = {
   company: CompanyType,
   memberOrAdmin: UserType,
-  selectedUser: number | null | undefined,
+  selectedUser: number | null,
   userId: number | undefined,
-  deleteMemberOrAdmin: (id: number | null | undefined) => void,
+  deleteMemberOrAdmin: (id: number) => void,
 }
+
+export type UpdateFieldsQuizType = {
+  title: string; description: string; frequencyInDays: number
+}
+
+

@@ -14,7 +14,7 @@ export default function MemberOrAdminItem({
     <li
       onClick={
         company?.owner?.id === userId
-          ? () => deleteMemberOrAdmin(memberOrAdmin.id)
+          ? () => deleteMemberOrAdmin(memberOrAdmin.id!)
           : undefined
       }
       className={`flex gap-2 place-items-center border-solid border rounded-xl p-2.5 bg-white shadow-lg ${

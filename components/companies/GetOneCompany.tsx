@@ -24,9 +24,7 @@ import MemberOrAdminItem from "./MemberOrAdminItem";
 export default function GetOneCompany({ id, children }: IdChildrenProps) {
   const userId = useAppSelector((state) => state.authReducer.user?.id);
   const [disabledFields, setDisabledFields] = useState(true);
-  const [selectedMember, setSelectedMember] = useState<
-    number | null | undefined
-  >(null);
+  const [selectedMember, setSelectedMember] = useState<number | null>(null);
   const [userIsMember, setUserIsMember] = useState(false);
   const [showUpdateCompanyModal, setShowUpdateCompanyModal] = useState(false);
   const [showDeleteCompanyModal, setShowDeleteCompanyModal] = useState(false);
@@ -35,9 +33,7 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
   const [showAddAdminModal, setShowAddAdminModal] = useState(false);
   const [showDeleteAdminModal, setShowDeleteAdminModal] = useState(false);
   const [isAdmin, setIsAdmin] = useState(true);
-  const [selectedAdmin, setSelectedAdmin] = useState<number | null | undefined>(
-    null
-  );
+  const [selectedAdmin, setSelectedAdmin] = useState<number | null>(null);
 
   const toggleUpdateCompanyModal = () => {
     setShowUpdateCompanyModal((prev) => !prev);
@@ -129,7 +125,7 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
     }
   }, [isRemoveMemberSuccess]);
 
-  const deleteCompanyMember = (id: number | null | undefined) => {
+  const deleteCompanyMember = (id: number) => {
     setSelectedMember(id);
     toggleRemoveUserModal();
   };
@@ -182,7 +178,7 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
     toggleAddAdminModal();
   };
 
-  const deleteCompanyAdmin = (id: number | null | undefined) => {
+  const deleteCompanyAdmin = (id: number) => {
     setSelectedAdmin(id);
     toggleDeleteAdminModal();
     setIsAdmin(false);
@@ -226,7 +222,7 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
         <Loader />
       ) : (
         <div className="p-4 xl:p-6 flex gap-7 flex-row">
-          <div className="flex flex-col justify-between border-solid border-gray-700 border-1 rounded-xl p-12 gap-7 bg-white shadow-2xl">
+          <div className="flex flex-col justify-between border-solid border-gray-700 border-1 rounded-xl p-8 gap-7 bg-white shadow-2xl">
             <div className="flex flex-col gap-7">
               <p className="flex gap-14 font-bold text-xl text-amber-800">
                 Name:{" "}
@@ -277,8 +273,8 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
             </div>
 
             {company?.owner?.id === userId && (
-              <div className="flex mt-4 gap-4">
-                <div className="flex gap-4 mr-auto">
+              <div className="flex place-items-center mt-4 gap-4 p-4">
+                <div className="flex gap-4 mr-auto place-items-center">
                   <button className="btn btn-outline" onClick={updateCompany}>
                     Edit
                   </button>
@@ -290,7 +286,7 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
                   </button>
                 </div>
                 <button className="btn btn-outline" onClick={addAdmin}>
-                  Add Admin
+                  + Admin
                 </button>
               </div>
             )}
@@ -308,7 +304,7 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
 
           {/* requests and invitation tabs */}
           {company?.owner?.id === userId && (
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4">
               <ul className="flex flex-row gap-6">
                 <li>
                   {" "}
@@ -324,9 +320,16 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
                     label="Invitations"
                   />
                 </li>
+                <li>
+                  {" "}
+                  <SubNavLink
+                    hrefLink={`/companies/${id}/quizzes`}
+                    label="Quizzes"
+                  />
+                </li>
               </ul>
 
-              {/* invitations and requests lists renders */}
+              {/* invitations and requests and quizzes lists renders */}
               {children}
             </div>
           )}
