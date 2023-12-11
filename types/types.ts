@@ -319,3 +319,32 @@ export type CommonModalType = {
   noText: string,
   error: {} | undefined,
 }
+
+
+export type IdTypesAndBody = {
+  companyId: number;
+  userId: number;
+  isAdmin: boolean
+}
+
+
+export type AddAdminType = {
+  id: number,
+  company: CompanyType | undefined,
+  showModal: boolean,
+  toggleModal: () => void,
+}
+
+export type MemberOrAdminItemType = {
+  company: CompanyType,
+  memberOrAdmin: UserType,
+  selectedUser: number | null,
+  userId: number | undefined,
+  deleteMemberOrAdmin: (id: number) => void,
+}
+
+export type UpdateFieldsQuizType = {
+  title: string; description: string; frequencyInDays: number
+}
+
+

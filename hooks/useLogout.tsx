@@ -11,10 +11,10 @@ const useLogout = () => {
 
   const handleLogout = () => {
     try {
-      dispatch(logOut());
       Cookies.remove("accessToken");
       Cookies.remove("refreshToken");
       Cookies.remove("provider");
+      dispatch(logOut());
       logout({ logoutParams: { returnTo: window.location.origin } });
     } catch (error: any) {
       toast.error(error.message, {

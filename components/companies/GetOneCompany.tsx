@@ -4,6 +4,7 @@ import RefreshToken from "../auth/RefreshToken";
 import {
   useDeleteCompanyMutation,
   useLazyGetOneCompanyQuery,
+  useOwnerAddsOrRemovesAdminMutation,
   useOwnerRemovesUserMutation,
 } from "@/redux/api/companyApiSlice";
 import "react-toastify/dist/ReactToastify.css";
@@ -12,22 +13,27 @@ import { IdChildrenProps, UserType } from "@/types/types";
 import Loader from "../common/Loader";
 import UpdateCompany from "./UpdateCompany";
 import SubNavLink from "../common/SubNavLink";
-import { RiDeleteBin5Fill } from "react-icons/ri";
 import CommonModal from "../common/CommonModal";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useUserLeavesCompanyMutation } from "@/redux/api/userApiSlice";
+import AddAdmin from "./AddAdmin";
+import MemberOrAdminItem from "./MemberOrAdminItem";
 
 export default function GetOneCompany({ id, children }: IdChildrenProps) {
   const userId = useAppSelector((state) => state.authReducer.user?.id);
   const [disabledFields, setDisabledFields] = useState(true);
-  const [selectedMember, setSelectedMember] = useState(null);
+  const [selectedMember, setSelectedMember] = useState<number | null>(null);
   const [userIsMember, setUserIsMember] = useState(false);
   const [showUpdateCompanyModal, setShowUpdateCompanyModal] = useState(false);
   const [showDeleteCompanyModal, setShowDeleteCompanyModal] = useState(false);
   const [showRemoveUserModal, setShowRemoveUserModal] = useState(false);
   const [showLeaveCompanyModal, setShowLeaveCompanyModal] = useState(false);
+  const [showAddAdminModal, setShowAddAdminModal] = useState(false);
+  const [showDeleteAdminModal, setShowDeleteAdminModal] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(true);
+  const [selectedAdmin, setSelectedAdmin] = useState<number | null>(null);
 
   const toggleUpdateCompanyModal = () => {
     setShowUpdateCompanyModal((prev) => !prev);
@@ -40,6 +46,12 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
   };
   const toggleLeaveCompanyModal = () => {
     setShowLeaveCompanyModal((prev) => !prev);
+  };
+  const toggleAddAdminModal = () => {
+    setShowAddAdminModal((prev) => !prev);
+  };
+  const toggleDeleteAdminModal = () => {
+    setShowDeleteAdminModal((prev) => !prev);
   };
 
   const [
@@ -73,7 +85,7 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
     }
   }, [isDeletedSuccess]);
 
-  const handleDeleteCompany = async (ids: any) => {
+  const handleDeleteCompany = async (ids: any[]) => {
     try {
       await deleteCompany(ids[0]);
     } catch (error: any) {
@@ -95,7 +107,7 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
     },
   ] = useOwnerRemovesUserMutation();
 
-  const handleRemoveMember = async (ids: any) => {
+  const handleRemoveMember = async (ids: any[]) => {
     try {
       await removeMember({ companyId: ids[0], userId: ids[1] });
     } catch (error: any) {
@@ -113,7 +125,7 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
     }
   }, [isRemoveMemberSuccess]);
 
-  const deleteCompanyMember = (id: any) => {
+  const deleteCompanyMember = (id: number) => {
     setSelectedMember(id);
     toggleRemoveUserModal();
   };
@@ -127,7 +139,7 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
     },
   ] = useUserLeavesCompanyMutation();
 
-  const handleLeaveCompany = async (ids: any) => {
+  const handleLeaveCompany = async (ids: any[]) => {
     try {
       await leaveCompany({ userId: ids[0], companyId: ids[1] });
     } catch (error: any) {
@@ -162,13 +174,55 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
     });
   }, [company?.members, userId]);
 
+  const addAdmin = async () => {
+    toggleAddAdminModal();
+  };
+
+  const deleteCompanyAdmin = (id: number) => {
+    setSelectedAdmin(id);
+    toggleDeleteAdminModal();
+    setIsAdmin(false);
+  };
+
+  const [
+    removeAdmin,
+    {
+      data: removeAdminData,
+      error: removeAdminError,
+      isSuccess: isRemoveAdminSuccess,
+    },
+  ] = useOwnerAddsOrRemovesAdminMutation();
+
+  const handleRemoveAdmin = async (ids: any[]) => {
+    try {
+      await removeAdmin({
+        companyId: ids[0],
+        userId: ids[1],
+        isAdmin: ids[2],
+      });
+    } catch (error: any) {
+      toast.error(error.message, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    }
+  };
+  useEffect(() => {
+    if (isRemoveAdminSuccess) {
+      toggleDeleteAdminModal();
+      setSelectedAdmin(null);
+      toast.success("Admin has been successfully removed", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    }
+  }, [isRemoveAdminSuccess]);
+
   return (
     <>
       {getOneCompanyLoading ? (
         <Loader />
       ) : (
         <div className="p-4 xl:p-6 flex gap-7 flex-row">
-          <div className="flex flex-col justify-between border-solid border-gray-700 border-1 rounded-xl p-12 gap-7 bg-white shadow-2xl">
+          <div className="flex flex-col justify-between border-solid border-gray-700 border-1 rounded-xl p-8 gap-7 bg-white shadow-2xl">
             <div className="flex flex-col gap-7">
               <p className="flex gap-14 font-bold text-xl text-amber-800">
                 Name:{" "}
@@ -187,46 +241,40 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
                 </span>
               </p>
 
-              {/*  owner option to remove member from the company */}
+              {/*  members, owner can remove members from the company */}
               <ul className="flex gap-8 font-bold text-lg text-amber-800">
                 Members:{" "}
                 {company?.members.map((member: UserType, index: number) => (
-                  <li
-                    onClick={
-                      company?.owner?.id === userId
-                        ? () => deleteCompanyMember(member.id)
-                        : undefined
-                    }
-                    className={`flex gap-2 place-items-center border-solid border rounded-xl p-2.5 bg-white shadow-lg ${
-                      selectedMember === member.id
-                        ? "border-amber-800 border-4"
-                        : "border-zinc-200"
-                    } `}
+                  <MemberOrAdminItem
                     key={index}
-                  >
-                    <p className="font-medium text-gray-950">{member.name} </p>
-                    {company?.owner?.id === userId ? (
-                      <RiDeleteBin5Fill className="text-red-500" />
-                    ) : undefined}
-                  </li>
+                    company={company}
+                    memberOrAdmin={member}
+                    selectedUser={selectedMember}
+                    userId={userId}
+                    deleteMemberOrAdmin={deleteCompanyMember}
+                  />
                 ))}
               </ul>
 
-              <ul className="flex gap-12 font-bold text-lg text-amber-800">
+              {/*  admins, owner can remove admins from the company */}
+              <ul className="flex gap-10 font-bold text-lg text-amber-800">
                 Admins:{" "}
                 {company?.admins.map((admin: UserType, index: number) => (
-                  <li
-                    className="font-medium text-gray-950 border-solid border-zinc-200 border rounded-xl p-2 bg-white flex-col shadow-lg"
+                  <MemberOrAdminItem
                     key={index}
-                  >
-                    {admin.name}
-                  </li>
+                    company={company}
+                    memberOrAdmin={admin}
+                    selectedUser={selectedAdmin}
+                    userId={userId}
+                    deleteMemberOrAdmin={deleteCompanyAdmin}
+                  />
                 ))}
               </ul>
             </div>
+
             {company?.owner?.id === userId && (
-              <div className="flex gap-4 mt-4">
-                <>
+              <div className="flex place-items-center mt-4 gap-4 p-4">
+                <div className="flex gap-4 mr-auto place-items-center">
                   <button className="btn btn-outline" onClick={updateCompany}>
                     Edit
                   </button>
@@ -236,7 +284,10 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
                   >
                     Delete
                   </button>
-                </>
+                </div>
+                <button className="btn btn-outline" onClick={addAdmin}>
+                  + Admin
+                </button>
               </div>
             )}
 
@@ -253,7 +304,7 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
 
           {/* requests and invitation tabs */}
           {company?.owner?.id === userId && (
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4">
               <ul className="flex flex-row gap-6">
                 <li>
                   {" "}
@@ -269,9 +320,16 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
                     label="Invitations"
                   />
                 </li>
+                <li>
+                  {" "}
+                  <SubNavLink
+                    hrefLink={`/companies/${id}/quizzes`}
+                    label="Quizzes"
+                  />
+                </li>
               </ul>
 
-              {/* invitations and requests lists renders */}
+              {/* invitations and requests and quizzes lists renders */}
               {children}
             </div>
           )}
@@ -320,6 +378,26 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
         yesText=" Yes, I want to leave"
         noText="No, I changed my mind"
         error={leaveCompanyError}
+      />
+
+      {/* owner deletes admin from  the list */}
+      <CommonModal
+        ids={[id, selectedAdmin, isAdmin]}
+        showModal={showDeleteAdminModal}
+        toggleModal={toggleDeleteAdminModal}
+        handleOnClick={handleRemoveAdmin}
+        titleText=" Are you sure you want to remove this admin?"
+        yesText=" Yes, I want to remove"
+        noText="No, I changed my mind"
+        error={removeAdminError}
+      />
+
+      {/* owner adds admin to the company*/}
+      <AddAdmin
+        id={id}
+        company={company}
+        showModal={showAddAdminModal}
+        toggleModal={toggleAddAdminModal}
       />
       <RefreshToken error={getOneCompanyError} />
     </>
