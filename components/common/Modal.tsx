@@ -8,13 +8,18 @@ export function CreateModal({
   children,
   showModal,
   toggleModal,
+  minWidth,
 }: ModalWindowType) {
   if (typeof window !== "undefined") {
     const modalRoot = document.querySelector("#modal-root");
     if (!modalRoot) return null;
 
     return createPortal(
-      <ModalWindow showModal={showModal} toggleModal={toggleModal}>
+      <ModalWindow
+        showModal={showModal}
+        toggleModal={toggleModal}
+        minWidth={minWidth}
+      >
         {children}
       </ModalWindow>,
       modalRoot as HTMLElement
@@ -27,6 +32,7 @@ export default function ModalWindow({
   children,
   showModal,
   toggleModal,
+  minWidth,
 }: ModalWindowType) {
   const handleOverlayClick = (event: React.MouseEvent<HTMLDivElement>) => {
     const target = event.target as HTMLElement;
@@ -55,8 +61,10 @@ export default function ModalWindow({
           onClick={handleOverlayClick}
         >
           <div
-            className="flex items-center justify-center absolute top-1/2 left-1/2 -translate-x-1/2
-              -translate-y-1/2 min-h-[50%] min-w-[30%] p-10 bg-white rounded-2xl "
+            className={`flex items-center justify-center absolute top-1/2 left-1/2 -translate-x-1/2
+              -translate-y-1/2 min-h-[50%]  ${
+                minWidth ? `${minWidth}` : "min-w-[30%]"
+              } p-10 bg-white rounded-2xl overflow-y-auto`}
           >
             <div className="absolute top-3 right-3 flex items-center justify-center w-8 h-8 rounded-full bg-zinc-200 hover:bg-zinc-400">
               <button

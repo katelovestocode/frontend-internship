@@ -137,6 +137,7 @@ export type ModalWindowType = {
   children: ReactNode;
   showModal: boolean;
   toggleModal: () => void;
+  minWidth?: string;
 };
 
 export type UpdateFieldsCompanyType = {

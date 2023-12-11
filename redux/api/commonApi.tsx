@@ -14,6 +14,8 @@ export const commonApi = createApi({
     "Company-Requests",
     "User-Invitations",
     "Company-Invitations",
+    "Quizzes",
+    "Quiz",
   ],
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
