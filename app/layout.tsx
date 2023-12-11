@@ -22,6 +22,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Children) {
   return (
     <html lang="en">
+      <meta
+        http-equiv="Content-Security-Policy"
+        content="upgrade-insecure-requests"
+      />
       <Auth0ProviderWithNavigate>
         <ReduxProvider>
           <body className={adamina.className}>
