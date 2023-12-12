@@ -1,37 +1,29 @@
-import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 import React from "react";
-import {
-  useDeleteQuizMutation,
-  useUpdateQuizMutation,
-} from "@/redux/api/quizApiSlice";
+import { useDeleteQuizMutation } from "@/redux/api/quizApiSlice";
 import CommonModal from "../common/CommonModal";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import RefreshToken from "../auth/RefreshToken";
 import UpdateQuiz from "./UpdateQuiz";
+import { QuizAndCompIdType } from "@/types/types";
 
-export default function ListOfCompanyQuizzesItem({ quiz, companyId }) {
-  const [
-    deleteQuiz,
-    { error: deleteQuizError, isSuccess: isDeleteQuizSuccess },
-  ] = useDeleteQuizMutation();
+export default function ListOfCompanyQuizzesItem({
+  quiz,
+  companyId,
+}: QuizAndCompIdType) {
   const [disabledFields, setDisabledFields] = useState(true);
-  // const [disabledFields, setDisabledFields] = useState({
-  //   title: true,
-  //   description: true,
-  //   frequencyInDays: true,
-  // });
-
   const [showDeleteQuizModal, setShowDeleteQuizModal] = useState(false);
   const [showUpdateQuizModal, setShowUpdateQuizModal] = useState(false);
 
   // DELETE QUIZ
+  const [
+    deleteQuiz,
+    { error: deleteQuizError, isSuccess: isDeleteQuizSuccess },
+  ] = useDeleteQuizMutation();
+
   const toggleDeleteQuizModal = () => {
     setShowDeleteQuizModal((prev) => !prev);
-  };
-  const deleteSelectedQuiz = () => {
-    toggleDeleteQuizModal();
   };
 
   const handleDeleteQuiz = async (ids: any[]) => {
@@ -56,18 +48,10 @@ export default function ListOfCompanyQuizzesItem({ quiz, companyId }) {
     }
   }, [isDeleteQuizSuccess]);
 
-  const updateSelectedQuiz = () => {
-    toggleUpdateQuizModal();
-  };
-
   // UPDATE QUIZ
   const toggleUpdateQuizModal = () => {
     setShowUpdateQuizModal((prev) => !prev);
     setDisabledFields(false);
-    //   title: false,
-    //   description: false,
-    //   frequencyInDays: false,
-    // });
   };
 
   return (
@@ -98,14 +82,14 @@ export default function ListOfCompanyQuizzesItem({ quiz, companyId }) {
           <button
             type="button"
             className="btn btn-outline"
-            onClick={() => updateSelectedQuiz()}
+            onClick={() => toggleUpdateQuizModal()}
           >
             Update Quiz
           </button>
           <button
             type="button"
             className="btn-error btn btn-outline"
-            onClick={() => deleteSelectedQuiz()}
+            onClick={() => toggleDeleteQuizModal()}
           >
             Delete
           </button>

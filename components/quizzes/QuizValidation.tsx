@@ -1,14 +1,4 @@
 import * as Yup from "yup";
-export interface MyFormValues {
-  title: string;
-  description: string;
-  frequencyInDays: number | null;
-  questions: {
-    question: string;
-    answers: string[];
-    correctAnswer: string;
-  }[];
-}
 
 export const createAQuizSchema = Yup.object({
   title: Yup.string()
@@ -46,4 +36,17 @@ export const updateQuizSchema = Yup.object({
     .trim()
     .min(15, "Please enter at least 15 characters"),
   frequencyInDays: Yup.number().typeError("Frequency must be a valid number"),
+});
+
+export const addQuestionSchema = Yup.object({
+  question: Yup.string()
+    .trim()
+    .required("Please enter a question")
+    .min(5, "Please enter at least 5 characters"),
+  answers: Yup.array()
+    .of(Yup.string().trim().required("Please enter an answer"))
+    .min(2, "Please add at least two answers"),
+  correctAnswer: Yup.string()
+    .trim()
+    .required("Please specify the correct answer"),
 });

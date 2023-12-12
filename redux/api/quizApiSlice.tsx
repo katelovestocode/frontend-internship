@@ -1,26 +1,39 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { commonApi } from "./commonApi";
-import {} from "@/types/types";
+import {
+  AddQuestionReqProps,
+  AddQuestionResType,
+  CreateQuizType,
+  DeleteQuestReqType,
+  DeleteQuestResType,
+  DeleteQuizResType,
+  GetAllQuizzesType,
+  GetOneQuizType,
+  QuizIdAndCompIdType,
+  UpdateFormikType,
+  UpdateQuestReqType,
+  UpdateQuestResponse,
+} from "@/types/types";
 
 export type QuizApi = ReturnType<typeof createApi>;
 
 export const quizApi = commonApi.injectEndpoints({
   endpoints: (build) => ({
-    getAllQuizzes: build.query<any, number>({
+    getAllQuizzes: build.query<GetAllQuizzesType, number>({
       query: (companyId) => ({
         url: `/quizzes/companies/${companyId}`,
         method: "GET",
       }),
       providesTags: () => [{ type: "Quizzes" }],
     }),
-    getOneQuiz: build.query<any, any>({
+    getOneQuiz: build.query<GetOneQuizType, QuizIdAndCompIdType>({
       query: ({ quizId, companyId }) => ({
         url: `/quizzes/${quizId}/companies/${companyId}`,
         method: "GET",
       }),
       providesTags: (result, error, arg) => [{ type: "Quiz", id: arg.quizId }],
     }),
-    createQuiz: build.mutation<any, any>({
+    createQuiz: build.mutation<GetOneQuizType, CreateQuizType>({
       query: ({ companyId, ...body }) => ({
         url: `/quizzes/companies/${companyId}`,
         method: "POST",
@@ -28,26 +41,22 @@ export const quizApi = commonApi.injectEndpoints({
       }),
       invalidatesTags: () => [{ type: "Quizzes" }],
     }),
-    updateQuiz: build.mutation<any, any>({
+    updateQuiz: build.mutation<UpdateFormikType, QuizIdAndCompIdType>({
       query: ({ quizId, companyId, ...body }) => ({
         url: `/quizzes/${quizId}/companies/${companyId}`,
         method: "PUT",
         body: body,
       }),
-      invalidatesTags: (result, error, arg) => [
-        // { type: "Quiz", id: arg.quizId },
-        // { type: "Quiz", id: arg.companyId },
-        { type: "Quizzes" },
-      ],
+      invalidatesTags: (result, error, arg) => [{ type: "Quizzes" }],
     }),
-    deleteQuiz: build.mutation<any, any>({
+    deleteQuiz: build.mutation<DeleteQuizResType, QuizIdAndCompIdType>({
       query: ({ quizId, companyId }) => ({
         url: `/quizzes/${quizId}/companies/${companyId}`,
         method: "DELETE",
       }),
       invalidatesTags: () => [{ type: "Quizzes" }],
     }),
-    addQuestion: build.mutation<any, any>({
+    addQuestion: build.mutation<AddQuestionResType, AddQuestionReqProps>({
       query: ({ quizId, companyId, ...body }) => ({
         url: `/questions/quizzes/${quizId}/companies/${companyId}/add`,
         method: "POST",
@@ -55,9 +64,10 @@ export const quizApi = commonApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [
         { type: "Quiz", id: arg.quizId },
+        { type: "Quizzes" },
       ],
     }),
-    updateQuestion: build.mutation<any, any>({
+    updateQuestion: build.mutation<UpdateQuestResponse, UpdateQuestReqType>({
       query: ({ questionId, quizId, companyId, ...body }) => ({
         url: `/questions/${questionId}/quizzes/${quizId}/companies/${companyId}`,
         method: "PUT",
@@ -65,15 +75,17 @@ export const quizApi = commonApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [
         { type: "Quiz", id: arg.quizId },
+        { type: "Quizzes" },
       ],
     }),
-    deleteQuestion: build.mutation<any, any>({
+    deleteQuestion: build.mutation<DeleteQuestResType, DeleteQuestReqType>({
       query: ({ questionId, quizId, companyId }) => ({
         url: `/questions/${questionId}/quizzes/${quizId}/companies/${companyId}`,
         method: "DELETE",
       }),
       invalidatesTags: (result, error, arg) => [
         { type: "Quiz", id: arg.quizId },
+        { type: "Quizzes" },
       ],
     }),
   }),
@@ -87,4 +99,7 @@ export const {
   useLazyGetAllQuizzesQuery,
   useLazyGetOneQuizQuery,
   useUpdateQuizMutation,
+  useAddQuestionMutation,
+  useDeleteQuestionMutation,
+  useUpdateQuestionMutation,
 } = quizApi;

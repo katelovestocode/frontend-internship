@@ -9,19 +9,14 @@ import ModalWindow from "../common/Modal";
 import Button from "../common/Button";
 import { useCreateQuizMutation } from "@/redux/api/quizApiSlice";
 import { createAQuizSchema } from "./QuizValidation";
+import {
+  CreateQuizType,
+  IdProps,
+  MyFormValues,
+  QuestionsWithNoIDType,
+} from "@/types/types";
 
-export interface MyFormValues {
-  title: string;
-  description: string;
-  frequencyInDays: number | null;
-  questions: {
-    question: string;
-    answers: string[];
-    correctAnswer: string;
-  }[];
-}
-
-export default function CreateQuiz({ id }) {
+export default function CreateQuiz({ id }: IdProps) {
   const [
     createAQuiz,
     {
@@ -53,7 +48,7 @@ export default function CreateQuiz({ id }) {
     }
   }, [isCreateAQuizSuccess, isCreateAQuizError]);
 
-  const handleCreateQuiz = async (quiz: any) => {
+  const handleCreateQuiz = async (quiz: CreateQuizType) => {
     try {
       await createAQuiz(quiz);
     } catch (error: any) {
@@ -87,7 +82,7 @@ export default function CreateQuiz({ id }) {
 
   return (
     <>
-      <div className="ml-auto">
+      <div className="w-60">
         <Button onClick={toggleModal} title={"Add Quiz"} />
       </div>
       <ModalWindow
@@ -107,7 +102,7 @@ export default function CreateQuiz({ id }) {
             >
               <div className="flex flex-row gap-5 justify-start items-start">
                 {" "}
-                <div>
+                <div className="flex flex-col items-center gap-2">
                   <div className="w-full">
                     <label htmlFor="name" className="font-semibold">
                       Title
@@ -200,15 +195,20 @@ export default function CreateQuiz({ id }) {
                                   }
                                 />
                                 {formik.touched.questions?.[index]?.question &&
-                                  formik.errors.questions?.[index]
-                                    ?.question && (
-                                    <p className="text-xs text-red-600 pt-1">
-                                      {
-                                        formik.errors.questions?.[index]
-                                          ?.question
-                                      }
-                                    </p>
-                                  )}
+                                formik.errors.questions &&
+                                formik.errors.questions?.[index] ? (
+                                  <p className="text-xs text-red-600 pt-1">
+                                    {
+                                      (
+                                        formik.errors.questions?.[
+                                          index
+                                        ] as QuestionsWithNoIDType
+                                      ).question
+                                    }
+                                  </p>
+                                ) : (
+                                  ""
+                                )}
                               </div>
 
                               <div className="flex flex-col pt-2 items-start">
@@ -232,15 +232,20 @@ export default function CreateQuiz({ id }) {
                                 />
                                 {formik.touched.questions?.[index]
                                   ?.correctAnswer &&
-                                  formik.errors.questions?.[index]
-                                    ?.correctAnswer && (
-                                    <p className="text-xs text-red-600 pt-1">
-                                      {
-                                        formik.errors.questions?.[index]
-                                          ?.correctAnswer
-                                      }
-                                    </p>
-                                  )}
+                                formik.errors.questions &&
+                                formik.errors.questions?.[index] ? (
+                                  <p className="text-xs text-red-600 pt-1">
+                                    {
+                                      (
+                                        formik.errors.questions?.[
+                                          index
+                                        ] as QuestionsWithNoIDType
+                                      ).correctAnswer
+                                    }
+                                  </p>
+                                ) : (
+                                  ""
+                                )}
                               </div>
 
                               <div className="flex flex-col pt-2 items-start">
@@ -290,19 +295,33 @@ export default function CreateQuiz({ id }) {
                                                   -
                                                 </button>
                                               </div>
-
                                               {formik.touched.questions?.[index]
-                                                ?.answers?.[answerIndex] &&
-                                                formik.errors.questions?.[index]
-                                                  ?.answers?.[answerIndex] && (
-                                                  <p className="text-xs text-red-600 pt-1">
-                                                    {
-                                                      formik.errors.questions?.[
+                                                ?.answers &&
+                                              formik.errors.questions?.[
+                                                index
+                                              ] &&
+                                              (
+                                                formik.errors.questions[
+                                                  index
+                                                ] as QuestionsWithNoIDType
+                                              ).answers &&
+                                              (
+                                                formik.errors.questions[
+                                                  index
+                                                ] as QuestionsWithNoIDType
+                                              ).answers[answerIndex] ? (
+                                                <p className="text-xs text-red-600 pt-1">
+                                                  {
+                                                    (
+                                                      formik.errors.questions[
                                                         index
-                                                      ]?.answers?.[answerIndex]
-                                                    }
-                                                  </p>
-                                                )}
+                                                      ] as QuestionsWithNoIDType
+                                                    ).answers[answerIndex]
+                                                  }
+                                                </p>
+                                              ) : (
+                                                ""
+                                              )}
                                             </div>
                                           )
                                         )}
