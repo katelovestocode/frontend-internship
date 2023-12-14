@@ -480,7 +480,26 @@ export type UpdateQuestReqType = {
   questionId: number,
   quizId: number,
   companyId: number,
-  question: string;
-  answers: string[];
-  correctAnswer: string;
+  question?: string;
+  answers?: string[];
+  correctAnswer?: string;
 }
+
+export type UpdateQuestType = {
+  id: number,
+  quizId: number,
+  questionId: number,
+  question: {question: string;
+  answers: string[];
+  correctAnswer: string;},
+  setQuestionDisabledFields: (state: boolean) => void,
+  questionDisabledFields: boolean,
+  handleEditClick: (index: number) => void,
+  index:number
+}
+
+export type EditButtonType = {
+  toggleActiveState: (state: string | null) => void;
+  field: string | null;
+  isActive: boolean;
+};

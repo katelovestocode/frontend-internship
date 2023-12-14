@@ -158,7 +158,7 @@ export default function AddQuestion({
                               {formik.touched.answers &&
                                 formik.errors.answers?.[answerIndex] && (
                                   <p className="text-xs text-red-600 pt-1">
-                                    {formik.errors.answers?.[answerIndex]}
+                                    {formik.errors.answers}
                                   </p>
                                 )}
                             </div>

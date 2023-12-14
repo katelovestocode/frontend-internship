@@ -3,7 +3,13 @@ import { useEffect, useState } from "react";
 import React from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useFormik, FormikProvider, FieldArray, Field } from "formik";
+import {
+  useFormik,
+  FormikProvider,
+  FieldArray,
+  Field,
+  FormikErrors,
+} from "formik";
 import RefreshToken from "../auth/RefreshToken";
 import ModalWindow from "../common/Modal";
 import Button from "../common/Button";
@@ -282,7 +288,6 @@ export default function CreateQuiz({ id }: IdProps) {
                                                     ].answers?.[answerIndex]
                                                   }
                                                 />
-
                                                 <button
                                                   type="button"
                                                   className="btn btn-outline btn-error text-2xl remove-answer"
@@ -297,38 +302,41 @@ export default function CreateQuiz({ id }: IdProps) {
                                               </div>
                                               {formik.touched.questions?.[index]
                                                 ?.answers &&
-                                              formik.errors.questions?.[
-                                                index
-                                              ] &&
-                                              (
-                                                formik.errors.questions[
+                                                formik.errors.questions?.[
                                                   index
-                                                ] as QuestionsWithNoIDType
-                                              ).answers &&
-                                              (
-                                                formik.errors.questions[
+                                                ] &&
+                                                typeof formik.errors.questions[
                                                   index
-                                                ] as QuestionsWithNoIDType
-                                              ).answers[answerIndex] ? (
-                                                <p className="text-xs text-red-600 pt-1">
-                                                  {
-                                                    (
-                                                      formik.errors.questions[
-                                                        index
-                                                      ] as QuestionsWithNoIDType
-                                                    ).answers[answerIndex]
-                                                  }
-                                                </p>
-                                              ) : (
-                                                ""
-                                              )}
+                                                ] === "object" && (
+                                                  <p className="text-xs text-red-600 pt-1">
+                                                    {
+                                                      ((
+                                                        formik.errors.questions[
+                                                          index
+                                                        ] as any
+                                                      ).answers?.[
+                                                        answerIndex
+                                                      ] ===
+                                                      "Please enter an answer"
+                                                        ? "Please enter an answer"
+                                                        : (
+                                                            formik.errors
+                                                              .questions[
+                                                              index
+                                                            ] as any
+                                                          ).answers) as string
+                                                    }
+                                                  </p>
+                                                )}
                                             </div>
                                           )
                                         )}
-                                      {formik.errors.questions &&
-                                        formik.values.questions.length < 2 && (
+
+                                      {formik.errors?.questions &&
+                                        typeof formik.errors?.questions ===
+                                          "string" && (
                                           <p className="text-xs text-red-600">
-                                            Please add at least two questions
+                                            {formik.errors?.questions}
                                           </p>
                                         )}
                                       <button

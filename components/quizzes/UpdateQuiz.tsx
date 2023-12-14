@@ -21,6 +21,7 @@ import {
   UpdateQuizBodyType,
   UpdateQuizType,
 } from "@/types/types";
+import UpdateQuestion from "./UpdateQuestion";
 
 export default function UpdateQuiz({
   id,
@@ -36,6 +37,16 @@ export default function UpdateQuiz({
     frequencyInDays: false,
   });
   const [addedQuestion, setAddedQuestion] = useState(false);
+  const [editQuestions, setEditQuestions] = useState(
+    new Array(quiz?.questions.length).fill(false)
+  );
+  const [questionDisabledFields, setQuestionDisabledFields] = useState(true);
+  const handleEditQuestionClick = (index: number) => {
+    const updatedEditQuestions = [...editQuestions];
+    updatedEditQuestions[index] = !updatedEditQuestions[index];
+    setEditQuestions(updatedEditQuestions);
+    setQuestionDisabledFields((prev) => !prev);
+  };
 
   // UPDATE QUIZ
   const [
@@ -278,43 +289,68 @@ export default function UpdateQuiz({
                     key={index}
                     className="flex flex-col gap-2 h-80 lg:text-sm justify-between border-solid border-gray-700 border-1 rounded-xl p-4 bg-white shadow-lg"
                   >
-                    <div className="flex gap-2 flex-col">
-                      <p className="text-amber-800">
-                        Question:{" "}
-                        <span className="font-medium text-gray-950">
-                          {question.question}
-                        </span>
-                      </p>
-                      <p className="text-amber-800">
-                        Answers:{" "}
-                        <span className="font-bold text-gray-950">
-                          {question.answers.map((answer, index) => (
-                            <p key={index}>{answer} </p>
-                          ))}
-                        </span>
-                      </p>
-                      <p className="text-amber-800">
-                        Correct Answer:{" "}
-                        <span className="font-medium text-gray-950">
-                          {question.correctAnswer}
-                        </span>
-                      </p>
-                    </div>
-                    <div className="w-full flex gap-2 flex-col">
-                      <button
-                        type="button"
-                        className="btn-error btn btn-outline"
-                        onClick={() =>
-                          handleDeleteQuestion({
-                            questionId: question.id,
-                            quizId: quiz.id,
-                            companyId: id,
-                          })
-                        }
-                      >
-                        Delete Question
-                      </button>
-                    </div>
+                    {/*  UPDATE QUESTION */}
+                    {editQuestions[index] ? (
+                      <UpdateQuestion
+                        id={id}
+                        question={question}
+                        questionId={question.id}
+                        quizId={quiz.id}
+                        setQuestionDisabledFields={setQuestionDisabledFields}
+                        questionDisabledFields={questionDisabledFields}
+                        handleEditClick={handleEditQuestionClick}
+                        index={index}
+                      />
+                    ) : (
+                      <div className="flex gap-2 flex-col">
+                        <p className="text-amber-800">
+                          Question:{" "}
+                          <span className="font-medium text-gray-950">
+                            {question.question}
+                          </span>
+                        </p>
+                        <p className="text-amber-800">
+                          Answers:{" "}
+                          <span className="font-bold text-gray-950">
+                            {question.answers.map((answer, index) => (
+                              <p key={index}>{answer} </p>
+                            ))}
+                          </span>
+                        </p>
+                        <p className="text-amber-800">
+                          Correct Answer:{" "}
+                          <span className="font-medium text-gray-950">
+                            {question.correctAnswer}
+                          </span>
+                        </p>
+                      </div>
+                    )}
+                    {questionDisabledFields ? (
+                      <div className=" flex gap-2 flex-row place-content-center">
+                        <button
+                          type="button"
+                          className="btn btn-outline"
+                          onClick={() => handleEditQuestionClick(index)}
+                        >
+                          ✔
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-outline btn-error text-2xl text-bold"
+                          onClick={() =>
+                            handleDeleteQuestion({
+                              questionId: question.id,
+                              quizId: quiz.id,
+                              companyId: id,
+                            })
+                          }
+                        >
+                          -
+                        </button>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </li>
                 ))}
               </ul>
