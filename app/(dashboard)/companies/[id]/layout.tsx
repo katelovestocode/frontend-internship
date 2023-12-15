@@ -18,7 +18,7 @@ export default function OneCompanyLayout({
   children,
 }: IdProps) {
   return (
-    <div className="flex flex-col px-8 xl:px-14 gap-6">
+    <div className="flex flex-col px-8 xl:px-14 gap-4">
       <h1 className="font-bold text-3xl text-center">Company Profile</h1>
       <GetOneCompany id={Number(id)}>{children} </GetOneCompany>
     </div>

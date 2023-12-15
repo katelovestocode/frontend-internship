@@ -42,7 +42,6 @@ export const createAQuizSchema = Yup.object({
     .test("is-unique-questions", "Questions must be unique", function (value) {
       const questions = value?.map((q) => q.question);
       const isUnique = new Set(questions).size === questions?.length;
-      console.log("isUnique:", isUnique);
       return isUnique;
     }),
 });

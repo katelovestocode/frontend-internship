@@ -7,6 +7,9 @@ import "react-toastify/dist/ReactToastify.css";
 import RefreshToken from "../auth/RefreshToken";
 import UpdateQuiz from "./UpdateQuiz";
 import { QuizAndCompIdType } from "@/types/types";
+import { useAppSelector } from "@/redux/store";
+import Link from "next/link";
+import { useLazyGetOneCompanyQuery } from "@/redux/api/companyApiSlice";
 
 export default function ListOfCompanyQuizzesItem({
   quiz,
@@ -15,6 +18,17 @@ export default function ListOfCompanyQuizzesItem({
   const [disabledFields, setDisabledFields] = useState(true);
   const [showDeleteQuizModal, setShowDeleteQuizModal] = useState(false);
   const [showUpdateQuizModal, setShowUpdateQuizModal] = useState(false);
+  const userId = useAppSelector((state) => state.authReducer.user?.id);
+  const [
+    getOneCompany,
+    { data, error: getOneCompanyError, isLoading: getOneCompanyLoading },
+  ] = useLazyGetOneCompanyQuery();
+
+  const { company } = data || {};
+
+  useEffect(() => {
+    getOneCompany(companyId);
+  }, [getOneCompany, companyId]);
 
   // DELETE QUIZ
   const [
@@ -78,22 +92,34 @@ export default function ListOfCompanyQuizzesItem({
             </span>
           </p>
         </div>
-        <div className="w-full flex gap-2 flex-col">
-          <button
-            type="button"
-            className="btn btn-outline"
-            onClick={() => toggleUpdateQuizModal()}
-          >
-            Update Quiz
-          </button>
-          <button
-            type="button"
-            className="btn-error btn btn-outline"
-            onClick={() => toggleDeleteQuizModal()}
-          >
-            Delete
-          </button>
-        </div>
+        {company?.owner?.id === userId ? (
+          <div className="w-full flex gap-2 flex-col">
+            <button
+              type="button"
+              className="btn btn-outline"
+              onClick={() => toggleUpdateQuizModal()}
+            >
+              Update Quiz
+            </button>
+            <button
+              type="button"
+              className="btn-error btn btn-outline"
+              onClick={() => toggleDeleteQuizModal()}
+            >
+              Delete
+            </button>
+          </div>
+        ) : (
+          <Link href={`/companies/${companyId}/quizzes/${quiz.id}`} passHref>
+            <button
+              type="button"
+              className="btn btn-outline w-full"
+              onClick={() => console.log("click")}
+            >
+              Take a Quiz
+            </button>
+          </Link>
+        )}
       </li>
 
       <CommonModal

@@ -20,6 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useUserLeavesCompanyMutation } from "@/redux/api/userApiSlice";
 import AddAdmin from "./AddAdmin";
 import MemberOrAdminItem from "./MemberOrAdminItem";
+import Link from "next/link";
 
 export default function GetOneCompany({ id, children }: IdChildrenProps) {
   const userId = useAppSelector((state) => state.authReducer.user?.id);
@@ -215,111 +216,122 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
       });
     }
   }, [isRemoveAdminSuccess]);
-
   return (
     <>
       {getOneCompanyLoading ? (
         <Loader />
       ) : (
-        <div className="p-4 xl:p-6 flex gap-7 flex-row">
-          <div className="flex flex-col justify-between border-solid border-gray-700 border-1 rounded-xl p-8 gap-7 bg-white shadow-2xl">
-            <div className="flex flex-col gap-7">
-              <p className="flex gap-14 font-bold text-xl text-amber-800">
-                Name:{" "}
-                <span className="font-bold text-gray-950">{company?.name}</span>
-              </p>
-              <p className="flex gap-3 flex-wrap font-bold text-lg text-amber-800">
-                Description:{" "}
-                <span className="font-medium text-gray-950 max-w-xs">
-                  {company?.description}
-                </span>
-              </p>
-              <p className="flex gap-14 font-bold text-lg text-amber-800">
-                Owner:{" "}
-                <span className="font-medium text-gray-950">
-                  {company?.owner?.name}
-                </span>
-              </p>
+        <>
+          <Link
+            href={`/companies`}
+            className="mx-4 xl:mx-6 text-xl font-medium border-amber-700 w-60 border-2 p-2.5 rounded-md shadow-md"
+          >
+            Back to Companies
+          </Link>
+          <div className="p-4 xl:p-6 flex gap-7 flex-row">
+            <div className="flex flex-col justify-between border-solid border-gray-700 border-1 rounded-xl p-8 gap-7 bg-white shadow-2xl">
+              <div className="flex flex-col gap-7">
+                <p className="flex gap-14 font-bold text-xl text-amber-800">
+                  Name:{" "}
+                  <span className="font-bold text-gray-950">
+                    {company?.name}
+                  </span>
+                </p>
+                <p className="flex gap-3 flex-wrap font-bold text-lg text-amber-800">
+                  Description:{" "}
+                  <span className="font-medium text-gray-950 max-w-xs">
+                    {company?.description}
+                  </span>
+                </p>
+                <p className="flex gap-14 font-bold text-lg text-amber-800">
+                  Owner:{" "}
+                  <span className="font-medium text-gray-950">
+                    {company?.owner?.name}
+                  </span>
+                </p>
 
-              {/*  members, owner can remove members from the company */}
-              <ul className="flex gap-8 font-bold text-lg text-amber-800">
-                Members:{" "}
-                {company?.members.map((member: UserType, index: number) => (
-                  <MemberOrAdminItem
-                    key={index}
-                    company={company}
-                    memberOrAdmin={member}
-                    selectedUser={selectedMember}
-                    userId={userId}
-                    deleteMemberOrAdmin={deleteCompanyMember}
-                  />
-                ))}
-              </ul>
+                {/*  members, owner can remove members from the company */}
+                <ul className="flex gap-8 font-bold text-lg text-amber-800">
+                  Members:{" "}
+                  {company?.members.map((member: UserType, index: number) => (
+                    <MemberOrAdminItem
+                      key={index}
+                      company={company}
+                      memberOrAdmin={member}
+                      selectedUser={selectedMember}
+                      userId={userId}
+                      deleteMemberOrAdmin={deleteCompanyMember}
+                    />
+                  ))}
+                </ul>
 
-              {/*  admins, owner can remove admins from the company */}
-              <ul className="flex gap-10 font-bold text-lg text-amber-800">
-                Admins:{" "}
-                {company?.admins.map((admin: UserType, index: number) => (
-                  <MemberOrAdminItem
-                    key={index}
-                    company={company}
-                    memberOrAdmin={admin}
-                    selectedUser={selectedAdmin}
-                    userId={userId}
-                    deleteMemberOrAdmin={deleteCompanyAdmin}
-                  />
-                ))}
-              </ul>
-            </div>
+                {/*  admins, owner can remove admins from the company */}
+                <ul className="flex gap-10 font-bold text-lg text-amber-800">
+                  Admins:{" "}
+                  {company?.admins.map((admin: UserType, index: number) => (
+                    <MemberOrAdminItem
+                      key={index}
+                      company={company}
+                      memberOrAdmin={admin}
+                      selectedUser={selectedAdmin}
+                      userId={userId}
+                      deleteMemberOrAdmin={deleteCompanyAdmin}
+                    />
+                  ))}
+                </ul>
+              </div>
 
-            {company?.owner?.id === userId && (
-              <div className="flex place-items-center mt-4 gap-4 p-4">
-                <div className="flex gap-4 mr-auto place-items-center">
-                  <button className="btn btn-outline" onClick={updateCompany}>
-                    Edit
-                  </button>
-                  <button
-                    className="btn btn-outline btn-error"
-                    onClick={ownerDeletesCompany}
-                  >
-                    Delete
+              {company?.owner?.id === userId && (
+                <div className="flex place-items-center mt-4 gap-4 p-4">
+                  <div className="flex gap-4 mr-auto place-items-center">
+                    <button className="btn btn-outline" onClick={updateCompany}>
+                      Edit
+                    </button>
+                    <button
+                      className="btn btn-outline btn-error"
+                      onClick={ownerDeletesCompany}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                  <button className="btn btn-outline" onClick={addAdmin}>
+                    + Admin
                   </button>
                 </div>
-                <button className="btn btn-outline" onClick={addAdmin}>
-                  + Admin
+              )}
+
+              {/* user leaves company */}
+              {userIsMember && (
+                <button
+                  className="btn btn-outline btn-error"
+                  onClick={() => toggleLeaveCompanyModal()}
+                >
+                  Leave Company
                 </button>
-              </div>
-            )}
+              )}
+            </div>
 
-            {/* user leaves company */}
-            {userIsMember && (
-              <button
-                className="btn btn-outline btn-error"
-                onClick={() => toggleLeaveCompanyModal()}
-              >
-                Leave Company
-              </button>
-            )}
-          </div>
-
-          {/* requests and invitation tabs */}
-          {company?.owner?.id === userId && (
+            {/* requests and invitation tabs */}
             <div className="flex flex-col gap-4">
               <ul className="flex flex-row gap-6">
-                <li>
-                  {" "}
-                  <SubNavLink
-                    hrefLink={`/companies/${id}/requests`}
-                    label="Requests"
-                  />
-                </li>
-                <li>
-                  {" "}
-                  <SubNavLink
-                    hrefLink={`/companies/${id}/invitations`}
-                    label="Invitations"
-                  />
-                </li>
+                {company?.owner?.id === userId && (
+                  <>
+                    <li>
+                      {" "}
+                      <SubNavLink
+                        hrefLink={`/companies/${id}/requests`}
+                        label="Requests"
+                      />
+                    </li>
+                    <li>
+                      {" "}
+                      <SubNavLink
+                        hrefLink={`/companies/${id}/invitations`}
+                        label="Invitations"
+                      />
+                    </li>
+                  </>
+                )}
                 <li>
                   {" "}
                   <SubNavLink
@@ -332,8 +344,8 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
               {/* invitations and requests and quizzes lists renders */}
               {children}
             </div>
-          )}
-        </div>
+          </div>
+        </>
       )}
       <UpdateCompany
         id={id}

@@ -3,13 +3,7 @@ import { useEffect, useState } from "react";
 import React from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  useFormik,
-  FormikProvider,
-  FieldArray,
-  Field,
-  FormikErrors,
-} from "formik";
+import { useFormik, FormikProvider, FieldArray, Field } from "formik";
 import RefreshToken from "../auth/RefreshToken";
 import ModalWindow from "../common/Modal";
 import Button from "../common/Button";
@@ -21,8 +15,20 @@ import {
   MyFormValues,
   QuestionsWithNoIDType,
 } from "@/types/types";
+import { useAppSelector } from "@/redux/store";
+import { useLazyGetOneCompanyQuery } from "@/redux/api/companyApiSlice";
 
 export default function CreateQuiz({ id }: IdProps) {
+  const [getOneCompany, { data, error: getOneCompanyError }] =
+    useLazyGetOneCompanyQuery();
+
+  const { company } = data || {};
+
+  useEffect(() => {
+    getOneCompany(id);
+  }, [getOneCompany, id]);
+
+  const userId = useAppSelector((state) => state.authReducer.user?.id);
   const [
     createAQuiz,
     {
@@ -88,9 +94,11 @@ export default function CreateQuiz({ id }: IdProps) {
 
   return (
     <>
-      <div className="w-60">
-        <Button onClick={toggleModal} title={"Add Quiz"} />
-      </div>
+      {company?.owner?.id === userId && (
+        <div className="w-60">
+          <Button onClick={toggleModal} title={"Add Quiz"} />
+        </div>
+      )}
       <ModalWindow
         showModal={showModal}
         toggleModal={toggleModal}
@@ -383,7 +391,7 @@ export default function CreateQuiz({ id }: IdProps) {
           </FormikProvider>
         </div>
       </ModalWindow>
-      <RefreshToken error={createError} />
+      <RefreshToken error={createError || getOneCompanyError} />
     </>
   );
 }
