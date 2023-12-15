@@ -137,6 +137,7 @@ export type ModalWindowType = {
   children: ReactNode;
   showModal: boolean;
   toggleModal: () => void;
+  minWidth?: string;
 };
 
 export type UpdateFieldsCompanyType = {
@@ -347,4 +348,158 @@ export type UpdateFieldsQuizType = {
   title: string; description: string; frequencyInDays: number
 }
 
+export type MyFormValues = {
+  title: string;
+  description: string;
+  frequencyInDays: number | null;
+  questions: {
+    question: string;
+    answers: string[];
+    correctAnswer: string;
+  }[];
+}
 
+export type AddQuestionType = {
+  quizId: number,
+  companyId: number,
+  addedQuestion: boolean,
+  setAddedQuestion: (state: boolean) => void,
+  showModal: boolean,
+}
+
+export type AddQuestionReqProps = {
+  quizId: number,
+  companyId: number,
+  question?: string,
+  answers?: string[],
+  correctAnswer?: string,
+}
+
+export type QuestionsType = {
+  id: number;
+  question: string;
+  answers: string[];
+  correctAnswer: string;
+}
+
+export type QuestionsWithNoIDType = {
+  question: string;
+  answers: string[];
+  correctAnswer: string;
+}
+
+export type CreateQuizType = {
+  companyId: number,
+  title: string,
+  description: string,
+  frequencyInDays: number | null,
+  questions: QuestionsWithNoIDType[],
+}
+
+export type QuizType = {
+  id: number
+  title: string,
+  description: string,
+  frequencyInDays: number | null,
+  questions: QuestionsType[],
+}
+
+export type QuizAndCompIdType = {
+  companyId: number,
+  quiz: QuizType
+}
+
+export type UpdateQuizType = {
+  id: number,
+  quiz: QuizType,
+  showModal: boolean,
+  toggleModal: () => void,
+  disabledFields: boolean,
+  setDisabledFields: (state: boolean) => void,
+}
+
+export type UpdateQuizBodyType = {
+  quizId: number,
+  companyId: number,
+  title?: string,
+  description?: string,
+  frequencyInDays?: number | null,
+}
+
+export type UpdateFormikType = {
+  title: string,
+  description: string,
+  frequencyInDays: number | null,
+}
+
+export type DeleteQuestReqType = {
+  questionId: number,
+  quizId: number,
+  companyId: number,
+}
+export type AllQuestionsType = {
+  id: number,
+  question: string;
+  answers: string[];
+  correctAnswer: string;
+  index: number
+}
+
+export type GetAllQuizzesType = {
+  quizzes: []
+}
+
+export type QuizIdAndCompIdType = {
+  companyId: number,
+  quizId: number
+}
+
+export type GetOneQuizType = {
+   quiz: QuizType
+}
+
+export type DeleteQuizResType = {
+  quiz: number
+}
+
+export type AddQuestionResType = {
+  question: QuizType
+}
+
+export type DeleteQuestResType = {
+  question: number
+}
+
+export type UpdateQuestResponse = {
+  question: {
+  question: string;
+  answers: string[];
+  correctAnswer: string;}
+}
+export type UpdateQuestReqType = {
+  questionId: number,
+  quizId: number,
+  companyId: number,
+  question?: string;
+  answers?: string[];
+  correctAnswer?: string;
+}
+
+export type UpdateQuestType = {
+  id: number,
+  quizId: number,
+  questionId: number,
+  question: {question: string;
+  answers: string[];
+  correctAnswer: string;},
+  setQuestionDisabledFields: (state: boolean) => void,
+  questionDisabledFields: boolean,
+  handleEditClick: (index: number) => void,
+  index:number
+}
+
+export type EditButtonType = {
+  toggleActiveState: (state: string | null) => void;
+  field: string | null;
+  isActive: boolean;
+};

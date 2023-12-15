@@ -12,6 +12,7 @@ export default function UpdateFormInput({
   type,
   placeholder,
   isActive,
+  disabled,
   ...rest
 }: InputProps) {
   return (
@@ -25,6 +26,7 @@ export default function UpdateFormInput({
           : "w-full bg-white text-zinc-400"
       }`}
       {...rest}
+      disabled={disabled}
     />
   );
 }
