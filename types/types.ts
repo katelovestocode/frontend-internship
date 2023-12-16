@@ -522,7 +522,7 @@ export type QuizAttemptType = {
 }
 
 export type QuizAttemptResType = {
-company: CompanyType,
+quiz: {company: CompanyType,
 quiz: QuizType,
 user: UserType
 id: number,
@@ -531,5 +531,5 @@ timestamp: Date,
 overallRatingAcrossSystem: number,
 averageScoreWithinCompany: number,
 totalCorrect: number,
-totalQuestions: number,
+totalQuestions: number,}
 }

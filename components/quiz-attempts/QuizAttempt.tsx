@@ -157,7 +157,7 @@ export default function QuizAttempt({
                                     />
                                     {answer}
                                   </label>
-                                  {formik.errors.questions?.[index]?.answer &&
+                                  {/* {formik.errors.questions?.[index]?.answer &&
                                     formik.touched.questions?.[index]
                                       ?.answer && (
                                       <p className="text-xs text-red-600 pt-1">
@@ -166,7 +166,7 @@ export default function QuizAttempt({
                                             ?.answer
                                         }
                                       </p>
-                                    )}
+                                    )} */}
                                 </li>
                               ))}
                             </ul>
