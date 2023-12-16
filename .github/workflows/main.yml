@@ -36,8 +36,8 @@ jobs:
             echo "NEXT_PUBLIC_AUTH0_AUDIENCE=${{ secrets.NEXT_PUBLIC_AUTH0_AUDIENCE }}" >> .env
             echo "NEXT_PUBLIC_AUTH0_ISSUER_URL=${{ secrets.NEXT_PUBLIC_AUTH0_ISSUER_URL }}" >> .env
 
-            docker stop frontend-prod || true
-            docker rm frontend-prod || true
-            docker rmi frontend-image-prod || true
-            docker build -t frontend-image-prod --progress=plain --no-cache --target prod .
-            docker run -d -p 3000:3000 --name frontend-prod frontend-image-prod
+            docker stop docker-frontend || true
+            docker rm docker-frontend  || true
+            docker rmi docker-frontend  || true
+            docker build -t docker-frontend --progress=plain --no-cache --target prod .
+            docker run -d -p 3000:3000 --name docker-frontend docker-frontend
