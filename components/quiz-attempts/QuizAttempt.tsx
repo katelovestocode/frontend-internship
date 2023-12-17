@@ -47,16 +47,17 @@ export default function QuizAttempt({
   useEffect(() => {
     if (isQuizAttepmtSuccess) {
       setFinishedQuiz(true);
-      toast.error((isQuizAttepmtSuccess as any).message, {
-        position: toast.POSITION.TOP_CENTER,
-      });
-    }
-    if (isQuizAttepmtSuccess) {
       toast.success("Quiz has been submitted", {
         position: toast.POSITION.TOP_CENTER,
       });
     }
-  }, [isQuizAttepmtSuccess, isQuizAttepmtSuccess]);
+    if (sendQuizAttemptError) {
+      toast.error((isQuizAttepmtSuccess as any).message, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      formik.resetForm();
+    }
+  }, [isQuizAttepmtSuccess, sendQuizAttemptError]);
 
   const formik = useFormik({
     initialValues: {
@@ -80,13 +81,16 @@ export default function QuizAttempt({
     },
   });
 
-  console.log(
-    quiz?.questions?.map((question) => ({
-      answer: "",
-      id: question.id,
-    }))
-  );
-  console.log(formik.initialValues, "initialValues");
+  useEffect(() => {
+    formik.resetForm({
+      values: {
+        questions: quiz?.questions?.map((question) => ({
+          answer: "",
+          id: question.id,
+        })),
+      },
+    });
+  }, [quiz?.questions]);
 
   return (
     <>
@@ -157,18 +161,21 @@ export default function QuizAttempt({
                                     />
                                     {answer}
                                   </label>
-                                  {/* {formik.errors.questions?.[index]?.answer &&
-                                    formik.touched.questions?.[index]
-                                      ?.answer && (
-                                      <p className="text-xs text-red-600 pt-1">
-                                        {
-                                          formik.errors.questions?.[index]
-                                            ?.answer
-                                        }
-                                      </p>
-                                    )} */}
                                 </li>
                               ))}
+                              {formik.errors.questions?.[index] &&
+                                typeof formik.errors.questions?.[index] ===
+                                  "object" && (
+                                  <p className="text-xs text-red-600 pt-1">
+                                    {
+                                      (
+                                        formik.errors.questions?.[index] as {
+                                          answer?: string;
+                                        }
+                                      )?.answer
+                                    }
+                                  </p>
+                                )}
                             </ul>
                           </div>
                         </li>
