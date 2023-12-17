@@ -3,7 +3,7 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - FE-20-add-github-actions
+      - develop
 
 jobs:
   deploy:
@@ -12,7 +12,7 @@ jobs:
       - name: Clone Repository
         uses: actions/checkout@v3
         with:
-          ref: FE-20-add-github-actions
+          ref: develop
 
       - name: Executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@master
@@ -24,8 +24,8 @@ jobs:
           script: |
             set -x 
             cd app/frontend-internship
-            git checkout FE-20-add-github-actions 
-            git pull origin FE-20-add-github-actions 
+            git checkout develop 
+            git pull origin develop 
 
             echo "NEXT_PUBLIC_API_BASE_URL=${{ secrets.NEXT_PUBLIC_API_BASE_URL }}" > .env
             echo "NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}" >> .env
