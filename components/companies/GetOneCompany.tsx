@@ -310,10 +310,13 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
               )}
             </div>
 
-            {/* requests and invitation tabs */}
-            <div className="flex flex-col gap-4">
-              <ul className="flex flex-row gap-6">
-                {company?.owner?.id === userId && (
+            {/* requests, invitation, quizzes and analytics tabs */}
+            <div className="flex flex-col gap-4 ">
+              <ul className="flex flex-row gap-6 ">
+                {(company?.owner?.id === userId ||
+                  company?.admins
+                    .map((admin: UserType) => admin.id)
+                    .includes(userId)) && (
                   <>
                     <li>
                       {" "}
@@ -329,26 +332,33 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
                         label="Invitations"
                       />
                     </li>
+                    <li>
+                      <SubNavLink
+                        hrefLink={`/companies/${id}/quizzes`}
+                        label="Quizzes"
+                      />
+                    </li>
+                    <li>
+                      <SubNavLink
+                        hrefLink={`/companies/${id}/analytics`}
+                        label="Analytics"
+                      />
+                    </li>
                   </>
-                )}
-                {company?.owner?.id === userId && (
-                  <li>
-                    <SubNavLink
-                      hrefLink={`/companies/${id}/quizzes`}
-                      label="Quizzes"
-                    />
-                  </li>
                 )}
                 {company?.members
                   .map((member: UserType) => member.id)
-                  .includes(userId) && (
-                  <li>
-                    <SubNavLink
-                      hrefLink={`/companies/${id}/quizzes`}
-                      label="Quizzes"
-                    />
-                  </li>
-                )}
+                  .includes(userId) &&
+                  !company?.admins
+                    .map((admin: UserType) => admin.id)
+                    .includes(userId) && (
+                    <li>
+                      <SubNavLink
+                        hrefLink={`/companies/${id}/quizzes`}
+                        label="Quizzes"
+                      />
+                    </li>
+                  )}
               </ul>
 
               {/* invitations and requests and quizzes lists renders */}
