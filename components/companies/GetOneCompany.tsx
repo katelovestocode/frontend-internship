@@ -332,13 +332,24 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
                     </li>
                   </>
                 )}
-                <li>
-                  {" "}
-                  <SubNavLink
-                    hrefLink={`/companies/${id}/quizzes`}
-                    label="Quizzes"
-                  />
-                </li>
+                {company?.owner?.id === userId && (
+                  <li>
+                    <SubNavLink
+                      hrefLink={`/companies/${id}/quizzes`}
+                      label="Quizzes"
+                    />
+                  </li>
+                )}
+                {company?.members
+                  .map((member: UserType) => member.id)
+                  .includes(userId) && (
+                  <li>
+                    <SubNavLink
+                      hrefLink={`/companies/${id}/quizzes`}
+                      label="Quizzes"
+                    />
+                  </li>
+                )}
               </ul>
 
               {/* invitations and requests and quizzes lists renders */}
