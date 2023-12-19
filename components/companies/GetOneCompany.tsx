@@ -312,7 +312,7 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
 
             {/* requests, invitation, quizzes and analytics tabs */}
             <div className="flex flex-col gap-4 ">
-              <ul className="flex flex-row gap-6 ">
+              <ul className="flex flex-row w-full gap-6 ">
                 {(company?.owner?.id === userId ||
                   company?.admins
                     .map((admin: UserType) => admin.id)

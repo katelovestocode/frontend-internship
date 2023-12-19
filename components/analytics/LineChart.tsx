@@ -12,6 +12,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { LineChartType } from "@/types/types";
 
 ChartJS.register(
   CategoryScale,
@@ -23,16 +24,7 @@ ChartJS.register(
   Legend
 );
 
-const chartColors = [
-  "rgb(255, 99, 132)",
-  "rgb(255, 159, 64)",
-  "rgb(54, 162, 235)",
-  "rgb(64, 224, 208)",
-  "#6366f1",
-  "#ec4899",
-];
-
-export default function LineChart({ data, name }) {
+export default function LineChart({ data, name }: LineChartType) {
   const chartData = {
     labels: data?.analytics?.map(
       (dataPoint: { quizTime: moment.MomentInput }) =>
@@ -44,7 +36,7 @@ export default function LineChart({ data, name }) {
         data: data?.analytics?.map(
           (dataPoint: { quizAvarage: any }) => dataPoint.quizAvarage
         ),
-        borderColor: chartColors || "rgb(255, 99, 132)",
+        borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 0, 0, 0.1)",
         yAxisID: "y",
       },
@@ -64,7 +56,6 @@ export default function LineChart({ data, name }) {
           label: (context: any) => {
             const index = context.dataIndex;
             const dataPoint = data?.analytics?.[index];
-
             if (dataPoint) {
               return `${moment(dataPoint.quizTime).format(
                 "YYYY-MM-DD HH:mm:ss"

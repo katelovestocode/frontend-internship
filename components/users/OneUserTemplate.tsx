@@ -17,6 +17,8 @@ import { useLazyCurrentUserQuery } from "@/redux/api/authApiSlice";
 import useLogout from "../../hooks/useLogout";
 import { omit } from "lodash";
 import { updateFormikFields } from "@/utils/helpers";
+import { useGetUsersAvarageRatingQuery } from "@/redux/api/analyticsApiSlice";
+import StarRating from "./StarRating";
 
 export default function OneUserTemplate({ id, user }: OneUserType) {
   const [disabledFields, setDisabledFields] = useState(true);
@@ -51,6 +53,9 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
       error: deleteError,
     },
   ] = useDeleteUserMutation();
+
+  const { data: getRatingData, error: getRatingError } =
+    useGetUsersAvarageRatingQuery(userId!);
 
   const toggleActiveState = (field: keyof ActiveFieldsType) => {
     setIsActive((prev) => ({ ...prev, [field]: !prev[field] }));
@@ -147,13 +152,19 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
       }
     },
   });
+  const getStarRating = (averageRating: number) => {
+    const maxRating = 100;
+    const numberOfStars = Math.round((averageRating / maxRating) * 5);
+    return numberOfStars;
+  };
+  const starRating = getStarRating(getRatingData?.averageRating!);
 
   return (
     <div className="flex flex-col justify-between border-solid border-gray-700 border-1 rounded-xl p-10 flex gap-2 bg-white shadow-lg">
       <form
         autoComplete="off"
         onSubmit={formik.handleSubmit}
-        className="flex flex-col gap-5 justify-center items-center w-52 md:w-80 "
+        className="flex flex-col gap-5 w-52 md:w-80 "
       >
         <div className="w-full">
           <label htmlFor="email" className="font-semibold">
@@ -177,7 +188,6 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
             </p>
           )}
         </div>
-
         <div className="w-full">
           <label htmlFor="name" className="font-semibold">
             Name
@@ -205,7 +215,6 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
             </p>
           )}
         </div>
-
         <div className="w-full">
           <label htmlFor="password" className="font-semibold">
             Password
@@ -236,7 +245,6 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
             </p>
           )}
         </div>
-
         <div className="w-full">
           <label htmlFor="password" className="font-semibold">
             Confirm Password
@@ -267,11 +275,13 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
             </p>
           )}
         </div>
-
         {!disabledFields && (
           <button type="submit" className="btn btn-outline mt-4">
             Submit
           </button>
+        )}
+        {disabledFields && userId === user.id && (
+          <StarRating starRating={starRating} />
         )}
       </form>
 

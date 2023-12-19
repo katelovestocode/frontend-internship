@@ -1,46 +1,56 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { commonApi } from "./commonApi";
+import {
+  GetUserRatingType,
+  IdTypes,
+  UserAllQuizAttemptsType,
+  UserAndQuizIdsTypes,
+} from "@/types/types";
 
 export type AnalyticsApi = ReturnType<typeof createApi>;
 
 export const analyticsApi = commonApi.injectEndpoints({
   endpoints: (build) => ({
-    getUsersAvarageRating: build.query<any, number>({
+    getUsersAvarageRating: build.query<GetUserRatingType, number>({
       query: (userId) => ({
         url: `/analytics/users/${userId}`,
         method: "GET",
       }),
     }),
-    getUserAvarageQuizAnalytics: build.query<any, any>({
+    getUserAvarageQuizAnalytics: build.query<any, UserAndQuizIdsTypes>({
       query: ({ userId, quizId }) => ({
         url: `/analytics/users/${userId}/quizzes/${quizId}`,
         method: "GET",
       }),
     }),
-    getUserAvarAllQuizAnalytics: build.query<any, number>({
+    getUserAvarAllQuizAnalytics: build.query<UserAllQuizAttemptsType, number>({
       query: (userId) => ({
         url: `/analytics/users/${userId}/quizzes`,
         method: "GET",
       }),
     }),
-    getCompanyAllUsersAnalytics: build.query<any, number>({
+    getCompanyAllUsersAnalytics: build.query<UserAllQuizAttemptsType, number>({
       query: (companyId) => ({
         url: `/analytics/companies/${companyId}/users`,
         method: "GET",
       }),
     }),
-    getOneUserInCompanyAnalytics: build.query<any, any>({
-      query: ({ companyId, userId }) => ({
-        url: `/analytics/companies/${companyId}/users/${userId}`,
-        method: "GET",
-      }),
-    }),
-    getUsersAttemptsInCompany: build.query<any, number>({
-      query: (companyId) => ({
-        url: `/analytics/companies/${companyId}/latest`,
-        method: "GET",
-      }),
-    }),
+    getOneUserInCompanyAnalytics: build.query<UserAllQuizAttemptsType, IdTypes>(
+      {
+        query: ({ companyId, userId }) => ({
+          url: `/analytics/companies/${companyId}/users/${userId}`,
+          method: "GET",
+        }),
+      }
+    ),
+    getUsersLastAttemptsInCompany: build.query<UserAllQuizAttemptsType, number>(
+      {
+        query: (companyId) => ({
+          url: `/analytics/companies/${companyId}/latest`,
+          method: "GET",
+        }),
+      }
+    ),
   }),
 });
 
@@ -49,12 +59,12 @@ export const {
   useGetOneUserInCompanyAnalyticsQuery,
   useGetUserAvarAllQuizAnalyticsQuery,
   useGetUserAvarageQuizAnalyticsQuery,
-  useGetUsersAttemptsInCompanyQuery,
+  useGetUsersLastAttemptsInCompanyQuery,
+  useLazyGetUsersLastAttemptsInCompanyQuery,
   useGetUsersAvarageRatingQuery,
   useLazyGetCompanyAllUsersAnalyticsQuery,
   useLazyGetOneUserInCompanyAnalyticsQuery,
   useLazyGetUserAvarAllQuizAnalyticsQuery,
   useLazyGetUserAvarageQuizAnalyticsQuery,
-  useLazyGetUsersAttemptsInCompanyQuery,
   useLazyGetUsersAvarageRatingQuery,
 } = analyticsApi;

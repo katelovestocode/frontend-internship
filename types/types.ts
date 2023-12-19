@@ -534,3 +534,36 @@ averageScoreWithinCompany: number,
 totalCorrect: number,
 totalQuestions: number,}
 }
+
+export type GetUserRatingType = {
+averageRating: number,
+userId: number,
+userName: string
+}
+
+export type UserAllQuizAttemptsType = {
+  analytics: {
+    quizAttemptId: number,
+    quizAvarage: number,
+    quizTime: Date,
+    userId: number,
+    userName: string
+  }[]
+}
+
+export type UserAndQuizIdsTypes = {
+  quizId: number;
+  userId: number ;
+}
+
+export type LineChartType = {
+  data: { analytics: {
+    quizAttemptId: number,
+    quizAvarage: number,
+    quizTime: Date,
+    userId: number,
+    userName: string
+  }[]}
+  name: string;
+}
+
