@@ -4,7 +4,6 @@ import {
   useDeleteUserMutation,
   useUpdateUserMutation,
 } from "../../redux/api/userApiSlice";
-import RefreshToken from "../auth/RefreshToken";
 import { useFormik } from "formik";
 import { updateUserSchema } from "./UpdateUserValidation";
 import UpdateFormInput from "./UpdateFormInput";
@@ -291,7 +290,6 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
           </>
         )}
       </div>
-      <RefreshToken error={updateError || deleteError || getUserError} />
     </div>
   );
 }

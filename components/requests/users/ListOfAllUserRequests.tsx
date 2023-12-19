@@ -4,7 +4,6 @@ import {
   useGetUsersAllRequestsQuery,
   useSendUserRequestMutation,
 } from "@/redux/api/requestApiSlice";
-import RefreshToken from "../../auth/RefreshToken";
 import ListOfUserRequestsItem from "./ListOfUserRequestsItem";
 import ModalWindow from "@/components/common/Modal";
 import { FiSend } from "react-icons/fi";
@@ -109,7 +108,6 @@ export default function ListOfAllUserRequests({ id }: { id: number }) {
           </button>
         </div>
       </ModalWindow>
-      <RefreshToken error={error || sendRequestError || getCompanyError} />
     </>
   );
 }

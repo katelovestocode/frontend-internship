@@ -53,6 +53,7 @@ export type InitialState = {
   isLoading: boolean;
   isLoggedIn: boolean;
   isRefreshing: boolean;
+  isError: boolean
 }
 
 export type UserType = {

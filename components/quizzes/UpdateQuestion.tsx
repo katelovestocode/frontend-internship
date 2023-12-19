@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
 import { updateFormikFields } from "@/utils/helpers";
-import RefreshToken from "../auth/RefreshToken";
 import { updateQuestionSchema } from "./QuizValidation";
 import { useUpdateQuestionMutation } from "@/redux/api/quizApiSlice";
 import { UpdateQuestReqType, UpdateQuestType } from "@/types/types";
@@ -213,7 +212,6 @@ export default function UpdateQuestion({
           </div>
         </form>
       </div>
-      <RefreshToken error={updateQuestionError} />
     </>
   );
 }

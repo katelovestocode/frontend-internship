@@ -8,7 +8,6 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
 import { updateFormikFields } from "@/utils/helpers";
-import RefreshToken from "../auth/RefreshToken";
 import { updateQuizSchema } from "./QuizValidation";
 import AddQuestion from "./AddQuestion";
 import {
@@ -309,14 +308,14 @@ export default function UpdateQuiz({
                             {question.question}
                           </span>
                         </p>
-                        <p className="text-amber-800">
+                        <div className="text-amber-800">
                           Answers:{" "}
-                          <span className="font-bold text-gray-950">
+                          <ul className="font-bold text-gray-950">
                             {question.answers.map((answer, index) => (
-                              <p key={index}>{answer} </p>
+                              <li key={index}>{answer} </li>
                             ))}
-                          </span>
-                        </p>
+                          </ul>
+                        </div>
                         <p className="text-amber-800">
                           Correct Answer:{" "}
                           <span className="font-medium text-gray-950">
@@ -374,7 +373,6 @@ export default function UpdateQuiz({
           </button>
         </div>
       </ModalWindow>
-      <RefreshToken error={updateQuizError || deleteQuestionError} />
     </>
   );
 }

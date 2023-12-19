@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import RefreshToken from "../auth/RefreshToken";
 import {
   useDeleteCompanyMutation,
   useLazyGetOneCompanyQuery,
@@ -422,7 +421,6 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
         showModal={showAddAdminModal}
         toggleModal={toggleAddAdminModal}
       />
-      <RefreshToken error={getOneCompanyError} />
     </>
   );
 }

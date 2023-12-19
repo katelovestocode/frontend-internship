@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import Cookies from "js-cookie";
 import { useLazyCurrentUserQuery } from "@/redux/api/authApiSlice";
 import React from "react";
-import RefreshToken from "./RefreshToken";
 
 interface Children {
   children: React.ReactNode;
@@ -19,10 +18,5 @@ export default function CurrentUser({ children }: Children) {
     }
   }, [accessToken, getCurrentUser]);
 
-  return (
-    <>
-      {children}
-      <RefreshToken error={getUserError} />
-    </>
-  );
+  return <>{children}</>;
 }

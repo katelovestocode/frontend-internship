@@ -11,7 +11,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
 import { updateCompanySchema } from "./CompanyValidation";
 import { updateFormikFields } from "@/utils/helpers";
-import RefreshToken from "../auth/RefreshToken";
 
 export default function UpdateCompany({
   id,
@@ -182,7 +181,6 @@ export default function UpdateCompany({
           </form>
         </div>
       </ModalWindow>
-      <RefreshToken error={updatedError} />
     </>
   );
 }

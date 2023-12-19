@@ -14,6 +14,7 @@ export const initialState: InitialState = {
   isLoggedIn: false,
   isLoading: false,
   isRefreshing: false,
+  isError: false,
  
 };
 
@@ -33,6 +34,9 @@ export const authSlice = createSlice({
       state.isLoading = false;
       state.isRefreshing = false;
     },
+    isRefreshError: (state, { payload }) => {
+      state.isError = payload
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -122,4 +126,4 @@ export const authSlice = createSlice({
 });
 
 export default authSlice.reducer;
-export const {logOut} = authSlice.actions;
+export const {logOut, isRefreshError} = authSlice.actions;

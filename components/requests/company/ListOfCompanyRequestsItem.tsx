@@ -8,7 +8,6 @@ import { FcCancel } from "react-icons/fc";
 import { FaCheck } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import ModalWindow from "@/components/common/Modal";
-import RefreshToken from "@/components/auth/RefreshToken";
 import { CompReqIdsType, RequestAndIdType } from "@/types/types";
 import React from "react";
 
@@ -133,7 +132,6 @@ export default function ListOfCompanyRequestsItem({
           </div>
         </ModalWindow>
       </li>
-      <RefreshToken error={acceptError || requestError} />
     </>
   );
 }

@@ -5,7 +5,6 @@ import React from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
-import RefreshToken from "../auth/RefreshToken";
 import { createACompanySchema } from "./CompanyValidation";
 import UpdateFormInput from "../users/UpdateFormInput";
 import ModalWindow from "../common/Modal";
@@ -135,7 +134,6 @@ export default function CreateACompany() {
           </form>
         </div>
       </ModalWindow>
-      <RefreshToken error={createError} />
     </>
   );
 }

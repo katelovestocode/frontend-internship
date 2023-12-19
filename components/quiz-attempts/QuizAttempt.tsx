@@ -1,7 +1,6 @@
 "use client";
 import { useLazyGetOneQuizQuery } from "@/redux/api/quizApiSlice";
 import { useEffect, useState } from "react";
-import RefreshToken from "../auth/RefreshToken";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FormikProvider, useFormik } from "formik";
@@ -213,8 +212,6 @@ export default function QuizAttempt({
           </div>
         </div>
       )}
-
-      <RefreshToken error={getOneQuizError || sendQuizAttemptError} />
     </>
   );
 }

@@ -4,7 +4,6 @@ import React from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormik, FormikProvider, FieldArray, Field } from "formik";
-import RefreshToken from "../auth/RefreshToken";
 import ModalWindow from "../common/Modal";
 import Button from "../common/Button";
 import { useCreateQuizMutation } from "@/redux/api/quizApiSlice";
@@ -391,7 +390,6 @@ export default function CreateQuiz({ id }: IdProps) {
           </FormikProvider>
         </div>
       </ModalWindow>
-      <RefreshToken error={createError || getOneCompanyError} />
     </>
   );
 }

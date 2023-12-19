@@ -2,7 +2,6 @@
 import React from "react";
 import { useGetAllQuizzesQuery } from "@/redux/api/quizApiSlice";
 import ListOfCompanyQuizzesItem from "./ListOfAllCompanyQuizzesItem";
-import RefreshToken from "../auth/RefreshToken";
 import { IdProps, QuizType } from "@/types/types";
 
 export default function ListOfAllCompanyQuizzes({ id }: IdProps) {
@@ -23,7 +22,6 @@ export default function ListOfAllCompanyQuizzes({ id }: IdProps) {
             />
           ))}
       </ul>
-      <RefreshToken error={error} />
     </>
   );
 }

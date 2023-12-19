@@ -6,6 +6,7 @@ import { setupListeners } from '@reduxjs/toolkit/query';
 import healthCheckReducer from './slices/healthCheckSlice';
 import authReducer from './slices/authSlice';
 import { commonApi } from './api/commonApi';
+import refreshMiddleware from '@/middlewares/refreshMiddleware';
 
 const rootReducer = combineReducers({
   counter: counterReducer,
@@ -18,7 +19,7 @@ const rootReducer = combineReducers({
 export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(healthApi.middleware, commonApi.middleware),
+    getDefaultMiddleware().concat(refreshMiddleware, healthApi.middleware, commonApi.middleware ),
 });
 
 setupListeners(store.dispatch);

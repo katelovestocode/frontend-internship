@@ -1,6 +1,5 @@
 "use client";
 import { useGetCompanyAllRequestsQuery } from "@/redux/api/requestApiSlice";
-import RefreshToken from "../../auth/RefreshToken";
 import ListOfCompanyRequestsItem from "./ListOfCompanyRequestsItem";
 import React from "react";
 
@@ -19,7 +18,6 @@ export default function ListOfAllCompanyRequests({ id }: { id: number }) {
             />
           ))}
       </ul>
-      <RefreshToken error={error} />
     </>
   );
 }

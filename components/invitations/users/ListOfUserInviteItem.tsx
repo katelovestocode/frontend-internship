@@ -1,4 +1,3 @@
-import RefreshToken from "@/components/auth/RefreshToken";
 import ModalWindow from "@/components/common/Modal";
 import React, { useEffect } from "react";
 import {
@@ -135,8 +134,6 @@ export default function ListOfUserInviteItem({ invite }: OneInviteType) {
           </button>
         </div>
       </ModalWindow>
-
-      <RefreshToken error={declineInviteError || acceptInviteError} />
     </>
   );
 }

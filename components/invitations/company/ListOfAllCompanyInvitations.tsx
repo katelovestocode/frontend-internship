@@ -3,7 +3,6 @@ import {
   useCompanySendsInvitationMutation,
   useGetAllCompanyInvitationsQuery,
 } from "@/redux/api/invitationApiSlice";
-import RefreshToken from "../../auth/RefreshToken";
 import ListOfCompanyInviteItem from "./ListOfCompanyInviteItem";
 import { FiSend } from "react-icons/fi";
 import { toast } from "react-toastify";
@@ -109,8 +108,6 @@ export default function ListOfAllCompanyInvitations({ id }: { id: number }) {
           </button>
         </div>
       </ModalWindow>
-
-      <RefreshToken error={error || invitationError || getUsersError} />
     </>
   );
 }

@@ -4,7 +4,6 @@ import { useDeleteQuizMutation } from "@/redux/api/quizApiSlice";
 import CommonModal from "../common/CommonModal";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import RefreshToken from "../auth/RefreshToken";
 import UpdateQuiz from "./UpdateQuiz";
 import { QuizAndCompIdType } from "@/types/types";
 import { useAppSelector } from "@/redux/store";
@@ -111,11 +110,7 @@ export default function ListOfCompanyQuizzesItem({
           </div>
         ) : (
           <Link href={`/companies/${companyId}/quizzes/${quiz.id}`} passHref>
-            <button
-              type="button"
-              className="btn btn-outline w-full"
-              onClick={() => console.log("click")}
-            >
+            <button type="button" className="btn btn-outline w-full">
               Take a Quiz
             </button>
           </Link>
@@ -141,7 +136,6 @@ export default function ListOfCompanyQuizzesItem({
         disabledFields={disabledFields}
         setDisabledFields={setDisabledFields}
       />
-      <RefreshToken error={deleteQuizError} />
     </>
   );
 }

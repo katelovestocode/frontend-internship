@@ -4,7 +4,6 @@ import { useAddQuestionMutation } from "@/redux/api/quizApiSlice";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
-import RefreshToken from "../auth/RefreshToken";
 import { AddQuestionReqProps, AddQuestionType } from "@/types/types";
 
 export default function AddQuestion({
@@ -188,7 +187,6 @@ export default function AddQuestion({
           </FormikProvider>
         </div>
       )}
-      <RefreshToken error={addQuestionError} />
     </>
   );
 }
