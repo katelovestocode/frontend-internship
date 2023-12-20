@@ -8,28 +8,24 @@ import {
   useLazyGetUserAvarageQuizAnalyticsQuery,
 } from "@/redux/api/analyticsApiSlice";
 import LineChart from "./LineChart";
-import { useLazyGetOneQuizQuery } from "@/redux/api/quizApiSlice";
+import { useGetAllQuizAttemptsQuery } from "@/redux/api/quizAttempt";
+import { AttemptType, GetOneQuizType } from "@/types/types";
+import { useAppSelector } from "@/redux/store";
+import moment from "moment";
 
 export default function UsersAnalytics({ id }: { id: number }) {
-  const [
-    userAvarageByQuiz,
-    { data: userAvarageByQuizData, error: userAvarageByQuizError },
-  ] = useLazyGetUserAvarageQuizAnalyticsQuery();
+  const userId = useAppSelector((state) => state.authReducer.user?.id);
+  const [userAvarageByQuiz, { data: userAvarageByQuizData }] =
+    useLazyGetUserAvarageQuizAnalyticsQuery();
 
-  const [
-    userAvarageAllQuizzes,
-    { data: userAvarageAllQuizzesData, error: userAvarageAllQuizzesError },
-  ] = useLazyGetUserAvarAllQuizAnalyticsQuery();
+  const [userAvarageAllQuizzes, { data: userAvarageAllQuizzesData }] =
+    useLazyGetUserAvarAllQuizAnalyticsQuery();
 
-  //   const { data, error: getOneUserError } = useGetOneUserQuery(id);
-  //   const { user } = data || {};
+  const { data, error } = useGetAllQuizAttemptsQuery(id);
 
-  //   const [getOneQuiz, { data: getOneQuizData, error: getOneQuizError }] =
-  //     useLazyGetOneQuizQuery();
-
-  //   useEffect(() => {
-  //     getOneQuiz({ quizId: isQuizSelected, companyId: companyId });
-  //   }, [companyId, quizId]);
+  const uniqueQuizIds = Array.from(
+    new Set(data?.quizAttempts?.map((quiz: GetOneQuizType) => quiz.quiz.id))
+  );
 
   const [isQuizSelected, setIsQuizSelected] = useState(false);
   const [isAllQuizzesAttempts, setIsAllQuizzesAttempts] = useState(false);
@@ -40,15 +36,11 @@ export default function UsersAnalytics({ id }: { id: number }) {
     setIsAllQuizzesAttempts(false);
   };
 
-  const getUserAvaragebyQuiz = (selectedQuiz: number) => {
-    setSelectedQuiz(selectedQuiz);
-    handleGetUsersAvarageByQuiz(id, selectedQuiz);
-  };
-
   const handleGetUsersAvarageByQuiz = async (
     id: number,
     selectedQuiz: number
   ) => {
+    setSelectedQuiz(selectedQuiz);
     try {
       await userAvarageByQuiz({ userId: id, quizId: selectedQuiz });
     } catch (error: any) {
@@ -58,7 +50,7 @@ export default function UsersAnalytics({ id }: { id: number }) {
     }
   };
 
-  const getAllQuizAttempts = async () => {
+  const handleGetAllQuizAttempts = async () => {
     setIsQuizSelected(false);
     setIsAllQuizzesAttempts(true);
     try {
@@ -72,7 +64,7 @@ export default function UsersAnalytics({ id }: { id: number }) {
   return (
     <>
       <div className="w-full">
-        {id && (
+        {id && userId === Number(id) && (
           <>
             <div className="mb-4">
               <div className="flex gap-4 flex-row">
@@ -87,7 +79,7 @@ export default function UsersAnalytics({ id }: { id: number }) {
                 <div className="flex gap-2 flex-row">
                   <button
                     className="btn btn-outline"
-                    onClick={() => getAllQuizAttempts()}
+                    onClick={() => handleGetAllQuizAttempts()}
                   >
                     <FaRegUser /> All Quiz Attempts
                   </button>
@@ -99,41 +91,71 @@ export default function UsersAnalytics({ id }: { id: number }) {
 
         {isQuizSelected && (
           <>
-            <div className="flex flex-row">
-              <div className="flex flex-col w-32 gap-6 border-2 p-2 rounded-md shadow-md">
+            <div className="flex flex-row gap-4 pt-4 place-items-center">
+              <div className="flex flex-col place-content-center gap-6 border-2 p-2 rounded-md shadow-md">
                 <h2 className="font-bold text-2xl"> Quizzes: </h2>
-                {/* <ul className="flex flex-col gap-6">
-                {company?.members?.map((member: any, index: number) => (
-                  <li
-                    key={index}
-                    onClick={() => getUserAvaragebyQuiz(member.id, member.name)}
-                    className={`w-24 flex place-content-start text-lg font-medium border-2 p-2 rounded-md shadow-md  ${
-                      selectedUser === member.id
-                        ? "border-2 border-amber-700"
-                        : "text-xl"
-                    } `}
-                  >
-                    {member.name}
-                  </li>
-                ))}
-              </ul> */}
+                <ul className="grid gap-4 grid-cols-2">
+                  {uniqueQuizIds?.map((quizId: any, index: number) => (
+                    <li
+                      key={index}
+                      onClick={() => handleGetUsersAvarageByQuiz(id, quizId)}
+                      className={`flex place-content-start text-lg font-medium border-2 p-2 rounded-md shadow-md  ${
+                        selectedQuiz === quizId
+                          ? "border-2 border-amber-700"
+                          : "text-xl"
+                      } `}
+                    >
+                      {quizId}
+                    </li>
+                  ))}
+                </ul>
               </div>
-
-              {/* {userAvarageAllQuizzesData && (
-              <LineChart
-                data={userAvarageAllQuizzesData}
-                name={`${userAvarageAllQuizzesData.userName}'s Analytics`}
-              />
-            )} */}
+              <div className="w-full">
+                {userAvarageByQuizData && (
+                  <LineChart
+                    data={userAvarageByQuizData}
+                    name={`Quiz #${selectedQuiz} Analytics`}
+                  />
+                )}
+              </div>
             </div>
           </>
         )}
       </div>
+
       {userAvarageAllQuizzesData && isAllQuizzesAttempts && (
-        <LineChart
-          data={userAvarageAllQuizzesData}
-          name={`${userAvarageAllQuizzesData?.analytics?.[0]?.userName}'s Analytics`}
-        />
+        <div className="flex flex-col gap-6 p-2 ">
+          <h2 className="font-bold text-2xl"> Last Attempts: </h2>
+          <ul className="grid gap-4 grid-cols-3">
+            {userAvarageAllQuizzesData?.analytics?.map(
+              (attempt: AttemptType, index: number) => (
+                <li
+                  key={index}
+                  className="border-solid border-gray-700 border-1 rounded-xl p-4 flex gap-2 bg-white flex-col shadow-lg"
+                >
+                  <p className="text-amber-800">
+                    Quiz ID:{" "}
+                    <span className="font-medium text-gray-950">
+                      {attempt.quizAttemptId}
+                    </span>
+                  </p>
+                  <p className="text-amber-800">
+                    Quiz Avarage:{" "}
+                    <span className="font-medium text-gray-950">
+                      {attempt.quizAvarage}
+                    </span>
+                  </p>
+                  <p className="text-amber-800">
+                    Quiz Time:{" "}
+                    <span className="font-medium text-gray-950">
+                      {moment(attempt.quizTime).format("YYYY-MM-DD HH:mm:ss")}
+                    </span>
+                  </p>
+                </li>
+              )
+            )}
+          </ul>
+        </div>
       )}
     </>
   );

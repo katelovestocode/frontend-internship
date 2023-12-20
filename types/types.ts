@@ -567,3 +567,19 @@ export type LineChartType = {
   name: string;
 }
 
+export type FilterQuizAttemptsType = {
+quizAttempts: {averageScoreWithinCompany: number, 
+id: number,
+overallRatingAcrossSystem: number,
+questionResponses: QuestionsType,
+quiz: QuizType,
+totalCorrect: number}[]
+}
+
+export type AttemptType = {
+ quizAttemptId: number;
+ quizAvarage: number;
+ quizTime: Date;
+ userId: number;
+ userName: string;     
+}

@@ -17,7 +17,10 @@ export const analyticsApi = commonApi.injectEndpoints({
         method: "GET",
       }),
     }),
-    getUserAvarageQuizAnalytics: build.query<any, UserAndQuizIdsTypes>({
+    getUserAvarageQuizAnalytics: build.query<
+      UserAllQuizAttemptsType,
+      UserAndQuizIdsTypes
+    >({
       query: ({ userId, quizId }) => ({
         url: `/analytics/users/${userId}/quizzes/${quizId}`,
         method: "GET",
@@ -52,6 +55,7 @@ export const analyticsApi = commonApi.injectEndpoints({
       }
     ),
   }),
+  overrideExisting: true,
 });
 
 export const {

@@ -12,6 +12,7 @@ import {
 import LineChart from "./LineChart";
 import { useGetOneCompanyQuery } from "@/redux/api/companyApiSlice";
 import moment from "moment";
+import { AttemptType, UserAllQuizAttemptsType } from "@/types/types";
 
 export default function CompanyAnalytics({ id }: { id: number }) {
   const [
@@ -38,7 +39,7 @@ export default function CompanyAnalytics({ id }: { id: number }) {
   const [selectedUser, setSelectedUser] = useState<number | null>(null);
   const [selectedUserName, setSelectedUserName] = useState<string | null>(null);
 
-  const getCompanyAllUsersAttempts = async () => {
+  const handleGetCompAllUsersAttempts = async () => {
     try {
       await allCompanyAnalytics(id);
     } catch (error: any) {
@@ -73,7 +74,7 @@ export default function CompanyAnalytics({ id }: { id: number }) {
     }
   };
 
-  const getLastAttempts = async () => {
+  const handleGetLastAttempts = async () => {
     setIsAllQuizAttempts(false);
     setIsOneUser(false);
     seIsLastAttempts(true);
@@ -94,7 +95,7 @@ export default function CompanyAnalytics({ id }: { id: number }) {
               <div className="flex gap-2 flex-row">
                 <button
                   className="btn btn-outline"
-                  onClick={() => getCompanyAllUsersAttempts()}
+                  onClick={() => handleGetCompAllUsersAttempts()}
                 >
                   <GrGroup /> All Quizz Attempts
                 </button>
@@ -110,7 +111,7 @@ export default function CompanyAnalytics({ id }: { id: number }) {
               <div className="flex gap-2 flex-row">
                 <button
                   className="btn btn-outline"
-                  onClick={() => getLastAttempts()}
+                  onClick={() => handleGetLastAttempts()}
                 >
                   <GrGroup />
                   Last Attempts
@@ -122,13 +123,16 @@ export default function CompanyAnalytics({ id }: { id: number }) {
       )}
 
       {isAllQuizAttempts && (
-        <LineChart data={allCompanyAnalyticsData} name="All Users Analytics" />
+        <LineChart
+          data={allCompanyAnalyticsData as UserAllQuizAttemptsType}
+          name="All Users Analytics"
+        />
       )}
 
       {isOneUser && (
         <>
           <div className="flex flex-row">
-            <div className="flex flex-col w-32 gap-6 border-2 p-2 rounded-md shadow-md">
+            <div className="flex flex-col gap-6 border-2 p-2 rounded-md shadow-md ">
               <h2 className="font-bold text-2xl"> Users: </h2>
               <ul className="flex flex-col gap-6">
                 {company?.members?.map((member: any, index: number) => (
@@ -160,35 +164,40 @@ export default function CompanyAnalytics({ id }: { id: number }) {
       {isLastAttempts && (
         <div className="flex flex-col gap-6 p-2 ">
           <h2 className="font-bold text-2xl"> Last Users Attempts: </h2>
-          <ul className="flex flex-row gap-6">
-            {lastAttemptsData?.analytics?.map((attempt: any, index: number) => (
-              <li key={index}>
-                <p className="text-amber-800">
-                  User Name:{" "}
-                  <span className="font-medium text-gray-950">
-                    {attempt.userName}
-                  </span>
-                </p>
-                <p className="text-amber-800">
-                  Quiz ID:{" "}
-                  <span className="font-medium text-gray-950">
-                    {attempt.quizAttemptId}
-                  </span>
-                </p>
-                <p className="text-amber-800">
-                  Quiz Avarage:{" "}
-                  <span className="font-medium text-gray-950">
-                    {attempt.quizAvarage}
-                  </span>
-                </p>
-                <p className="text-amber-800">
-                  Quiz Time:{" "}
-                  <span className="font-medium text-gray-950">
-                    {moment(attempt.quizTime).format("YYYY-MM-DD HH:mm:ss")}
-                  </span>
-                </p>
-              </li>
-            ))}
+          <ul className="grid gap-4 grid-cols-3">
+            {lastAttemptsData?.analytics?.map(
+              (attempt: AttemptType, index: number) => (
+                <li
+                  key={index}
+                  className="border-solid border-gray-700 border-1 rounded-xl p-4 flex gap-2 bg-white flex-col shadow-lg"
+                >
+                  <p className="text-amber-800">
+                    User Name:{" "}
+                    <span className="font-medium text-gray-950">
+                      {attempt.userName}
+                    </span>
+                  </p>
+                  <p className="text-amber-800">
+                    Quiz ID:{" "}
+                    <span className="font-medium text-gray-950">
+                      {attempt.quizAttemptId}
+                    </span>
+                  </p>
+                  <p className="text-amber-800">
+                    Quiz Avarage:{" "}
+                    <span className="font-medium text-gray-950">
+                      {attempt.quizAvarage}
+                    </span>
+                  </p>
+                  <p className="text-amber-800">
+                    Quiz Time:{" "}
+                    <span className="font-medium text-gray-950">
+                      {moment(attempt.quizTime).format("YYYY-MM-DD HH:mm:ss")}
+                    </span>
+                  </p>
+                </li>
+              )
+            )}
           </ul>
         </div>
       )}

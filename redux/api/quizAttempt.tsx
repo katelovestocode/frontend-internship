@@ -1,6 +1,10 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { commonApi } from "./commonApi";
-import { QuizAttemptResType, QuizAttemptType } from "@/types/types";
+import {
+  FilterQuizAttemptsType,
+  QuizAttemptResType,
+  QuizAttemptType,
+} from "@/types/types";
 
 export type QuizAttemptApi = ReturnType<typeof createApi>;
 
@@ -13,7 +17,13 @@ export const quizAttemptApi = commonApi.injectEndpoints({
         body: body,
       }),
     }),
+    getAllQuizAttempts: build.query<FilterQuizAttemptsType, number>({
+      query: (userId) => ({
+        url: `/users/${userId}/quizzes/attempts`,
+        method: "GET",
+      }),
+    }),
   }),
 });
-
-export const { useAttemptAQuizMutation } = quizAttemptApi;
+export const { useAttemptAQuizMutation, useGetAllQuizAttemptsQuery } =
+  quizAttemptApi;

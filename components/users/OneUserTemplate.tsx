@@ -17,7 +17,10 @@ import { useLazyCurrentUserQuery } from "@/redux/api/authApiSlice";
 import useLogout from "../../hooks/useLogout";
 import { omit } from "lodash";
 import { updateFormikFields } from "@/utils/helpers";
-import { useGetUsersAvarageRatingQuery } from "@/redux/api/analyticsApiSlice";
+import {
+  useGetUsersAvarageRatingQuery,
+  useLazyGetUsersAvarageRatingQuery,
+} from "@/redux/api/analyticsApiSlice";
 import StarRating from "./StarRating";
 
 export default function OneUserTemplate({ id, user }: OneUserType) {
@@ -31,8 +34,7 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
   });
   const logOutUser = useLogout();
 
-  const [getCurrentUser, { error: getUserError, data: userData }] =
-    useLazyCurrentUserQuery();
+  const [getCurrentUser] = useLazyCurrentUserQuery();
 
   const [
     updateCurrentUser,
@@ -55,7 +57,7 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
   ] = useDeleteUserMutation();
 
   const { data: getRatingData, error: getRatingError } =
-    useGetUsersAvarageRatingQuery(userId!);
+    useGetUsersAvarageRatingQuery(user?.id!);
 
   const toggleActiveState = (field: keyof ActiveFieldsType) => {
     setIsActive((prev) => ({ ...prev, [field]: !prev[field] }));

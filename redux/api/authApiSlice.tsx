@@ -43,6 +43,7 @@ export const authApi = commonApi.injectEndpoints({
       }),
     }),
   }),
+  overrideExisting: true,
 });
 
 export const {

@@ -34,7 +34,7 @@ export default function LineChart({ data, name }: LineChartType) {
       {
         label: name,
         data: data?.analytics?.map(
-          (dataPoint: { quizAvarage: any }) => dataPoint.quizAvarage
+          (dataPoint: { quizAvarage: number }) => dataPoint.quizAvarage
         ),
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 0, 0, 0.1)",

@@ -1,5 +1,4 @@
 import CompanyAnalytics from "@/components/analytics/CompanyAnalytics";
-import ListOfAllCompanyInvitations from "@/components/invitations/company/ListOfAllCompanyInvitations";
 import { IdParamsProps } from "@/types/types";
 import { Metadata } from "next";
 import React from "react";
