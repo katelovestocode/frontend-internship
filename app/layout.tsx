@@ -8,7 +8,6 @@ import { Children } from "@/types/types";
 import CurrentUser from "@/components/auth/CurrentUser";
 import Auth0ProviderWithNavigate from "@/auth0/Auth0Provider";
 import { ToastContainer } from "react-toastify";
-import { RefreshTokenProvider } from "@/components/auth/RefreshTokenProvider";
 
 const adamina = Adamina({
   subsets: ["latin"],
@@ -25,16 +24,14 @@ export default function RootLayout({ children }: Children) {
     <html lang="en">
       <Auth0ProviderWithNavigate>
         <ReduxProvider>
-          <RefreshTokenProvider>
-            <body className={adamina.className}>
-              <CurrentUser>
-                <TheHeader />
-                <main>{children}</main>
-              </CurrentUser>
-              <ToastContainer />
-              <div id="modal-root"></div>
-            </body>
-          </RefreshTokenProvider>
+          <body className={adamina.className}>
+            <CurrentUser>
+              <TheHeader />
+              <main>{children}</main>
+            </CurrentUser>
+            <ToastContainer />
+            <div id="modal-root"></div>
+          </body>
         </ReduxProvider>
       </Auth0ProviderWithNavigate>
     </html>
