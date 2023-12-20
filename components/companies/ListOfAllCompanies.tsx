@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import RefreshToken from "../auth/RefreshToken";
 import ListOfCompaniesItem from "./ListOfCompaniesItem";
 import { useGetAllCompaniesQuery } from "@/redux/api/companyApiSlice";
 import { CompanyType } from "@/types/types";
@@ -20,7 +19,6 @@ export default function ListOfAllCompanies() {
             <ListOfCompaniesItem company={company} key={company?.id} />
           ))}
       </ul>
-      <RefreshToken error={error} />
     </>
   );
 }

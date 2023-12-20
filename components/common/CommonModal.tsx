@@ -2,7 +2,6 @@ import ModalWindow from "../common/Modal";
 import { FaCheck } from "react-icons/fa";
 import { FcCancel } from "react-icons/fc";
 import "react-toastify/dist/ReactToastify.css";
-import RefreshToken from "../auth/RefreshToken";
 import React from "react";
 import { CommonModalType } from "@/types/types";
 
@@ -38,8 +37,6 @@ export default function CommonModal({
           </button>
         </div>
       </ModalWindow>
-
-      <RefreshToken error={error} />
     </>
   );
 }

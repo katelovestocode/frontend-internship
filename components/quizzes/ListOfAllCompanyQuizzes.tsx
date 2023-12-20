@@ -2,10 +2,9 @@
 import React from "react";
 import { useGetAllQuizzesQuery } from "@/redux/api/quizApiSlice";
 import ListOfCompanyQuizzesItem from "./ListOfAllCompanyQuizzesItem";
-import RefreshToken from "../auth/RefreshToken";
-import { QuizType } from "@/types/types";
+import { IdProps, QuizType } from "@/types/types";
 
-export default function ListOfAllCompanyQuizzes({ id }: { id: number }) {
+export default function ListOfAllCompanyQuizzes({ id }: IdProps) {
   const { data, error } = useGetAllQuizzesQuery(id);
 
   const sortedQuizzes = [...(data?.quizzes || [])].sort(
@@ -23,7 +22,6 @@ export default function ListOfAllCompanyQuizzes({ id }: { id: number }) {
             />
           ))}
       </ul>
-      <RefreshToken error={error} />
     </>
   );
 }

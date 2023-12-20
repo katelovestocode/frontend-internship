@@ -2,7 +2,6 @@ import ModalWindow from "../common/Modal";
 import { FiSend } from "react-icons/fi";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import RefreshToken from "../auth/RefreshToken";
 import { useEffect, useState } from "react";
 import React from "react";
 import { useOwnerAddsOrRemovesAdminMutation } from "@/redux/api/companyApiSlice";
@@ -88,8 +87,6 @@ export default function AddAdmin({
           </button>
         </div>
       </ModalWindow>
-
-      <RefreshToken error={ownerAddsAdminError} />
     </>
   );
 }

@@ -53,6 +53,7 @@ export type InitialState = {
   isLoading: boolean;
   isLoggedIn: boolean;
   isRefreshing: boolean;
+  isError: boolean
 }
 
 export type UserType = {
@@ -127,6 +128,10 @@ export type IdProps = {
   id: number;
 };
 
+export type IdAndCompanyProps = {
+  id: number;
+  company: CompanyType
+};
 
 export type ListOfUsersItemType =  {
   key?: number,
@@ -503,3 +508,29 @@ export type EditButtonType = {
   field: string | null;
   isActive: boolean;
 };
+
+export type ChildComponentProps = {
+  company: CompanyType | null;
+};
+
+export type QuizAttemptType = {
+  userId: number,
+  quizId: number,
+  questions: {
+        answer: string,
+        id: number | null,
+      }[] | undefined
+}
+
+export type QuizAttemptResType = {
+quiz: {company: CompanyType,
+quiz: QuizType,
+user: UserType
+id: number,
+questionResponses: [],
+timestamp: Date,
+overallRatingAcrossSystem: number,
+averageScoreWithinCompany: number,
+totalCorrect: number,
+totalQuestions: number,}
+}

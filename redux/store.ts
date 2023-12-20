@@ -18,7 +18,7 @@ const rootReducer = combineReducers({
 export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(healthApi.middleware, commonApi.middleware),
+    getDefaultMiddleware().concat( healthApi.middleware, commonApi.middleware ),
 });
 
 setupListeners(store.dispatch);

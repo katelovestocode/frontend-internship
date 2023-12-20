@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { useGetOneUserQuery } from "../../redux/api/userApiSlice";
-import RefreshToken from "../auth/RefreshToken";
 import OneUserTemplate from "./OneUserTemplate";
 import { IdProps } from "@/types/types";
 
@@ -10,10 +9,5 @@ export default function GetOneUser({ id }: IdProps) {
 
   const { user } = data || {};
 
-  return (
-    <>
-      {user && <OneUserTemplate id={id} user={user} />}
-      <RefreshToken error={getOneUserError} />
-    </>
-  );
+  return <>{user && <OneUserTemplate id={id} user={user} />}</>;
 }

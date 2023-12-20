@@ -1,6 +1,5 @@
 "use client";
 import { useGetAllUsersInvitationsQuery } from "@/redux/api/invitationApiSlice";
-import RefreshToken from "../../auth/RefreshToken";
 import ListOfUserInviteItem from "./ListOfUserInviteItem";
 import React from "react";
 
@@ -15,7 +14,6 @@ export default function ListOfAllUserInvitations({ id }: { id: number }) {
             <ListOfUserInviteItem invite={invite} key={invite?.id} />
           ))}
       </ul>
-      <RefreshToken error={error} />
     </>
   );
 }
