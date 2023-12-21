@@ -24,6 +24,7 @@ export const quizAttemptApi = commonApi.injectEndpoints({
       }),
     }),
   }),
+  overrideExisting: true,
 });
 export const { useAttemptAQuizMutation, useGetAllQuizAttemptsQuery } =
   quizAttemptApi;

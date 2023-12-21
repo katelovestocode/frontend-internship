@@ -40,6 +40,20 @@ export default function OneUserLayout({ params: { id }, children }: IdProps) {
                 label="Analytics"
               />
             </li>
+            <li>
+              {" "}
+              <SubNavLink
+                hrefLink={`/users/${id}/my-companies`}
+                label="My Companies"
+              />
+            </li>
+            <li>
+              {" "}
+              <SubNavLink
+                hrefLink={`/users/${id}/member-of-company`}
+                label="Member"
+              />
+            </li>
           </ul>
 
           {/* requests and invitations */}

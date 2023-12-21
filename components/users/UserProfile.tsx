@@ -36,6 +36,20 @@ export default function UserProfile({ children }: ChildrenProps) {
                 label="Analytics"
               />
             </li>
+            <li>
+              {" "}
+              <SubNavLink
+                hrefLink={`/users/${user.id}/my-companies`}
+                label="My Companies"
+              />
+            </li>
+            <li>
+              {" "}
+              <SubNavLink
+                hrefLink={`/users/${user.id}/member-of-company`}
+                label="Member"
+              />
+            </li>
           </ul>
 
           {/* invitations and requests lists renders */}

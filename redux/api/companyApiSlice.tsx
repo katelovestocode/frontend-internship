@@ -76,6 +76,7 @@ export const companyApi = commonApi.injectEndpoints({
       ],
     }),
   }),
+  overrideExisting: true,
 });
 
 export const {

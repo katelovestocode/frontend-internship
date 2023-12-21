@@ -79,7 +79,6 @@ export default function ListOfCompanyInviteItem({
         titleText="Are you sure you want to cancel invitation?"
         yesText="Yes, I want to cancel it"
         noText="No, I changed my mind"
-        error={cancelInviteError}
       />
     </>
   );

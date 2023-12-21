@@ -89,6 +89,7 @@ export const quizApi = commonApi.injectEndpoints({
       ],
     }),
   }),
+  overrideExisting: true,
 });
 
 export const {

@@ -73,7 +73,6 @@ export default function ListOfUserRequestsItem({ request }: OneRequestType) {
         titleText="Are you sure you want to cancel request?"
         yesText="Yes, I want to cancel it"
         noText="No, I changed my mind"
-        error={cancelRequestError}
       />
     </>
   );

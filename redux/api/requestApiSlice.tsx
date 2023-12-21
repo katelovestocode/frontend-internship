@@ -61,6 +61,7 @@ export const requestApi = commonApi.injectEndpoints({
       invalidatesTags: () => [{ type: "Company-Requests" }],
     }),
   }),
+  overrideExisting: true,
 });
 
 export const {
