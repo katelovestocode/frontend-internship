@@ -8,7 +8,7 @@ import UpdateQuiz from "./UpdateQuiz";
 import { QuizAndCompIdType } from "@/types/types";
 import { useAppSelector } from "@/redux/store";
 import Link from "next/link";
-import { useLazyGetOneCompanyQuery } from "@/redux/api/companyApiSlice";
+import { useGetOneCompanyQuery } from "@/redux/api/companyApiSlice";
 
 export default function ListOfCompanyQuizzesItem({
   quiz,
@@ -18,16 +18,9 @@ export default function ListOfCompanyQuizzesItem({
   const [showDeleteQuizModal, setShowDeleteQuizModal] = useState(false);
   const [showUpdateQuizModal, setShowUpdateQuizModal] = useState(false);
   const userId = useAppSelector((state) => state.authReducer.user?.id);
-  const [
-    getOneCompany,
-    { data, error: getOneCompanyError, isLoading: getOneCompanyLoading },
-  ] = useLazyGetOneCompanyQuery();
 
+  const { data } = useGetOneCompanyQuery(companyId);
   const { company } = data || {};
-
-  useEffect(() => {
-    getOneCompany(companyId);
-  }, [getOneCompany, companyId]);
 
   // DELETE QUIZ
   const [

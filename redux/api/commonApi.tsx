@@ -2,7 +2,6 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
-import { logOut } from "../slices/authSlice";
 import type {
   BaseQueryFn,
   FetchArgs,
@@ -70,7 +69,9 @@ const baseQueryWithReauth: BaseQueryFn<
       // retry the initial query
       result = await baseQuery(args, api, extraOptions);
     } else {
-      api.dispatch(logOut());
+      api.dispatch({
+        type: "auth/logOut",
+      });
       Cookies.remove("accessToken");
       Cookies.remove("refreshToken");
       Cookies.remove("provider");
