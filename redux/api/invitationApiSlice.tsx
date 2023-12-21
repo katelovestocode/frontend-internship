@@ -56,6 +56,7 @@ export const invitationApi = commonApi.injectEndpoints({
       invalidatesTags: () => [{ type: "User-Invitations" }],
     }),
   }),
+  overrideExisting: true,
 });
 
 export const {

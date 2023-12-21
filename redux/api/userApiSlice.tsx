@@ -1,6 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { commonApi } from "./commonApi";
 import {
+  AllUserCompaniesType,
   CompanyType,
   GetAllUsersType,
   GetOneUserType,
@@ -50,9 +51,18 @@ export const userApi = commonApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [
         { type: "Company", id: arg.companyId },
+        { type: "User-Companies" },
       ],
     }),
+    getAllUserCompanies: build.query<AllUserCompaniesType, number>({
+      query: (userId) => ({
+        url: `/users/${userId}/companies`,
+        method: "GET",
+      }),
+      providesTags: () => [{ type: "User-Companies" }],
+    }),
   }),
+  overrideExisting: true,
 });
 
 export const {
@@ -62,4 +72,6 @@ export const {
   useUpdateUserMutation,
   useDeleteUserMutation,
   useUserLeavesCompanyMutation,
+  useLazyGetAllUserCompaniesQuery,
+  useGetAllUserCompaniesQuery,
 } = userApi;

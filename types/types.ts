@@ -169,8 +169,8 @@ export type CompanyType = {
     owner: UserType,
     admins: [],
     members: [],
-    createdAt: Date,
-    updatedAt: Date
+    createdAt: string,
+    updatedAt: string
 }
 
 export type AllCompaniesType = {
@@ -323,7 +323,6 @@ export type CommonModalType = {
   handleOnClick: (ids: number[]) => void,
   yesText: string,
   noText: string,
-  error: {} | undefined,
 }
 
 
@@ -582,4 +581,20 @@ export type AttemptType = {
  quizTime: Date;
  userId: number;
  userName: string;     
+}
+
+export type ListOfAllUsersCompaniesType = {
+  company: CompanyType,
+  key: number,
+  userId: number,
+  userIsMember: boolean,
+}
+
+export type AllUserCompaniesType = {
+ list: { companies: CompanyType[],
+  reqCompanies: CompanyType[],
+  email: string,
+  name:string,
+  createdAt: string,
+  updatedAt: string}
 }

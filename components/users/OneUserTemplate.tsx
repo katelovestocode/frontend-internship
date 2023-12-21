@@ -17,11 +17,9 @@ import { useLazyCurrentUserQuery } from "@/redux/api/authApiSlice";
 import useLogout from "../../hooks/useLogout";
 import { omit } from "lodash";
 import { updateFormikFields } from "@/utils/helpers";
-import {
-  useGetUsersAvarageRatingQuery,
-  useLazyGetUsersAvarageRatingQuery,
-} from "@/redux/api/analyticsApiSlice";
+import { useLazyGetUsersAvarageRatingQuery } from "@/redux/api/analyticsApiSlice";
 import StarRating from "./StarRating";
+import CommonModal from "../common/CommonModal";
 
 export default function OneUserTemplate({ id, user }: OneUserType) {
   const [disabledFields, setDisabledFields] = useState(true);
@@ -32,6 +30,7 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
     password: false,
     confirmPassword: false,
   });
+  const [showDeleteProfileModal, setShowDeleteProfileModal] = useState(false);
   const logOutUser = useLogout();
 
   const [getCurrentUser] = useLazyCurrentUserQuery();
@@ -56,8 +55,12 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
     },
   ] = useDeleteUserMutation();
 
-  const { data: getRatingData, error: getRatingError } =
-    useGetUsersAvarageRatingQuery(user?.id!);
+  const [getAverageRating, { data: getRatingData }] =
+    useLazyGetUsersAvarageRatingQuery();
+
+  useEffect(() => {
+    if (userId) getAverageRating(userId);
+  }, [userId]);
 
   const toggleActiveState = (field: keyof ActiveFieldsType) => {
     setIsActive((prev) => ({ ...prev, [field]: !prev[field] }));
@@ -97,6 +100,7 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
       formik.resetForm();
     }
     if (isDeleteSuccess) {
+      toggleDeleteProfileModal();
       logOutUser();
     }
   }, [isDeleteSuccess, isDeleteError]);
@@ -111,10 +115,14 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
     }
   };
 
-  const handleDeleteUser = async (id: number | undefined) => {
+  const toggleDeleteProfileModal = () => {
+    setShowDeleteProfileModal((prev) => !prev);
+  };
+
+  const handleDeleteUser = async (ids: any[]) => {
     try {
       if (id === userId) {
-        await deleteCurrentUser(id);
+        await deleteCurrentUser(ids[0]);
       } else
         toast.error("Forbidden! You can only delete your own profile!", {
           position: toast.POSITION.TOP_CENTER,
@@ -295,13 +303,23 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
             </button>
             <button
               className="btn btn-outline btn-error"
-              onClick={() => handleDeleteUser(id)}
+              onClick={() => toggleDeleteProfileModal()}
             >
               Delete
             </button>
           </>
         )}
       </div>
+      {/* Delete User's Profile Confirmation Modal */}
+      <CommonModal
+        ids={[id]}
+        showModal={showDeleteProfileModal}
+        toggleModal={toggleDeleteProfileModal}
+        handleOnClick={handleDeleteUser}
+        titleText="Are you sure you want to delete this profile?"
+        yesText="Yes, I made my mind"
+        noText="No, I changed my mind"
+      />
     </div>
   );
 }

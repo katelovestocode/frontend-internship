@@ -91,6 +91,7 @@ export const commonApi = createApi({
     "Company-Requests",
     "User-Invitations",
     "Company-Invitations",
+    "User-Companies",
     "Quizzes",
     "Quiz",
   ],

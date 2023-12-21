@@ -13,7 +13,6 @@ export default function CommonModal({
   handleOnClick,
   yesText,
   noText,
-  error,
 }: CommonModalType) {
   return (
     <>

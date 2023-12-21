@@ -6,7 +6,6 @@ import {
   useOwnerAddsOrRemovesAdminMutation,
   useOwnerRemovesUserMutation,
 } from "@/redux/api/companyApiSlice";
-import "react-toastify/dist/ReactToastify.css";
 import { useAppSelector } from "@/redux/store";
 import { IdChildrenProps, UserType } from "@/types/types";
 import Loader from "../common/Loader";
@@ -248,10 +247,11 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
                     {company?.owner?.name}
                   </span>
                 </p>
-
                 {/*  members, owner can remove members from the company */}
-                <ul className="flex gap-8 font-bold text-lg text-amber-800">
+                <p className="flex font-bold text-lg text-amber-800">
                   Members:{" "}
+                </p>
+                <ul className="flex gap-4 font-bold text-lg text-amber-800">
                   {company?.members.map((member: UserType, index: number) => (
                     <MemberOrAdminItem
                       key={index}
@@ -263,10 +263,11 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
                     />
                   ))}
                 </ul>
-
                 {/*  admins, owner can remove admins from the company */}
-                <ul className="flex gap-10 font-bold text-lg text-amber-800">
+                <p className="flex font-bold text-lg text-amber-800">
                   Admins:{" "}
+                </p>
+                <ul className="flex gap-4 font-bold text-lg text-amber-800">
                   {company?.admins.map((admin: UserType, index: number) => (
                     <MemberOrAdminItem
                       key={index}
@@ -385,7 +386,6 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
         titleText="Are you sure you want to delete this company?"
         yesText="Yes, I made my mind"
         noText="No, I changed my mind"
-        error={deletedError}
       />
 
       {/* owner removes user from company member's list*/}
@@ -397,7 +397,6 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
         titleText="Are you sure you want to delete this user?"
         yesText="Yes, I made my mind"
         noText="No, I changed my mind"
-        error={removeMemberError}
       />
 
       {/* user leaves company*/}
@@ -409,7 +408,6 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
         titleText=" Are you sure you want to leave this company?"
         yesText=" Yes, I want to leave"
         noText="No, I changed my mind"
-        error={leaveCompanyError}
       />
 
       {/* owner deletes admin from  the list */}
@@ -421,7 +419,6 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
         titleText=" Are you sure you want to remove this admin?"
         yesText=" Yes, I want to remove"
         noText="No, I changed my mind"
-        error={removeAdminError}
       />
 
       {/* owner adds admin to the company*/}

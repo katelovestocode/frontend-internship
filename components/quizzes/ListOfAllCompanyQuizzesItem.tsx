@@ -118,7 +118,6 @@ export default function ListOfCompanyQuizzesItem({
         titleText="Are you sure you want to delete this quiz?"
         yesText="Yes, I made my mind"
         noText="No, I changed my mind"
-        error={deleteQuizError}
       />
 
       <UpdateQuiz
