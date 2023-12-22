@@ -41,14 +41,14 @@ export default function UserExportData({ id }: { id: number }) {
   useEffect(() => {
     if (getUsersResultsSuccess && !isLoadingGetUserData) {
       downloadFile(
-        getUsersResultsData?.data,
+        getUsersResultsData.data,
         selectedType,
         csvHeader,
         csvLineType
       );
     }
   }, [
-    getUsersResultsData?.data,
+    getUsersResultsData,
     getUsersResultsSuccess,
     isLoadingGetUserData,
     selectedType,

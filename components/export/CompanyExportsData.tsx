@@ -64,7 +64,7 @@ export default function CompanyExportsData({ id }: { id: number }) {
   useEffect(() => {
     if (getAllUsersDataIsSuccess && !isLoadingAllUsers) {
       downloadFile(
-        getAllUsersResultsData?.data,
+        getAllUsersResultsData.data,
         selectedType,
         csvHeader,
         csvLineType
@@ -72,7 +72,7 @@ export default function CompanyExportsData({ id }: { id: number }) {
     }
   }, [
     getAllUsersDataIsSuccess,
-    getAllUsersResultsData?.data,
+    getAllUsersResultsData,
     isLoadingAllUsers,
     selectedType,
   ]);
@@ -104,7 +104,7 @@ export default function CompanyExportsData({ id }: { id: number }) {
   useEffect(() => {
     if (getOneUserDataIsSuccess && !isLoadingOneUser) {
       downloadFile(
-        oneUserResultsData?.data,
+        oneUserResultsData.data,
         selectedType,
         csvHeader,
         csvLineType
@@ -113,7 +113,7 @@ export default function CompanyExportsData({ id }: { id: number }) {
   }, [
     getOneUserDataIsSuccess,
     isLoadingOneUser,
-    oneUserResultsData?.data,
+    oneUserResultsData,
     selectedType,
   ]);
 
