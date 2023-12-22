@@ -598,3 +598,37 @@ export type AllUserCompaniesType = {
   createdAt: string,
   updatedAt: string}
 }
+
+export type SelectedButtonType = {
+  selectedType: string,
+  setSelectedType: (type: string) => void,
+  type: string,
+  name: string
+}
+
+export type ExportDataUserReq = {
+  userId: number,
+  type:  string
+}
+
+export type ExportDataCompanyReq = {
+  companyId: number,
+  userId: number, 
+  type: string
+}
+
+export type ExportDataReq = {
+  companyId: number,
+  type: string
+}
+export type ExportDatQuizReq = {
+  companyId: number,
+  userId: number,
+  quizId: number,
+  type: string
+}
+
+export type ExportDataRes = {
+  data: string
+}
+

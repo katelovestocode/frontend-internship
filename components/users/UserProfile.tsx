@@ -39,15 +39,22 @@ export default function UserProfile({ children }: ChildrenProps) {
             <li>
               {" "}
               <SubNavLink
-                hrefLink={`/users/${user.id}/my-companies`}
-                label="My Companies"
+                hrefLink={`/users/${user.id}/companies`}
+                label="Companies"
               />
             </li>
             <li>
               {" "}
               <SubNavLink
-                hrefLink={`/users/${user.id}/member-of-company`}
-                label="Member"
+                hrefLink={`/users/${user.id}/membership`}
+                label="Membership"
+              />
+            </li>
+            <li>
+              {" "}
+              <SubNavLink
+                hrefLink={`/users/${user.id}/export`}
+                label="Export"
               />
             </li>
           </ul>
