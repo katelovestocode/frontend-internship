@@ -629,6 +629,6 @@ export type ExportDatQuizReq = {
 }
 
 export type ExportDataRes = {
-  data: string
+  data?: string
 }
 

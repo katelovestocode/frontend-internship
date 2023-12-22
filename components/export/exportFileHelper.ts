@@ -1,7 +1,7 @@
 import Papa from "papaparse";
 import { toast } from "react-toastify";
 
-export const downloadFile = (data: string, fileType: string, csvHeader: string, csvLineType: string) => {
+export const downloadFile = (data: any, fileType: string, csvHeader: string, csvLineType: string) => {
     
   try {
       if (!data) {
