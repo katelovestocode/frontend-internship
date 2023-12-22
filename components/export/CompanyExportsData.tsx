@@ -41,7 +41,7 @@ export default function CompanyExportsData({ id }: { id: number }) {
     setIsSelectedUser(false);
     setSelectedUser(null);
   };
-  console.log(getAllUsersResultsData, "getAllUsersResultsData");
+
   useEffect(() => {
     if (isSelectedAll) {
       handleGetAllUsersQuizResults();
