@@ -3,7 +3,7 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - develop
+      - FE-20-add-github-actions
 
 jobs:
   deploy:
@@ -12,7 +12,7 @@ jobs:
       - name: Clone Repository
         uses: actions/checkout@v3
         with:
-          ref: develop
+          ref: FE-20-add-github-actions
 
       - name: Executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@master
@@ -24,8 +24,8 @@ jobs:
           script: |
             set -x 
             cd app/frontend-internship
-            git checkout develop 
-            git pull origin develop 
+            git checkout FE-20-add-github-actions 
+            git pull origin FE-20-add-github-actions 
 
             echo "NEXT_PUBLIC_API_BASE_URL=${{ secrets.NEXT_PUBLIC_API_BASE_URL }}" > .env
             echo "NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}" >> .env
@@ -36,8 +36,8 @@ jobs:
             echo "NEXT_PUBLIC_AUTH0_AUDIENCE=${{ secrets.NEXT_PUBLIC_AUTH0_AUDIENCE }}" >> .env
             echo "NEXT_PUBLIC_AUTH0_ISSUER_URL=${{ secrets.NEXT_PUBLIC_AUTH0_ISSUER_URL }}" >> .env
 
-            docker stop docker-frontend || true
-            docker rm docker-frontend  || true
-            docker rmi docker-frontend  || true
-            docker build -t docker-frontend --progress=plain --no-cache --target prod .
-            docker run -d -p 3000:3000 --name docker-frontend docker-frontend
+          # docker stop docker-frontend || true
+          # docker rm docker-frontend  || true
+          # docker rmi docker-frontend  || true
+          # docker build -t docker-frontend --progress=plain --no-cache --target prod .
+          # docker run -d -p 3000:3000 --name docker-frontend docker-frontend
