@@ -62,9 +62,13 @@ export default function CompanyExportsData({ id }: { id: number }) {
   };
 
   useEffect(() => {
-    if (getAllUsersDataIsSuccess && !isLoadingAllUsers) {
+    if (
+      getAllUsersDataIsSuccess &&
+      !isLoadingAllUsers &&
+      getAllUsersResultsData?.data
+    ) {
       downloadFile(
-        getAllUsersResultsData?.data,
+        getAllUsersResultsData.data,
         selectedType,
         csvHeader,
         csvLineType
@@ -102,9 +106,13 @@ export default function CompanyExportsData({ id }: { id: number }) {
   };
 
   useEffect(() => {
-    if (getOneUserDataIsSuccess && !isLoadingOneUser) {
+    if (
+      getOneUserDataIsSuccess &&
+      !isLoadingOneUser &&
+      oneUserResultsData?.data
+    ) {
       downloadFile(
-        oneUserResultsData?.data!,
+        oneUserResultsData.data,
         selectedType,
         csvHeader,
         csvLineType
