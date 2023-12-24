@@ -24,8 +24,10 @@ jobs:
           script: |
             set -x 
             cd app/frontend-internship
-            git fetch origin
-            git checkout -B FE-20-add-github-actions origin/FE-20-add-github-actions
+            git reset --hard
+            git clean -fd
+
+            git checkout FE-20-add-github-actions 
             git pull origin FE-20-add-github-actions 
 
             echo "NEXT_PUBLIC_API_BASE_URL=${{ secrets.NEXT_PUBLIC_API_BASE_URL }}" > .env
