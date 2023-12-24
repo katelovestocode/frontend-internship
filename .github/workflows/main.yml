@@ -36,6 +36,13 @@ jobs:
             echo "NEXT_PUBLIC_AUTH0_AUDIENCE=${{ secrets.NEXT_PUBLIC_AUTH0_AUDIENCE }}" >> .env
             echo "NEXT_PUBLIC_AUTH0_ISSUER_URL=${{ secrets.NEXT_PUBLIC_AUTH0_ISSUER_URL }}" >> .env
 
+            cp /etc/ssl/private/certificate.crt certificate.crt
+            cp /etc/ssl/private/private.key private.key
+
+            docker-compose stop nextjs
+            docker-compose rm -f nextjs
+            docker-compose build nextjs
+            docker-compose up --no-deps -d nextjs
           # docker stop docker-frontend || true
           # docker rm docker-frontend  || true
           # docker rmi docker-frontend  || true
