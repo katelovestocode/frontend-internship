@@ -632,3 +632,23 @@ export type ExportDataRes = {
   data?: string
 }
 
+export type NotificationsReq = {
+  notificationId: number,
+  userId: number
+}
+
+export type NotificationsRes = {
+  notifications: {
+    id: number,
+    createdAt: string, 
+    status: string,
+    text: string
+  }[]
+}
+
+export type Notification = {
+    id: number,
+    createdAt: string, 
+    status: string,
+    text: string
+}

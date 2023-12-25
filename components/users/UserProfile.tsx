@@ -14,7 +14,7 @@ export default function UserProfile({ children }: ChildrenProps) {
         {user && <OneUserTemplate id={user.id} user={user} />}
 
         <div className="flex flex-col gap-6">
-          <ul className="flex flex-row gap-6">
+          <ul className="flex flex-wrap gap-4">
             <li>
               {" "}
               <SubNavLink
@@ -55,6 +55,13 @@ export default function UserProfile({ children }: ChildrenProps) {
               <SubNavLink
                 hrefLink={`/users/${user.id}/export`}
                 label="Export"
+              />
+            </li>
+            <li>
+              {" "}
+              <SubNavLink
+                hrefLink={`/users/${user.id}/notifications`}
+                label="Notifications"
               />
             </li>
           </ul>
