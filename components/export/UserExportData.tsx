@@ -12,23 +12,16 @@ export default function UserExportData({ id }: { id: number }) {
     { data: getUsersResultsData, isSuccess: getUsersResultsSuccess },
   ] = useLazyGetUsersQuizResultsQuery();
 
-  const [isSelected, setIsSelected] = useState(false);
   const [isLoadingGetUserData, setIsLoadingGetUserData] = useState(false);
   const [selectedType, setSelectedType] = useState("csv");
   const csvHeader =
     "id,questionResponses,totalQuestions,totalCorrect,averageScoreWithinCompany,overallRatingAcrossSystem,timestamp";
   const csvLineType = "user";
 
-  useEffect(() => {
-    if (isSelected) {
-      handleGetUserQuizResults();
-    }
-  }, [isSelected]);
-
-  const handleGetUserQuizResults = async () => {
+  const handleGetUserQuizResults = async (userId: number, type: string) => {
     try {
       setIsLoadingGetUserData(true);
-      await getUsersResults({ userId: id, type: selectedType });
+      await getUsersResults({ userId: userId, type: type });
     } catch (error: any) {
       toast.error(error.message, {
         position: toast.POSITION.TOP_CENTER,
@@ -80,7 +73,7 @@ export default function UserExportData({ id }: { id: number }) {
           <div className="flex gap-2 flex-row place-items-center ">
             <button
               className="btn btn-outline"
-              onClick={() => setIsSelected(true)}
+              onClick={() => handleGetUserQuizResults(id, selectedType)}
             >
               <FaRegUser /> Get Your Quiz Data
             </button>
