@@ -296,7 +296,7 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
       </form>
 
       <div className="flex justify-between mt-4">
-        {disabledFields && (
+        {disabledFields && userId === user.id && (
           <>
             <button className="btn btn-outline" onClick={enableFields}>
               Edit
@@ -310,6 +310,7 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
           </>
         )}
       </div>
+
       {/* Delete User's Profile Confirmation Modal */}
       <CommonModal
         ids={[id]}
