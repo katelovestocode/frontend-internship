@@ -19,15 +19,12 @@ RUN chown -R nginxuser:nginxuser /var/run/nginx/
 # Create the directory for SSL certificates
 RUN mkdir -p /etc/ssl/private/
 
-
 # Create the directory for Nginx cache
 RUN mkdir -p /var/cache/nginx/client_temp
 RUN mkdir -p /var/cache/nginx/proxy_temp
 RUN mkdir -p /var/cache/nginx/fastcgi_temp
 
-# Create the directory for Nginx cache
 RUN chown -R nginxuser:nginxuser /var/cache/nginx
-
 
 # Copy SSL certificates into the Docker image
 COPY certificate.crt /etc/ssl/private/certificate.crt
@@ -38,37 +35,6 @@ COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80 443
 
-# Switch to the root user and start Nginx
 USER nginxuser
 CMD ["nginx", "-g", "daemon off;"]
-
-
-## Dockerfile.nginx
-
-#FROM nginx:1.23.3-alpine
-
-## Create a non-privileged user for running Nginx
-#RUN adduser -D -g 'nginxuser' nginxuser
-
-## Create the directory for PID file
-#RUN mkdir -p /var/run/nginx/
-
-## Set appropriate permissions for the PID directory
-#RUN chown -R nginxuser:nginxuser /var/run/nginx/
-
-## Create the directory for SSL certificates
-#RUN mkdir -p /etc/ssl/private/
-
-## Create the directory for Nginx cache
-#RUN chown -R nginxuser:nginxuser /var/cache/nginx
-
-## Copy SSL certificates into the Docker image
-#COPY certificate.crt /etc/ssl/private/certificate.crt
-#COPY private.key /etc/ssl/private/private.key
-
-#COPY nginx.conf /etc/nginx/nginx.conf
-
-
-#EXPOSE 80
-#EXPOSE 443
 
