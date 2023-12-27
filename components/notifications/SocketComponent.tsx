@@ -3,14 +3,19 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import io, { Socket } from "socket.io-client";
+import { setNotification } from "@/redux/slices/authSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 
-export function SocketProvider() {
+export function SocketComponent() {
   const [socket, setSocket] = useState<Socket>();
-  const [messages, setMessages] = useState<string[]>([]);
+  const notifications = useAppSelector(
+    (state) => state.authReducer.notifications
+  );
   const accessToken = Cookies.get("accessToken") as string;
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const newSocket = io(`${process.env.NEXT_PUBLIC_SOCKET_PORT}`, {
+    const newSocket = io(`${process.env.NEXT_PUBLIC_API_BASE_URL}`, {
       transportOptions: {
         polling: {
           extraHeaders: {
@@ -23,7 +28,7 @@ export function SocketProvider() {
   }, [setSocket]);
 
   const messageListener = (message: string) => {
-    setMessages([...messages, message]);
+    dispatch(setNotification([message]));
   };
 
   useEffect(() => {
@@ -34,12 +39,12 @@ export function SocketProvider() {
   }, [messageListener]);
 
   useEffect(() => {
-    messages.map((message) =>
+    notifications.map((message) =>
       toast.info(message, {
         position: toast.POSITION.TOP_CENTER,
       })
     );
-  }, [messages]);
+  }, [notifications]);
 
   return <></>;
 }

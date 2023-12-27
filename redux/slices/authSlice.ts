@@ -15,6 +15,7 @@ export const initialState: InitialState = {
   isLoading: false,
   isRefreshing: false,
   isError: false,
+  notifications: []
  
 };
 
@@ -36,6 +37,9 @@ export const authSlice = createSlice({
     },
     isRefreshError: (state, { payload }) => {
       state.isError = payload
+    },
+    setNotification: (state, { payload }) => {
+      state.notifications = payload
     }
   },
   extraReducers: (builder) => {
@@ -126,4 +130,4 @@ export const authSlice = createSlice({
 });
 
 export default authSlice.reducer;
-export const {logOut, isRefreshError} = authSlice.actions;
+export const {logOut, isRefreshError, setNotification} = authSlice.actions;

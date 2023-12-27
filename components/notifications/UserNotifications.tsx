@@ -1,6 +1,6 @@
 "use client";
 import "react-toastify/dist/ReactToastify.css";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   useGetAllUsersNotificationsQuery,
   useMarkNotificationAsReadMutation,
@@ -8,13 +8,15 @@ import {
 import moment from "moment";
 import { toast } from "react-toastify";
 import { Notification } from "@/types/types";
+import { useAppSelector } from "@/redux/store";
 
 export default function UserNotifications({ id }: { id: number }) {
+  const newNotification = useAppSelector(
+    (state) => state.authReducer.notifications
+  );
   const [markNotification] = useMarkNotificationAsReadMutation();
-
-  const { data } = useGetAllUsersNotificationsQuery(id);
+  const { data, refetch } = useGetAllUsersNotificationsQuery(id);
   const { notifications } = data || {};
-
   const sortedNotifications = [...(notifications || [])].sort(
     (a: any, b: any) => b.id - a.id
   );
@@ -34,6 +36,12 @@ export default function UserNotifications({ id }: { id: number }) {
       });
     }
   };
+
+  useEffect(() => {
+    if (newNotification) {
+      refetch();
+    }
+  }, [newNotification]);
 
   return (
     <>

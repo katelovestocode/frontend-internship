@@ -54,6 +54,7 @@ export type InitialState = {
   isLoggedIn: boolean;
   isRefreshing: boolean;
   isError: boolean
+  notifications: []
 }
 
 export type UserType = {
