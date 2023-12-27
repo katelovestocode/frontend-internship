@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useLazyGetUsersQuizResultsQuery } from "@/redux/api/exportDataApiSlice";
 import { FaRegUser } from "react-icons/fa";
 import { toast } from "react-toastify";
@@ -12,7 +12,6 @@ export default function UserExportData({ id }: { id: number }) {
     { data: getUsersResultsData, isSuccess: getUsersResultsSuccess },
   ] = useLazyGetUsersQuizResultsQuery();
 
-  const [isLoadingGetUserData, setIsLoadingGetUserData] = useState(false);
   const [selectedType, setSelectedType] = useState("csv");
   const csvHeader =
     "id,questionResponses,totalQuestions,totalCorrect,averageScoreWithinCompany,overallRatingAcrossSystem,timestamp";
@@ -20,36 +19,19 @@ export default function UserExportData({ id }: { id: number }) {
 
   const handleGetUserQuizResults = async (userId: number, type: string) => {
     try {
-      setIsLoadingGetUserData(true);
       await getUsersResults({ userId: userId, type: type });
-    } catch (error: any) {
-      toast.error(error.message, {
-        position: toast.POSITION.TOP_CENTER,
-      });
-    } finally {
-      setIsLoadingGetUserData(false);
-    }
-  };
-
-  useEffect(() => {
-    if (
-      getUsersResultsSuccess &&
-      !isLoadingGetUserData &&
-      getUsersResultsData?.data
-    ) {
       downloadFile(
-        getUsersResultsData.data,
+        getUsersResultsData?.data,
         selectedType,
         csvHeader,
         csvLineType
       );
+    } catch (error: any) {
+      toast.error(error.message, {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
-  }, [
-    getUsersResultsData,
-    getUsersResultsSuccess,
-    isLoadingGetUserData,
-    selectedType,
-  ]);
+  };
 
   return (
     <>

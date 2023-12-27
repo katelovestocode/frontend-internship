@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   useLazyCompanyGetsAllUsersQuizResultsQuery,
   useLazyCompanyGetsOneUserQuizResultsQuery,
@@ -26,104 +26,50 @@ export default function CompanyExportsData({ id }: { id: number }) {
   const { data } = useGetOneCompanyQuery(id);
   const { company } = data || {};
 
-  const [selectedUser, setSelectedUser] = useState<number | null>(null);
-  const [isSelectedUser, setIsSelectedUser] = useState(false);
-  const [isSelectedAll, setIsSelectedAll] = useState(false);
-  const [isLoadingAllUsers, setIsLoadingAllUsers] = useState(false);
-  const [isLoadingOneUser, setIsLoadingOneUser] = useState(false);
+  const [memberId, setMemberId] = useState<number | null>(null);
+  const [selectUser, setSelectUser] = useState(false);
   const [selectedType, setSelectedType] = useState("csv");
   const csvHeader =
     "id,questionResponses,totalQuestions,totalCorrect,averageScoreWithinCompany,overallRatingAcrossSystem,userId,userEmail,userName,timestamp";
   const csvLineType = "company";
 
-  const selectedAllChange = () => {
-    setIsSelectedAll(true);
-    setIsSelectedUser(false);
-    setSelectedUser(null);
-  };
-
-  useEffect(() => {
-    if (isSelectedAll) {
-      handleGetAllUsersQuizResults();
-    }
-  }, [isSelectedAll]);
-
   const handleGetAllUsersQuizResults = async () => {
     try {
-      setIsLoadingAllUsers(true);
+      setSelectUser(false);
       await getAllUsersResults({ companyId: id, type: selectedType });
-    } catch (error: any) {
-      toast.error(error.message, {
-        position: toast.POSITION.TOP_CENTER,
-      });
-    } finally {
-      setIsLoadingAllUsers(false);
-    }
-  };
-
-  useEffect(() => {
-    if (
-      getAllUsersDataIsSuccess &&
-      !isLoadingAllUsers &&
-      getAllUsersResultsData?.data
-    ) {
       downloadFile(
-        getAllUsersResultsData.data,
+        getAllUsersResultsData?.data,
         selectedType,
         csvHeader,
         csvLineType
       );
+    } catch (error: any) {
+      toast.error(error.message, {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
-  }, [
-    getAllUsersDataIsSuccess,
-    getAllUsersResultsData,
-    isLoadingAllUsers,
-    selectedType,
-  ]);
+  };
 
-  useEffect(() => {
-    if (selectedUser !== null) {
-      handleGetOneUserQuizResults();
-    }
-  }, [selectedUser]);
-
-  const handleGetOneUserQuizResults = async () => {
+  const handleGetOneUserQuizResults = async (memberId: number) => {
     try {
-      setIsLoadingOneUser(true);
-      if (selectedUser !== null)
-        await getOneUserResults({
-          companyId: id,
-          userId: selectedUser,
-          type: selectedType,
-        });
-    } catch (error: any) {
-      toast.error(error.message, {
-        position: toast.POSITION.TOP_CENTER,
+      setMemberId(memberId);
+      await getOneUserResults({
+        companyId: id,
+        userId: memberId,
+        type: selectedType,
       });
-    } finally {
-      setIsLoadingOneUser(false);
-    }
-  };
-
-  useEffect(() => {
-    if (
-      getOneUserDataIsSuccess &&
-      !isLoadingOneUser &&
-      oneUserResultsData?.data
-    ) {
       downloadFile(
-        oneUserResultsData.data,
+        oneUserResultsData?.data,
         selectedType,
         csvHeader,
         csvLineType
       );
+    } catch (error: any) {
+      toast.error(error.message, {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
-  }, [
-    getOneUserDataIsSuccess,
-    isLoadingOneUser,
-    oneUserResultsData,
-    selectedType,
-  ]);
+  };
 
   return (
     <>
@@ -147,7 +93,7 @@ export default function CompanyExportsData({ id }: { id: number }) {
           <div className="flex gap-2 flex-row place-items-center ">
             <button
               className="btn btn-outline"
-              onClick={() => selectedAllChange()}
+              onClick={() => handleGetAllUsersQuizResults()}
             >
               <GrGroup /> Get All Users Data
             </button>
@@ -155,7 +101,7 @@ export default function CompanyExportsData({ id }: { id: number }) {
           <div className="flex gap-2 flex-row">
             <button
               className="btn btn-outline"
-              onClick={() => setIsSelectedUser(true)}
+              onClick={() => setSelectUser(true)}
             >
               <FaRegUser /> One User Results
             </button>
@@ -163,36 +109,37 @@ export default function CompanyExportsData({ id }: { id: number }) {
         </div>
       </div>
 
-      {isSelectedUser && (
+      {selectUser && (
         <div className="flex flex-col gap-6 p-2 ">
           <h2 className="font-bold text-2xl"> Choose a Company Member: </h2>
           <ul className="grid gap-4 grid-cols-2">
-            {company?.members?.map((member: UserType, index: number) => (
-              <li
-                key={index}
-                className={`flex flex-col gap-2 place-items-center border-solid border rounded-xl p-2.5 bg-white shadow-lg ${
-                  selectedUser === member.id
-                    ? "border-amber-800 border-4"
-                    : "border-zinc-200"
-                } `}
-                onClick={() => {
-                  setSelectedUser(member.id!);
-                }}
-              >
-                <p className="text-amber-800">
-                  Name:{" "}
-                  <span className="font-medium text-gray-950">
-                    {member.name}
-                  </span>
-                </p>
-                <p className="text-amber-800">
-                  Email:{" "}
-                  <span className="font-medium text-gray-950">
-                    {member.email}
-                  </span>
-                </p>
-              </li>
-            ))}
+            {company?.members &&
+              company.members.map((member: UserType, index: number) => (
+                <li
+                  key={index}
+                  className={`flex flex-col gap-2 place-items-center border-solid border rounded-xl p-2.5 bg-white shadow-lg ${
+                    memberId === member.id
+                      ? "border-amber-800 border-4"
+                      : "border-zinc-200"
+                  } `}
+                  onClick={() => {
+                    handleGetOneUserQuizResults(member.id!);
+                  }}
+                >
+                  <p className="text-amber-800">
+                    Name:{" "}
+                    <span className="font-medium text-gray-950">
+                      {member.name}
+                    </span>
+                  </p>
+                  <p className="text-amber-800">
+                    Email:{" "}
+                    <span className="font-medium text-gray-950">
+                      {member.email}
+                    </span>
+                  </p>
+                </li>
+              ))}
           </ul>
         </div>
       )}
