@@ -345,6 +345,12 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
                         label="Analytics"
                       />
                     </li>
+                    <li>
+                      <SubNavLink
+                        hrefLink={`/companies/${id}/export`}
+                        label="Export"
+                      />
+                    </li>
                   </>
                 )}
                 {company?.members

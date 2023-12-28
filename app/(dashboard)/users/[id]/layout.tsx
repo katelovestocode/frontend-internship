@@ -43,16 +43,20 @@ export default function OneUserLayout({ params: { id }, children }: IdProps) {
             <li>
               {" "}
               <SubNavLink
-                hrefLink={`/users/${id}/my-companies`}
-                label="My Companies"
+                hrefLink={`/users/${id}/companies`}
+                label="Companies"
               />
             </li>
             <li>
               {" "}
               <SubNavLink
-                hrefLink={`/users/${id}/member-of-company`}
-                label="Member"
+                hrefLink={`/users/${id}/membership`}
+                label="Membership"
               />
+            </li>
+            <li>
+              {" "}
+              <SubNavLink hrefLink={`/users/${id}/export`} label="Export" />
             </li>
           </ul>
 
