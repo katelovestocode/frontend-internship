@@ -1,0 +1,47 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v3
+        with:
+          ref: develop
+
+      - name: Executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AWS_EC2_HOST }}
+          username: ${{ secrets.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
+          port: ${{ secrets.AWS_PORT }}
+          script: |
+            set -x 
+            cd app/frontend-internship
+            git fetch origin
+            git reset --hard origin/develop
+            git pull origin develop
+
+            echo "NEXT_PUBLIC_API_BASE_URL=${{ secrets.NEXT_PUBLIC_API_BASE_URL }}" > .env
+            echo "NEXT_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_URL }}" >> .env
+            echo "NEXT_PUBLIC_SOCKET_PORT=${{ secrets.NEXT_PUBLIC_SOCKET_PORT }}" >> .env
+            echo "NEXT_PUBLIC_ACCESS_SECRET_KEY=${{ secrets.NEXT_PUBLIC_ACCESS_SECRET_KEY }}" >> .env
+            echo "NEXT_PUBLIC_REFRESH_SECRET_KEY=${{ secrets.NEXT_PUBLIC_REFRESH_SECRET_KEY }}" >> .env
+            echo "NEXT_PUBLIC_AUTH0_JWKS_URL=${{ secrets.NEXT_PUBLIC_AUTH0_JWKS_URL }}" >> .env
+            echo "NEXT_PUBLIC_AUTH0_CLIENT_ID=${{ secrets.NEXT_PUBLIC_AUTH0_CLIENT_ID }}" >> .env
+            echo "NEXT_PUBLIC_AUTH0_AUDIENCE=${{ secrets.NEXT_PUBLIC_AUTH0_AUDIENCE }}" >> .env
+            echo "NEXT_PUBLIC_AUTH0_ISSUER_URL=${{ secrets.NEXT_PUBLIC_AUTH0_ISSUER_URL }}" >> .env
+
+            cp /etc/ssl/private/certificate.crt certificate.crt
+            cp /etc/ssl/private/private.key private.key
+
+            docker-compose stop nextjs
+            docker-compose rm -f nextjs
+            docker-compose build nextjs
+            docker-compose up --no-deps -d nextjs
