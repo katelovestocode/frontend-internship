@@ -191,21 +191,21 @@ export default function QuizAttempt({
           <div className="flex flex-col gap-7">
             <div className="flex flex-col gap-7">
               <p className="flex gap-4 font-bold text-xl text-amber-800">
-                Tottal Correct Answers:
+                Total Correct Answers:
                 <span className="font-bold text-gray-950">
                   {sendQuizAttemptData?.quiz?.totalCorrect}
                 </span>
               </p>
-              <p className="flex gap-4 flex-wrap font-bold text-lg text-amber-800">
-                Overall Rating Accross the System:
+              <p className="flex gap-4 font-bold text-lg text-amber-800">
+                Average Correct Answers in the Company:
                 <span className="font-bold text-gray-950">
-                  {sendQuizAttemptData?.quiz?.overallRatingAcrossSystem}
+                  {sendQuizAttemptData?.quiz?.averageScoreWithinCompany}%
                 </span>
               </p>
-              <p className="flex gap-4 font-bold text-lg text-amber-800">
-                Average Score Accross the System:
+              <p className="flex gap-4 flex-wrap font-bold text-lg text-amber-800">
+                Average Correct Answers in the System:
                 <span className="font-bold text-gray-950">
-                  {sendQuizAttemptData?.quiz?.averageScoreWithinCompany}
+                  {sendQuizAttemptData?.quiz?.overallRatingAcrossSystem}%
                 </span>
               </p>
             </div>

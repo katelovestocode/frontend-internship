@@ -64,7 +64,7 @@ export type UserType = {
   password?: string;
   accessToken?: string,
   refreshToken?: string,
- 
+  averageRating: number
 }
 
 export type LoginUserType = {
@@ -103,6 +103,7 @@ export type GetOneUserType = {
   password?: string;
   accessToken?: string,
   refreshToken?: string,
+  averageRating: number,
   }
 }
 

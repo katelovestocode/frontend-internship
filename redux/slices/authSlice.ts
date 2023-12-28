@@ -10,6 +10,7 @@ export const initialState: InitialState = {
     password: "",
     accessToken: "",
     refreshToken: '',
+    averageRating: 0,
   },
   isLoggedIn: false,
   isLoading: false,
@@ -30,6 +31,7 @@ export const authSlice = createSlice({
         name: '',
         id: 0,
         email: '',
+        averageRating: 0,
       };
       state.isLoggedIn = false;
       state.isLoading = false;

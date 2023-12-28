@@ -162,12 +162,13 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
       }
     },
   });
+
   const getStarRating = (averageRating: number) => {
     const maxRating = 100;
     const numberOfStars = Math.round((averageRating / maxRating) * 5);
     return numberOfStars;
   };
-  const starRating = getStarRating(getRatingData?.averageRating!);
+  const starRating = getStarRating(user?.averageRating);
 
   return (
     <div className="flex flex-col justify-between border-solid border-gray-700 border-1 rounded-xl p-10 flex gap-2 bg-white shadow-lg">
