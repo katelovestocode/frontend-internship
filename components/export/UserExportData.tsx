@@ -19,13 +19,8 @@ export default function UserExportData({ id }: { id: number }) {
 
   const handleGetUserQuizResults = async (userId: number, type: string) => {
     try {
-      await getUsersResults({ userId: userId, type: type });
-      downloadFile(
-        getUsersResultsData?.data,
-        selectedType,
-        csvHeader,
-        csvLineType
-      );
+      const result = await getUsersResults({ userId: userId, type: type });
+      downloadFile(result?.data?.data, selectedType, csvHeader, csvLineType);
     } catch (error: any) {
       toast.error(error.message, {
         position: toast.POSITION.TOP_CENTER,

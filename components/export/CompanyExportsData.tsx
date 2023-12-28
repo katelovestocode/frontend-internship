@@ -36,13 +36,11 @@ export default function CompanyExportsData({ id }: { id: number }) {
   const handleGetAllUsersQuizResults = async () => {
     try {
       setSelectUser(false);
-      await getAllUsersResults({ companyId: id, type: selectedType });
-      downloadFile(
-        getAllUsersResultsData?.data,
-        selectedType,
-        csvHeader,
-        csvLineType
-      );
+      const result = await getAllUsersResults({
+        companyId: id,
+        type: selectedType,
+      });
+      downloadFile(result?.data?.data, selectedType, csvHeader, csvLineType);
     } catch (error: any) {
       toast.error(error.message, {
         position: toast.POSITION.TOP_CENTER,
@@ -53,17 +51,12 @@ export default function CompanyExportsData({ id }: { id: number }) {
   const handleGetOneUserQuizResults = async (memberId: number) => {
     try {
       setMemberId(memberId);
-      await getOneUserResults({
+      const result = await getOneUserResults({
         companyId: id,
         userId: memberId,
         type: selectedType,
       });
-      downloadFile(
-        oneUserResultsData?.data,
-        selectedType,
-        csvHeader,
-        csvLineType
-      );
+      downloadFile(result?.data?.data, selectedType, csvHeader, csvLineType);
     } catch (error: any) {
       toast.error(error.message, {
         position: toast.POSITION.TOP_CENTER,
