@@ -260,6 +260,7 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
                       selectedUser={selectedMember}
                       userId={userId}
                       deleteMemberOrAdmin={deleteCompanyMember}
+                      memberOrAdminLine={"member"}
                     />
                   ))}
                 </ul>
@@ -276,6 +277,7 @@ export default function GetOneCompany({ id, children }: IdChildrenProps) {
                       selectedUser={selectedAdmin}
                       userId={userId}
                       deleteMemberOrAdmin={deleteCompanyAdmin}
+                      memberOrAdminLine={"admin"}
                     />
                   ))}
                 </ul>

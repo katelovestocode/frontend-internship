@@ -14,20 +14,19 @@ export const Auth0Login = () => {
   const router = useRouter();
 
   useEffect(() => {
-    getToken();
+    if (isAuthenticated) {
+      getToken();
+    }
   }, [isAuthenticated]);
 
   async function getToken() {
-    if (isAuthenticated) {
-      const token = await getAccessTokenSilently()
-        .then(loginUserAuth)
-        .then((result) => result)
-        .catch((error: any) =>
-          toast.error(error.message, {
-            position: toast.POSITION.TOP_CENTER,
-          })
-        );
-      return token;
+    try {
+      const token = await getAccessTokenSilently();
+      loginUserAuth(token);
+    } catch (error: any) {
+      toast.error(error.message, {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
   }
 
@@ -39,11 +38,7 @@ export const Auth0Login = () => {
 
         getCurrentUser();
 
-        toast.success("You have been successfully logged-in", {
-          position: toast.POSITION.TOP_CENTER,
-        });
-
-        router.push("/profile");
+        // router.push("/profile");
       }
     } catch (error: any) {
       toast.error(error.message, {

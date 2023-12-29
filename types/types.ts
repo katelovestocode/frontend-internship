@@ -116,7 +116,8 @@ export type UpdateUserType = {
 }
 
 export type OneUserType = GetOneUserType & {
-    id?: number,
+  id?: number,
+  children: ReactNode;
 }
 
 export type ActiveFieldsType = {
@@ -348,6 +349,7 @@ export type MemberOrAdminItemType = {
   selectedUser: number | null,
   userId: number | undefined,
   deleteMemberOrAdmin: (id: number) => void,
+  memberOrAdminLine: string
 }
 
 export type UpdateFieldsQuizType = {

@@ -5,7 +5,7 @@ import CommonModal from "../common/CommonModal";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UpdateQuiz from "./UpdateQuiz";
-import { QuizAndCompIdType } from "@/types/types";
+import { QuizAndCompIdType, UserType } from "@/types/types";
 import { useAppSelector } from "@/redux/store";
 import Link from "next/link";
 import { useGetOneCompanyQuery } from "@/redux/api/companyApiSlice";
@@ -84,7 +84,8 @@ export default function ListOfCompanyQuizzesItem({
             </span>
           </p>
         </div>
-        {company?.owner?.id === userId ? (
+        {company?.owner?.id === userId ||
+        company?.admins?.find((admin: UserType) => admin.id === userId) ? (
           <div className="w-full flex gap-2 flex-col">
             <button
               type="button"
