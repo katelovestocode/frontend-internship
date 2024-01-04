@@ -1,6 +1,6 @@
-import SubNavLink from "@/components/common/SubNavLink";
 import OneUser from "@/components/users/GetOneUser";
 import type { Metadata } from "next";
+import Link from "next/link";
 import React from "react";
 
 type IdProps = {
@@ -18,58 +18,14 @@ export default function OneUserLayout({ params: { id }, children }: IdProps) {
   return (
     <div className="flex flex-col md:px-18 px-8 gap-6">
       <h1 className="font-bold text-3xl text-center">User Profile</h1>
-      <div className="flex md:px-10 px-6 py-8 md:gap-16 gap-8">
-        <OneUser id={Number(id)} />
-        <div className="flex flex-col w-full gap-4">
-          <ul className="flex flex-row  flex-wrap gap-4">
-            <li>
-              {" "}
-              <SubNavLink hrefLink={`/users/${id}/requests`} label="Requests" />
-            </li>
-            <li>
-              {" "}
-              <SubNavLink
-                hrefLink={`/users/${id}/invitations`}
-                label="Invitations"
-              />
-            </li>
-            <li>
-              {" "}
-              <SubNavLink
-                hrefLink={`/users/${id}/analytics`}
-                label="Analytics"
-              />
-            </li>
-            <li>
-              {" "}
-              <SubNavLink
-                hrefLink={`/users/${id}/companies`}
-                label="Companies"
-              />
-            </li>
-            <li>
-              {" "}
-              <SubNavLink
-                hrefLink={`/users/${id}/membership`}
-                label="Membership"
-              />
-            </li>
-            <li>
-              {" "}
-              <SubNavLink hrefLink={`/users/${id}/export`} label="Export" />
-            </li>
-            <li>
-              {" "}
-              <SubNavLink
-                hrefLink={`/users/${id}/notifications`}
-                label="Notifications"
-              />
-            </li>
-          </ul>
-
-          {/* requests and invitations */}
-          {children}
-        </div>
+      <Link
+        href={`/users`}
+        className="mx-6 md:mx-8 text-xl font-medium border-amber-700 w-60 border-2 p-2.5 rounded-md shadow-md"
+      >
+        Back to Users
+      </Link>
+      <div className="flex md:px-8 px-6 py-8 md:gap-10 gap-8">
+        <OneUser id={Number(id)}>{children}</OneUser>
       </div>
     </div>
   );

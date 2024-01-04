@@ -13,6 +13,7 @@ import {
   IdProps,
   MyFormValues,
   QuestionsWithNoIDType,
+  UserType,
 } from "@/types/types";
 import { useAppSelector } from "@/redux/store";
 import { useLazyGetOneCompanyQuery } from "@/redux/api/companyApiSlice";
@@ -90,13 +91,15 @@ export default function CreateQuiz({ id }: IdProps) {
       });
     },
   });
-
   return (
     <>
-      {company?.owner?.id === userId && (
+      {company?.owner?.id === userId ||
+      company?.admins.find((admin: UserType) => admin.id === userId) ? (
         <div className="w-60">
           <Button onClick={toggleModal} title={"Add Quiz"} />
         </div>
+      ) : (
+        ""
       )}
       <ModalWindow
         showModal={showModal}

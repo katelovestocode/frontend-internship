@@ -64,7 +64,7 @@ export type UserType = {
   password?: string;
   accessToken?: string,
   refreshToken?: string,
- 
+  averageRating: number
 }
 
 export type LoginUserType = {
@@ -103,6 +103,7 @@ export type GetOneUserType = {
   password?: string;
   accessToken?: string,
   refreshToken?: string,
+  averageRating: number,
   }
 }
 
@@ -115,7 +116,8 @@ export type UpdateUserType = {
 }
 
 export type OneUserType = GetOneUserType & {
-    id?: number,
+  id?: number,
+  children: ReactNode;
 }
 
 export type ActiveFieldsType = {
@@ -347,6 +349,7 @@ export type MemberOrAdminItemType = {
   selectedUser: number | null,
   userId: number | undefined,
   deleteMemberOrAdmin: (id: number) => void,
+  memberOrAdminLine: string
 }
 
 export type UpdateFieldsQuizType = {

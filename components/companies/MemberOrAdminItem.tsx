@@ -1,5 +1,5 @@
 "use client";
-import { MemberOrAdminItemType } from "@/types/types";
+import { MemberOrAdminItemType, UserType } from "@/types/types";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 import React from "react";
 
@@ -9,11 +9,14 @@ export default function MemberOrAdminItem({
   selectedUser,
   userId,
   deleteMemberOrAdmin,
+  memberOrAdminLine,
 }: MemberOrAdminItemType) {
   return (
     <li
       onClick={
-        company?.owner?.id === userId
+        company?.owner?.id === userId ||
+        (company?.admins?.find((admin: UserType) => admin.id === userId) &&
+          memberOrAdminLine === "member")
           ? () => deleteMemberOrAdmin(memberOrAdmin.id!)
           : undefined
       }
@@ -25,7 +28,9 @@ export default function MemberOrAdminItem({
       key={memberOrAdmin.id}
     >
       <p className="font-medium text-gray-950">{memberOrAdmin.name} </p>
-      {company?.owner?.id === userId ? (
+      {company?.owner?.id === userId ||
+      (company?.admins?.find((admin: UserType) => admin.id === userId) &&
+        memberOrAdminLine === "member") ? (
         <RiDeleteBin5Fill className="text-red-500" />
       ) : undefined}
     </li>

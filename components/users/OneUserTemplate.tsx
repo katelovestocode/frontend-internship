@@ -20,8 +20,9 @@ import { updateFormikFields } from "@/utils/helpers";
 import { useLazyGetUsersAvarageRatingQuery } from "@/redux/api/analyticsApiSlice";
 import StarRating from "./StarRating";
 import CommonModal from "../common/CommonModal";
+import OneUserSubLayout from "./OneUserSubLayout";
 
-export default function OneUserTemplate({ id, user }: OneUserType) {
+export default function OneUserTemplate({ id, user, children }: OneUserType) {
   const [disabledFields, setDisabledFields] = useState(true);
   const userId = useAppSelector((state) => state.authReducer.user?.id);
   const [isActive, setIsActive] = useState({
@@ -162,165 +163,180 @@ export default function OneUserTemplate({ id, user }: OneUserType) {
       }
     },
   });
+
   const getStarRating = (averageRating: number) => {
     const maxRating = 100;
     const numberOfStars = Math.round((averageRating / maxRating) * 5);
     return numberOfStars;
   };
-  const starRating = getStarRating(getRatingData?.averageRating!);
+  const starRating = getStarRating(user?.averageRating);
 
   return (
-    <div className="flex flex-col justify-between border-solid border-gray-700 border-1 rounded-xl p-10 flex gap-2 bg-white shadow-lg">
-      <form
-        autoComplete="off"
-        onSubmit={formik.handleSubmit}
-        className="flex flex-col gap-5 w-52 md:w-80 "
-      >
-        <div className="w-full">
-          <label htmlFor="email" className="font-semibold">
-            Email
-          </label>
-          <div className="flex flex-row pt-2 gap-2">
-            <UpdateFormInput
-              type="email"
-              name="email"
-              placeholder={`${user?.email}`}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.email}
-              isActive={isActive.email}
-              disabled
-            />
-          </div>
-          {formik.touched.email && formik.errors.email && (
-            <p className="text-xs text-red-600 pt-1">
-              {formik.errors.email as string}
-            </p>
-          )}
-        </div>
-        <div className="w-full">
-          <label htmlFor="name" className="font-semibold">
-            Name
-          </label>
-          <div className="flex flex-row pt-2 items-center gap-2">
-            <UpdateFormInput
-              type="text"
-              name="name"
-              placeholder={`${user?.name}`}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.name}
-              isActive={isActive.name}
-              disabled={disabledFields}
-            />
-            {!disabledFields && (
-              <button type="button" onClick={() => toggleActiveState("name")}>
-                {!isActive.name ? <MdEdit /> : <FaCheck />}
-              </button>
+    <>
+      <div className="flex flex-col justify-between border-solid border-gray-700 border-1 rounded-xl p-10 flex gap-2 bg-white shadow-lg">
+        <form
+          autoComplete="off"
+          onSubmit={formik.handleSubmit}
+          className="flex flex-col gap-5 w-52 md:w-80 "
+        >
+          <div className="w-full">
+            <label htmlFor="email" className="font-semibold">
+              Email
+            </label>
+            <div className="flex flex-row pt-2 gap-2">
+              <UpdateFormInput
+                type="email"
+                name="email"
+                placeholder={`${user?.email}`}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.email}
+                isActive={isActive.email}
+                disabled
+              />
+            </div>
+            {formik.touched.email && formik.errors.email && (
+              <p className="text-xs text-red-600 pt-1">
+                {formik.errors.email as string}
+              </p>
             )}
           </div>
-          {formik.touched.name && formik.errors.name && (
-            <p className="text-xs text-red-600 pt-1">
-              {formik.errors.name as string}
-            </p>
-          )}
-        </div>
-        <div className="w-full">
-          <label htmlFor="password" className="font-semibold">
-            Password
-          </label>
-          <div className="flex flex-row pt-2 items-center gap-2">
-            <UpdateFormInput
-              type="password"
-              name="password"
-              placeholder="************"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.password}
-              isActive={isActive.password}
-              disabled={disabledFields}
-            />
-            {!disabledFields && (
-              <button
-                type="button"
-                onClick={() => toggleActiveState("password")}
-              >
-                {!isActive.password ? <MdEdit /> : <FaCheck />}
-              </button>
+          <div className="w-full">
+            <label htmlFor="name" className="font-semibold">
+              Name
+            </label>
+            <div className="flex flex-row pt-2 items-center gap-2">
+              <UpdateFormInput
+                type="text"
+                name="name"
+                placeholder={`${user?.name}`}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.name}
+                isActive={isActive.name}
+                disabled={disabledFields}
+              />
+              {!disabledFields && (
+                <button type="button" onClick={() => toggleActiveState("name")}>
+                  {!isActive.name ? <MdEdit /> : <FaCheck />}
+                </button>
+              )}
+            </div>
+            {formik.touched.name && formik.errors.name && (
+              <p className="text-xs text-red-600 pt-1">
+                {formik.errors.name as string}
+              </p>
             )}
           </div>
-          {formik.touched.password && formik.errors.password && (
-            <p className="text-xs text-red-600 pt-1">
-              {formik.errors.password as string}
-            </p>
-          )}
-        </div>
-        <div className="w-full">
-          <label htmlFor="password" className="font-semibold">
-            Confirm Password
-          </label>
-          <div className="flex flex-row pt-2 items-center gap-2">
-            <UpdateFormInput
-              type="password"
-              name="confirmPassword"
-              placeholder="************"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.confirmPassword}
-              isActive={isActive.confirmPassword}
-              disabled={disabledFields}
-            />
-            {!disabledFields && (
-              <button
-                type="button"
-                onClick={() => toggleActiveState("confirmPassword")}
-              >
-                {!isActive.confirmPassword ? <MdEdit /> : <FaCheck />}
-              </button>
+          <div className="w-full">
+            <label htmlFor="password" className="font-semibold">
+              Password
+            </label>
+            <div className="flex flex-row pt-2 items-center gap-2">
+              <UpdateFormInput
+                type="password"
+                name="password"
+                placeholder="************"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.password}
+                isActive={isActive.password}
+                disabled={disabledFields}
+              />
+              {!disabledFields && (
+                <button
+                  type="button"
+                  onClick={() => toggleActiveState("password")}
+                >
+                  {!isActive.password ? <MdEdit /> : <FaCheck />}
+                </button>
+              )}
+            </div>
+            {formik.touched.password && formik.errors.password && (
+              <p className="text-xs text-red-600 pt-1">
+                {formik.errors.password as string}
+              </p>
             )}
           </div>
-          {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-            <p className="text-xs text-red-600 pt-1">
-              {formik.errors.confirmPassword as string}
-            </p>
+          <div className="w-full">
+            <label htmlFor="password" className="font-semibold">
+              Confirm Password
+            </label>
+            <div className="flex flex-row pt-2 items-center gap-2">
+              <UpdateFormInput
+                type="password"
+                name="confirmPassword"
+                placeholder="************"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.confirmPassword}
+                isActive={isActive.confirmPassword}
+                disabled={disabledFields}
+              />
+              {!disabledFields && (
+                <button
+                  type="button"
+                  onClick={() => toggleActiveState("confirmPassword")}
+                >
+                  {!isActive.confirmPassword ? <MdEdit /> : <FaCheck />}
+                </button>
+              )}
+            </div>
+            {formik.touched.confirmPassword &&
+              formik.errors.confirmPassword && (
+                <p className="text-xs text-red-600 pt-1">
+                  {formik.errors.confirmPassword as string}
+                </p>
+              )}
+            {formik.values.password !== formik.values.confirmPassword &&
+              !formik.touched.confirmPassword && (
+                <p className="text-xs text-red-600 pt-1">
+                  Add Confirm password
+                </p>
+              )}
+          </div>
+          {!disabledFields && (
+            <button type="submit" className="btn btn-outline mt-4">
+              Submit
+            </button>
           )}
-        </div>
-        {!disabledFields && (
-          <button type="submit" className="btn btn-outline mt-4">
-            Submit
-          </button>
-        )}
-        {disabledFields && userId === user.id && (
-          <StarRating starRating={starRating} />
-        )}
-      </form>
+          {disabledFields && userId === user.id && (
+            <StarRating starRating={starRating} />
+          )}
+        </form>
 
-      <div className="flex justify-between mt-4">
-        {disabledFields && userId === user.id && (
-          <>
-            <button className="btn btn-outline" onClick={enableFields}>
-              Edit
-            </button>
-            <button
-              className="btn btn-outline btn-error"
-              onClick={() => toggleDeleteProfileModal()}
-            >
-              Delete
-            </button>
-          </>
-        )}
+        <div className="flex justify-between mt-4">
+          {disabledFields && userId === user.id && (
+            <>
+              <button className="btn btn-outline" onClick={enableFields}>
+                Edit
+              </button>
+              <button
+                className="btn btn-outline btn-error"
+                onClick={() => toggleDeleteProfileModal()}
+              >
+                Delete
+              </button>
+            </>
+          )}
+        </div>
+
+        {/* Delete User's Profile Confirmation Modal */}
+        <CommonModal
+          ids={[id]}
+          showModal={showDeleteProfileModal}
+          toggleModal={toggleDeleteProfileModal}
+          handleOnClick={handleDeleteUser}
+          titleText="Are you sure you want to delete this profile?"
+          yesText="Yes, I made my mind"
+          noText="No, I changed my mind"
+        />
       </div>
 
-      {/* Delete User's Profile Confirmation Modal */}
-      <CommonModal
-        ids={[id]}
-        showModal={showDeleteProfileModal}
-        toggleModal={toggleDeleteProfileModal}
-        handleOnClick={handleDeleteUser}
-        titleText="Are you sure you want to delete this profile?"
-        yesText="Yes, I made my mind"
-        noText="No, I changed my mind"
-      />
-    </div>
+      {/* all requests, invitations, notifications, quizzes, exports passed down as children */}
+      {userId === user.id && (
+        <OneUserSubLayout id={id!}>{children}</OneUserSubLayout>
+      )}
+    </>
   );
 }

@@ -9,6 +9,7 @@ import CurrentUser from "@/components/auth/CurrentUser";
 import Auth0ProviderWithNavigate from "@/auth0/Auth0Provider";
 import { ToastContainer } from "react-toastify";
 import { SocketComponent } from "@/components/notifications/SocketComponent";
+import { Auth0Login } from "@/auth0/Auth0Login";
 
 const adamina = Adamina({
   subsets: ["latin"],
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: Children) {
             </CurrentUser>
             <ToastContainer />
             <SocketComponent />
+            <Auth0Login />
             <div id="modal-root"></div>
           </body>
         </ReduxProvider>
