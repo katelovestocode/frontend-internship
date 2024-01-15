@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Frontend project using Next.js
 
-## Getting Started
+- [1. Prerequisites](#1-prerequisites)
+- [2. Installation ](#2-installation)
+- [3. Running the Application](#3-running-the-application)
+- [4. Environment Configuration](#4-environment-configuration)
+- [5. Prerequisites to run the Application in Docker](#5-prerequisites-to-run-the-application-in-docker)
+- [6. Build the Docker image using the provided Dockerfile](#6-build-the-docker-image-using-the-provided-dockerfile)
+- [7. Run the Application](#7-run-the-application)
+- [8. Accessing the Application](#8-accessing-the-application)
+- [9. Stopping and Cleaning Up](#9-stopping-and-cleaning-up)
 
-First, run the development server:
+## 1. Prerequisites:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Before running the application, make sure you have the following dependencies installed:
+
+- Node.js: Download and Install Node.js
+- npm (Node Package Manager): It comes with Node.js, so no need to install separately.
+
+## 2. Installation:
+
+Clone the repository and install project dependencies.
+
+```
+git clone https://github.com/katelovestocode/frontend-internship.git
+cd your-project-directory
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 3. Running the Application:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Start your Next.js application on port **3000** using the following command:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```
+npm run dev
+```
 
-## Learn More
+## 4. Environment Configuration:
 
-To learn more about Next.js, take a look at the following resources:
+To configure your Next.js application, you will need an environment (`.env`) file. This file is used to store sensitive data and configuration settings. Here's how you can set up your `.env` file:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Create an `.env` file in the root of your project directory.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+2. Define your environment variables in the `.env` file. You need to specify values for variables like PORT, Database connection URLs, API keys, and other configuration settings. For example:
 
-## Deploy on Vercel
+   ```env
+   PORT=3000
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 5.Prerequisites to run the Application in Docker
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Before you can run the application in Docker, make sure you have the following dependencies installed on your machine:
+
+- Docker: Download and install Docker from [https://www.docker.com/get-started](https://www.docker.com/get-started).
+
+## 6. Build the Docker image using the provided Dockerfile:
+
+```
+docker build -t docker-frontend --progress=plain --no-cache --target prod .
+```
+
+## 7. Run the Application
+
+Now that you have built the Docker image, you can run the application within a Docker container. Use the following command:
+
+```
+docker run -d -p 3000:3000 --name docker-frontend docker-frontend
+```
+
+## 8. Accessing the Application
+
+Once the container is up and running, you can access the application in your web browser by navigating to:
+
+```
+http://localhost:3000
+```
+
+## 9. Stopping and Cleaning Up
+
+To stop the Docker container, use the following command:
+
+```
+docker stop docker-frontend
+```
+
+To remove the Docker container and image when you're done, run:
+
+```
+docker rm docker-frontend
+docker rmi docker-frontend
+```

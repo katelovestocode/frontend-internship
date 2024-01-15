@@ -1,0 +1,11 @@
+/* prettier-ignore */
+Dockerfile
+.dockerignore
+node_modules;
+/* prettier-ignore */
+npm-debug.log
+dist
+/* prettier-ignore */
+.git
+/* prettier-ignore */
+.next;
